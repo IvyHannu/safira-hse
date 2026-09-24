@@ -74,7 +74,7 @@ export function BottomNavigationShell({
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.warmBone },
-  content: { padding: spacing[3], gap: spacing[3], flexGrow: 1 },
+  content: { padding: spacing[2], gap: spacing[2], flexGrow: 1 },
   navigation: {
     flexDirection: 'row',
     borderTopWidth: 1,

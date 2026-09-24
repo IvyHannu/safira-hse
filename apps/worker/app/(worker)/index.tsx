@@ -15,6 +15,7 @@ import { workerHomeDemo, workerReportCategories } from '@/demo/worker-data';
 import { useAuth } from '@/lib/demo-auth';
 import { isDraftStarted } from '@/reporting/model';
 import { useReporting } from '@/reporting/provider';
+import { useSafety } from '@/safety/provider';
 
 const workerStatus: Record<ReportStatus, { label: string; tone: Tone }> = {
   submitted: { label: 'Sent', tone: 'information' },
@@ -28,6 +29,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const { session, loading } = useAuth();
   const { state } = useReporting();
+  const { checklists } = useSafety();
 
   if (loading)
     return <Text style={styles.body}>Loading your demo session…</Text>;
@@ -128,11 +130,45 @@ export default function HomeScreen() {
 
       <View style={styles.section}>
         <SectionHeader title="Your safety check" />
-        <AppCard>
-          <Text style={styles.cardTitle}>{assignedChecklist.title}</Text>
-          <Text style={styles.meta}>{assignedChecklist.locationLabel}</Text>
-          <StatusBadge label={assignedChecklist.dueLabel} tone="information" />
-        </AppCard>
+        {(() => {
+          const assigned =
+            checklists.find((c) => c.assignedToWorker) ?? checklists[0];
+          const isDone = assigned?.status === 'completed';
+          const isInProgress = assigned?.status === 'in_progress';
+          const badgeLabel = isDone
+            ? 'Completed'
+            : isInProgress
+              ? 'In progress'
+              : (assigned?.dueLabel ?? assignedChecklist.dueLabel);
+          const badgeTone: Tone = isDone
+            ? 'success'
+            : isInProgress
+              ? 'warning'
+              : 'information';
+          const location = [
+            assigned?.siteName ?? site.name,
+            assigned?.workAreaName,
+          ]
+            .filter(Boolean)
+            .join(' · ');
+
+          return (
+            <AppCard>
+              <Text style={styles.cardTitle}>
+                {assigned?.title ?? assignedChecklist.title}
+              </Text>
+              <Text style={styles.meta}>{location}</Text>
+              <StatusBadge label={badgeLabel} tone={badgeTone} />
+              <Button
+                label={isDone ? 'Review checklist' : 'Start checklist'}
+                variant="tertiary"
+                onPress={() =>
+                  router.push(assigned ? `/safety/${assigned.id}` : '/safety')
+                }
+              />
+            </AppCard>
+          );
+        })()}
       </View>
     </View>
   );

@@ -48,6 +48,24 @@ export function ReportSummary({
         </AppCard>
       </View>
 
+      {content.source?.type === 'checklist_submission' && (
+        <View style={styles.section}>
+          <SectionHeader title="Source" />
+          <AppCard>
+            <Text style={styles.label}>Origin</Text>
+            <Text style={styles.body}>
+              Identified during safety check: {content.source.checklistTitle}
+            </Text>
+            {content.source.itemPrompt ? (
+              <>
+                <Text style={styles.label}>Check item</Text>
+                <Text style={styles.body}>{content.source.itemPrompt}</Text>
+              </>
+            ) : null}
+          </AppCard>
+        </View>
+      )}
+
       <View style={styles.section}>
         <SectionHeader title="Evidence & details" />
         <AppCard>
@@ -61,6 +79,8 @@ export function ReportSummary({
               />
               <Text style={styles.body}>{content.evidence.fileName}</Text>
             </View>
+          ) : content.evidenceChoice === 'skipped' ? (
+            <Text style={styles.body}>Photo skipped</Text>
           ) : (
             <Text style={styles.body}>No photo added</Text>
           )}

@@ -49,7 +49,10 @@ export default function ReportConfirmationScreen() {
           This demo has not sent anything to your organisation.
         </Text>
       </AppCard>
-      <Button label="View report" onPress={() => router.push('/report/view')} />
+      <Button
+        label="View report"
+        onPress={() => router.push(`/reports/${report.reference}`)}
+      />
       <Button
         label="Back Home"
         variant="secondary"

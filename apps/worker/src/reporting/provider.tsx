@@ -12,6 +12,8 @@ import {
   createInitialReportingState,
   parseReportingState,
   reviewIssues,
+  submittedToDemoReport,
+  type DemoReport,
   type LocalReportingState,
   type ReportContent,
   type SavedReportDraft,
@@ -26,6 +28,16 @@ interface ReportingContextValue {
   storageError: string | null;
   updateDraft(patch: Partial<ReportContent>): void;
   submit(): SubmittedDemoReport | null;
+  getReport(reference: string): DemoReport | null;
+  startReportFromChecklist(params: {
+    checklistId: string;
+    checklistTitle: string;
+    itemId: string;
+    itemPrompt: string;
+    workAreaId: string | null;
+    note?: string;
+    photo?: import('./model').LocalPhotoEvidence | null;
+  }): void;
 }
 
 const ReportingContext = createContext<ReportingContextValue | null>(null);
@@ -99,6 +111,7 @@ export function ReportingProvider({ children }: { children: ReactNode }) {
       siteId: current.draft.siteId,
       workAreaId: current.draft.workAreaId,
       answers: { ...current.draft.answers },
+      source: current.draft.source ?? { type: 'direct' },
     };
     const submitted: SubmittedDemoReport = {
       kind: 'submitted',
@@ -107,10 +120,12 @@ export function ReportingProvider({ children }: { children: ReactNode }) {
       submittedAt: new Date().toISOString(),
       content,
     };
+    const demoReport = submittedToDemoReport(submitted);
     const next: LocalReportingState = {
       draft: createDraft(),
       submitted,
       nextReferenceNumber: current.nextReferenceNumber + 1,
+      demoReports: [demoReport, ...current.demoReports],
     };
     if (!persist(next)) return null;
     stateRef.current = next;
@@ -118,9 +133,65 @@ export function ReportingProvider({ children }: { children: ReactNode }) {
     return submitted;
   }
 
+  function getReport(reference: string): DemoReport | null {
+    return (
+      stateRef.current.demoReports.find((r) => r.reference === reference) ??
+      null
+    );
+  }
+
+  function startReportFromChecklist(params: {
+    checklistId: string;
+    checklistTitle: string;
+    itemId: string;
+    itemPrompt: string;
+    workAreaId: string | null;
+    note?: string;
+    photo?: import('./model').LocalPhotoEvidence | null;
+  }) {
+    if (!ready) return;
+    const notePart = params.note?.trim()
+      ? `\n\nNotes from check: ${params.note.trim()}`
+      : '';
+    const draft: SavedReportDraft = {
+      kind: 'draft',
+      updatedAt: new Date().toISOString(),
+      category: 'unsafe_observation',
+      evidenceChoice: params.photo ? 'photo' : 'unanswered',
+      evidence: params.photo ?? null,
+      description: `Issue found during ${params.checklistTitle}: ${params.itemPrompt}${notePart}`,
+      siteId: stateRef.current.draft.siteId,
+      workAreaId: params.workAreaId,
+      answers: {
+        anyoneHurt: 'no',
+        anythingDamaged: null,
+        environmentalImpact: null,
+      },
+      source: {
+        type: 'checklist_submission',
+        checklistId: params.checklistId,
+        checklistTitle: params.checklistTitle,
+        itemId: params.itemId,
+        itemPrompt: params.itemPrompt,
+      },
+    };
+    const next = { ...stateRef.current, draft };
+    stateRef.current = next;
+    setState(next);
+    persist(next);
+  }
+
   return (
     <ReportingContext.Provider
-      value={{ state, ready, storageError, updateDraft, submit }}
+      value={{
+        state,
+        ready,
+        storageError,
+        updateDraft,
+        submit,
+        getReport,
+        startReportFromChecklist,
+      }}
     >
       {children}
     </ReportingContext.Provider>

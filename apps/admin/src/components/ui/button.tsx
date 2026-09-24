@@ -35,7 +35,7 @@ export function Button({
       type={type}
       disabled={disabled || loading}
       aria-busy={loading}
-      className={`inline-flex min-h-10 items-center justify-center gap-1 rounded-md border px-2 py-1 font-semibold transition-colors motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${className}`}
+      className={`inline-flex h-9 items-center justify-center gap-2 rounded-md border px-3 text-sm font-semibold transition-colors motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${className}`}
     >
       {loading ? (
         <span

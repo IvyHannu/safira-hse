@@ -24,4 +24,40 @@ export const spacing = {
 export const radius = { sm: 4, md: 8, lg: 12, xl: 16 } as const;
 export const typography = { fontFamily: 'Inter' } as const;
 
-export const tokens = { colors, spacing, radius, typography } as const;
+// Shared layout rhythm. Single source for page width, section rhythm,
+// type scale, and control sizing so Admin + Worker stay aligned.
+export const layout = {
+  pageMaxWidth: 1120,
+  narrowMaxWidth: 720,
+  pagePaddingX: 16,
+  pagePaddingY: 24,
+  sectionGap: 24,
+  cardGap: 16,
+  contentMaxWidth: 768,
+} as const;
+
+export const typeScale = {
+  pageTitle: { size: 22, lineHeight: 28, weight: 600 },
+  sectionTitle: { size: 16, lineHeight: 24, weight: 600 },
+  cardTitle: { size: 15, lineHeight: 22, weight: 600 },
+  body: { size: 14, lineHeight: 21, weight: 400 },
+  small: { size: 12, lineHeight: 18, weight: 400 },
+} as const;
+
+export const controls = {
+  height: 36,
+  paddingX: 12,
+  radius: 8,
+  fontSize: 14,
+  fontWeight: 600,
+} as const;
+
+export const tokens = {
+  colors,
+  spacing,
+  radius,
+  typography,
+  layout,
+  typeScale,
+  controls,
+} as const;

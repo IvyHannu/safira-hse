@@ -102,12 +102,12 @@ export default function EvidenceDetailsScreen() {
             onPress={() => void pickPhoto('camera')}
           />
           <Button
-            label="Upload photo"
+            label="Upload"
             variant="secondary"
             onPress={() => void pickPhoto('library')}
           />
           <Button
-            label="Skip photo"
+            label="Skip"
             variant="tertiary"
             onPress={() => {
               updateDraft({ evidenceChoice: 'skipped', evidence: null });

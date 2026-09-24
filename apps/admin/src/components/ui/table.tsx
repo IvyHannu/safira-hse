@@ -30,8 +30,8 @@ export function TableFoundation<TData>({
     getCoreRowModel: getCoreRowModel(),
   });
   return (
-    <div className="overflow-x-auto border border-graphite bg-white">
-      <table className="w-full border-collapse text-left text-sm">
+    <div className="overflow-x-auto rounded-lg border border-graphite/20 bg-white">
+      <table className="w-full border-collapse text-left text-sm leading-6">
         <caption className="sr-only">{caption}</caption>
         <thead className="bg-warmBone">
           {table.getHeaderGroups().map((group) => (
@@ -40,7 +40,7 @@ export function TableFoundation<TData>({
                 <th
                   key={header.id}
                   scope="col"
-                  className="border-b border-graphite px-2 py-1 font-semibold text-softBlack"
+                  className="border-b border-graphite/20 px-3 py-2 font-semibold text-softBlack"
                 >
                   {header.isPlaceholder
                     ? null
@@ -64,10 +64,10 @@ export function TableFoundation<TData>({
             table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
-                className="border-b border-graphite last:border-0"
+                className="border-b border-graphite/20 last:border-0"
               >
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-2 py-1 text-graphite">
+                  <td key={cell.id} className="px-3 py-2 align-top text-graphite">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}

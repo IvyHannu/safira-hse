@@ -41,7 +41,7 @@ function Field({
 }
 
 const controlClass =
-  'min-h-10 w-full rounded-md border border-graphite bg-white px-1 text-softBlack focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information disabled:cursor-not-allowed disabled:bg-warmBone disabled:opacity-60 aria-invalid:border-critical';
+  'h-9 w-full rounded-md border border-graphite bg-white px-2.5 text-sm text-softBlack placeholder:text-graphite/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information disabled:cursor-not-allowed disabled:bg-warmBone disabled:opacity-60 aria-invalid:border-critical';
 
 type InputProps = FieldProps &
   Omit<InputHTMLAttributes<HTMLInputElement>, 'children'>;

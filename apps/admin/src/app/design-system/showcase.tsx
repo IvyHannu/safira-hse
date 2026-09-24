@@ -72,16 +72,16 @@ export function DesignSystemShowcase() {
             { href: '#data', label: 'Data' },
           ]}
         />
-        <main className="grid min-w-0 flex-1 gap-3 p-3">
+        <main className="mx-auto grid w-full min-w-0 max-w-[1120px] flex-1 gap-6 px-4 py-6">
           <PageHeader
             title="Admin design system"
             description="Development showcase. Generic examples only."
             actions={<Button>Header action</Button>}
           />
 
-          <section id="actions" className="grid gap-2">
-            <h2 className="text-lg font-semibold text-softBlack">Buttons</h2>
-            <div className="flex flex-wrap gap-1">
+          <section id="actions" className="grid gap-3">
+            <h2 className="text-base font-semibold leading-6 text-softBlack">Buttons</h2>
+            <div className="flex flex-wrap gap-2">
               <Button>Primary</Button>
               <Button variant="secondary">Secondary</Button>
               <Button variant="tertiary">Tertiary</Button>
@@ -91,12 +91,12 @@ export function DesignSystemShowcase() {
             </div>
           </section>
 
-          <section id="forms" className="grid gap-2">
-            <h2 className="text-lg font-semibold text-softBlack">
+          <section id="forms" className="grid gap-3">
+            <h2 className="text-base font-semibold leading-6 text-softBlack">
               Form controls
             </h2>
             <Card>
-              <div className="grid gap-2 md:grid-cols-2">
+              <div className="grid items-start gap-4 md:grid-cols-2">
                 <Input
                   label="Text input"
                   helperText="A short description helps."
@@ -152,17 +152,17 @@ export function DesignSystemShowcase() {
             </Card>
           </section>
 
-          <section className="grid gap-2">
-            <h2 className="text-lg font-semibold text-softBlack">
+          <section className="grid gap-3">
+            <h2 className="text-base font-semibold leading-6 text-softBlack">
               Status and feedback
             </h2>
-            <div className="flex flex-wrap gap-1">
+            <div className="flex flex-wrap gap-2">
               <StatusBadge tone="success" label="Complete" />
               <StatusBadge tone="warning" label="Needs attention" />
               <StatusBadge tone="critical" label="Critical" />
               <StatusBadge tone="information" label="In progress" />
             </div>
-            <div className="grid gap-1 md:grid-cols-2">
+            <div className="grid items-start gap-4 md:grid-cols-2">
               <Alert tone="success" title="Success">
                 The example action completed.
               </Alert>
@@ -184,8 +184,8 @@ export function DesignSystemShowcase() {
             />
           </section>
 
-          <section id="data" className="grid gap-2">
-            <h2 className="text-lg font-semibold text-softBlack">
+          <section id="data" className="grid gap-3">
+            <h2 className="text-base font-semibold leading-6 text-softBlack">
               Table and filter
             </h2>
             <FilterControl value={filter} onChange={setFilter} />

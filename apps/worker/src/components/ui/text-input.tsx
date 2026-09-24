@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     color: colors.softBlack,
     fontFamily: typography.fontFamily,
     fontWeight: '600',
-    fontSize: 16,
+    fontSize: 14,
   },
   input: {
     minHeight: 48,

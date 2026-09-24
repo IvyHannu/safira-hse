@@ -15,11 +15,15 @@ export function WorkerNavigation() {
   const pathname = usePathname();
   const router = useRouter();
   const { session, loading } = useAuth();
-  const selectedKey = pathname.startsWith('/report')
-    ? 'report'
-    : pathname === '/profile'
-      ? 'profile'
-      : 'home';
+  const selectedKey = pathname.startsWith('/reports')
+    ? 'reports'
+    : pathname.startsWith('/report')
+      ? 'report'
+      : pathname.startsWith('/safety')
+        ? 'safety'
+        : pathname === '/profile'
+          ? 'profile'
+          : 'home';
   const items: BottomNavigationItem[] = [
     {
       key: 'home',
@@ -30,7 +34,6 @@ export function WorkerNavigation() {
       key: 'reports',
       label: 'Reports',
       icon: <Files size={24} color={colors.graphite} />,
-      disabled: true,
     },
     {
       key: 'report',
@@ -42,7 +45,7 @@ export function WorkerNavigation() {
       key: 'safety',
       label: 'Safety',
       icon: <ShieldCheck size={24} color={colors.graphite} />,
-      disabled: true,
+      disabled: loading || session?.role !== 'worker',
     },
     {
       key: 'profile',
@@ -53,7 +56,9 @@ export function WorkerNavigation() {
 
   function select(key: string) {
     if (key === 'home') router.replace('/');
+    if (key === 'reports') router.push('/reports');
     if (key === 'report') router.push('/report');
+    if (key === 'safety') router.push('/safety');
     if (key === 'profile') router.push('/profile');
   }
 

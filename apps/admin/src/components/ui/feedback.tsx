@@ -27,9 +27,9 @@ export function Card({
   children: ReactNode;
 }) {
   return (
-    <section className="rounded-md border border-graphite bg-white p-2">
+    <section className="grid content-start gap-4 rounded-lg border border-graphite/20 bg-white p-4">
       {title && (
-        <h2 className="mb-1 text-lg font-semibold text-softBlack">{title}</h2>
+        <h2 className="text-[15px] font-semibold leading-6 text-softBlack">{title}</h2>
       )}
       {children}
     </section>
@@ -66,10 +66,12 @@ export function EmptyState({
   action?: ReactNode;
 }) {
   return (
-    <div className="rounded-md border border-graphite bg-warmBone p-3">
-      <h2 className="text-lg font-semibold text-softBlack">{title}</h2>
-      <p className="mt-1 text-sm text-graphite">{description}</p>
-      {action && <div className="mt-2">{action}</div>}
+    <div className="grid gap-4 rounded-lg border border-graphite/20 bg-warmBone p-4 text-center md:text-left">
+      <div className="grid gap-1">
+        <h2 className="text-[15px] font-semibold leading-6 text-softBlack">{title}</h2>
+        <p className="mx-auto max-w-[52ch] text-sm leading-6 text-graphite md:mx-0">{description}</p>
+      </div>
+      {action && <div className="flex justify-center md:justify-start">{action}</div>}
     </div>
   );
 }

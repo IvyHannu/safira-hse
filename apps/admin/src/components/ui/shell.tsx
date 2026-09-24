@@ -1,5 +1,21 @@
 import type { ReactNode } from 'react';
 
+export function PageContainer({
+  children,
+  narrow = false,
+}: {
+  children: ReactNode;
+  narrow?: boolean;
+}) {
+  return (
+    <div
+      className={`mx-auto w-full px-4 py-6 ${narrow ? 'max-w-[720px]' : 'max-w-[1120px]'}`}
+    >
+      <div className="grid gap-6">{children}</div>
+    </div>
+  );
+}
+
 export function PageHeader({
   title,
   description,
@@ -10,14 +26,14 @@ export function PageHeader({
   actions?: ReactNode;
 }) {
   return (
-    <header className="flex flex-wrap items-start justify-between gap-2 border-b border-graphite pb-2">
-      <div>
-        <h1 className="text-2xl font-semibold text-softBlack">{title}</h1>
+    <header className="flex flex-wrap items-center justify-between gap-3 border-b border-graphite/20 pb-4">
+      <div className="min-w-0">
+        <h1 className="text-[22px] font-semibold leading-7 text-softBlack">{title}</h1>
         {description && (
-          <p className="mt-1 text-sm text-graphite">{description}</p>
+          <p className="mt-1 max-w-[768px] text-sm leading-6 text-graphite">{description}</p>
         )}
       </div>
-      {actions}
+      {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
     </header>
   );
 }
@@ -38,10 +54,10 @@ export function SidebarShell({
 }) {
   return (
     <aside
-      className="w-full border-r border-graphite bg-white p-2 md:w-56"
+      className="w-full border-b border-graphite/20 bg-white px-4 py-3 md:w-60 md:border-b-0 md:border-r"
       aria-label={title}
     >
-      <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-graphite">
+      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-graphite">
         {title}
       </p>
       <nav aria-label={title} className="flex flex-wrap gap-1 md:grid">
@@ -50,7 +66,7 @@ export function SidebarShell({
             key={item.href}
             href={item.href}
             aria-current={item.active ? 'page' : undefined}
-            className={`inline-flex min-h-10 items-center gap-1 rounded-sm border-l-4 px-1 text-sm font-medium text-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information ${item.active ? 'border-saffron bg-warmBone font-semibold' : 'border-transparent hover:bg-warmBone'}`}
+            className={`inline-flex h-9 items-center gap-2 rounded-md border-l-4 px-2.5 text-sm font-medium text-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information ${item.active ? 'border-saffron bg-warmBone font-semibold' : 'border-transparent hover:bg-warmBone'}`}
           >
             {item.icon}
             {item.label}
@@ -69,9 +85,9 @@ export function TopbarShell({
   actions?: ReactNode;
 }) {
   return (
-    <header className="flex min-h-14 items-center justify-between gap-2 border-b border-graphite bg-white px-2">
-      <span className="font-semibold text-softBlack">{brand}</span>
-      <div className="flex items-center gap-1">{actions}</div>
+    <header className="flex h-14 items-center justify-between gap-3 border-b border-graphite/20 bg-white px-4">
+      <span className="text-sm font-semibold text-softBlack">{brand}</span>
+      <div className="flex items-center gap-2">{actions}</div>
     </header>
   );
 }
