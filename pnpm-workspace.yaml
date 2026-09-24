@@ -1,0 +1,11 @@
+packages:
+  - apps/*
+  - packages/*
+
+allowBuilds:
+  unrs-resolver: true
+
+verifyDepsBeforeRun: false
+
+overrides:
+  '@types/react-dom': 19.2.7

@@ -1,0 +1,4 @@
+{
+  "extends": "@safira/config/tsconfig",
+  "include": ["src/**/*.ts"]
+}

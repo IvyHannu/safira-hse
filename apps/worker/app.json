@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "Safira Worker",
+    "slug": "safira-worker",
+    "scheme": "safira",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "plugins": [
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Allow Safira to take a photo for your local demo report.",
+          "photosPermission": "Allow Safira to choose a photo for your local demo report."
+        }
+      ]
+    ],
+    "experiments": { "typedRoutes": true },
+    "web": { "bundler": "metro" }
+  }
+}

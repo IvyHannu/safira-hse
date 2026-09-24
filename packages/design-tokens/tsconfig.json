@@ -1,0 +1,9 @@
+{
+  "extends": "@safira/config/tsconfig",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
+  },
+  "include": ["src"]
+}

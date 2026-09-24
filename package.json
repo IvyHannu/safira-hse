@@ -1,0 +1,23 @@
+{
+  "name": "safira",
+  "private": true,
+  "packageManager": "pnpm@11.19.0",
+  "scripts": {
+    "dev": "turbo dev",
+    "dev:worker": "pnpm --filter @safira/worker dev",
+    "dev:admin": "pnpm --filter @safira/admin dev",
+    "build": "turbo build",
+    "db:verify": "node scripts/verify-db.cjs",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.8",
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0",
+    "turbo": "^2.0.0",
+    "typescript": "~6.0.3"
+  }
+}
