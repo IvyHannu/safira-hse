@@ -7,7 +7,9 @@ import {
   EmptyState,
   SectionHeader,
   StatusBadge,
+  WorkerHeader,
 } from '@/components/ui';
+import { workerHomeDemo } from '@/demo/worker-data';
 import { useReporting } from '@/reporting/provider';
 
 export default function ReportConfirmationScreen() {
@@ -29,6 +31,11 @@ export default function ReportConfirmationScreen() {
 
   return (
     <View style={styles.content}>
+      <WorkerHeader
+        backLabel="Back Home"
+        onBack={() => router.replace('/')}
+        context={workerHomeDemo.site.name}
+      />
       <SectionHeader
         title="Report submitted"
         description="Your demo report was saved on this device."
@@ -53,11 +60,6 @@ export default function ReportConfirmationScreen() {
         label="View report"
         onPress={() => router.push(`/reports/${report.reference}`)}
       />
-      <Button
-        label="Back Home"
-        variant="secondary"
-        onPress={() => router.replace('/')}
-      />
     </View>
   );
 }
@@ -65,7 +67,7 @@ export default function ReportConfirmationScreen() {
 const styles = StyleSheet.create({
   content: { gap: spacing[3] },
   reference: {
-    color: colors.softBlack,
+    color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 28,
     fontWeight: '700',

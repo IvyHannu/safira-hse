@@ -73,7 +73,7 @@ export function BottomNavigationShell({
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.warmBone },
+  screen: { flex: 1, backgroundColor: colors.coolSurface },
   content: { padding: spacing[2], gap: spacing[2], flexGrow: 1 },
   navigation: {
     flexDirection: 'row',
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: spacing[1],
   },
-  navigationSelected: { borderTopWidth: 3, borderColor: colors.saffron },
+  navigationSelected: { borderTopWidth: 3, borderColor: colors.signalYellow },
   navigationDisabled: { opacity: 0.45 },
   navigationLabel: {
     color: colors.graphite,

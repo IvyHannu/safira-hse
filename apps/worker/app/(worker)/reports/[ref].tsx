@@ -8,6 +8,7 @@ import {
   EmptyState,
   SectionHeader,
   StatusBadge,
+  WorkerHeader,
   type Tone,
 } from '@/components/ui';
 import type { DemoReport, DemoStatusStep } from '@/reporting/model';
@@ -90,10 +91,10 @@ function ReportDetailContent({ report }: { report: DemoReport }) {
 
   return (
     <View style={styles.content}>
-      <Button
-        label="Back to My Reports"
-        variant="tertiary"
-        onPress={() => router.replace('/reports')}
+      <WorkerHeader
+        backLabel="Back to My Reports"
+        onBack={() => router.replace('/reports')}
+        context={report.site}
       />
 
       <View style={styles.header}>
@@ -213,12 +214,6 @@ function ReportDetailContent({ report }: { report: DemoReport }) {
           </AppCard>
         </View>
       ) : null}
-
-      <Button
-        label="Back to My Reports"
-        variant="secondary"
-        onPress={() => router.replace('/reports')}
-      />
     </View>
   );
 }
@@ -254,7 +249,7 @@ const styles = StyleSheet.create({
   header: { gap: spacing[1] },
   section: { gap: spacing[1] },
   reference: {
-    color: colors.softBlack,
+    color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 28,
     fontWeight: '700',
@@ -266,7 +261,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   classification: {
-    color: colors.softBlack,
+    color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 14,
     fontWeight: '600',
@@ -286,7 +281,7 @@ const styles = StyleSheet.create({
     width: 160,
     height: 160,
     borderRadius: radius.md,
-    backgroundColor: colors.warmBone,
+    backgroundColor: colors.coolSurface,
   },
   answerRow: {
     flexDirection: 'row',
@@ -302,7 +297,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   answerValue: {
-    color: colors.softBlack,
+    color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 14,
     fontWeight: '600',
@@ -336,7 +331,7 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   timelineLabel: {
-    color: colors.softBlack,
+    color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 14,
     fontWeight: '600',

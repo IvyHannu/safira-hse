@@ -1,8 +1,9 @@
 import { useRouter } from 'expo-router';
-import { colors, radius, spacing, typography } from '@safira/design-tokens';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { colors, spacing, typography } from '@safira/design-tokens';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import {
   EmptyState,
+  PressableCard,
   SectionHeader,
   StatusBadge,
   type Tone,
@@ -49,11 +50,9 @@ function ChecklistCard({ checklist, onPress }: ChecklistCardProps) {
     .join(' · ');
 
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={`${checklist.title}, ${badge.label}, ${completionText}`}
+    <PressableCard
+      label={`${checklist.title}, ${badge.label}, ${completionText}`}
       onPress={onPress}
-      style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
     >
       <View style={styles.cardHeader}>
         <Text style={styles.cardTitle}>{checklist.title}</Text>
@@ -79,7 +78,7 @@ function ChecklistCard({ checklist, onPress }: ChecklistCardProps) {
           {checklist.description}
         </Text>
       ) : null}
-    </Pressable>
+    </PressableCard>
   );
 }
 
@@ -129,15 +128,6 @@ export default function SafetyScreen() {
 const styles = StyleSheet.create({
   content: { gap: spacing[3] },
   list: { gap: spacing[2] },
-  card: {
-    borderWidth: 1,
-    borderColor: colors.graphite,
-    borderRadius: radius.lg,
-    backgroundColor: colors.white,
-    padding: spacing[2],
-    gap: spacing[1],
-  },
-  cardPressed: { opacity: 0.8 },
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -146,7 +136,7 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     flex: 1,
-    color: colors.softBlack,
+    color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 16,
     fontWeight: '600',

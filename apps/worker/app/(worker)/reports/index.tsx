@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {
   EmptyState,
+  PressableCard,
   SectionHeader,
   StatusBadge,
   type Tone,
@@ -58,11 +59,9 @@ function ReportCard({ report, onPress }: ReportCardProps) {
   const { label, tone } = STATUS_CONFIG[report.status];
   const locationParts = [report.site, report.workArea].filter(Boolean);
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={`${report.categoryLabel}, ${report.reference}`}
+    <PressableCard
+      label={`${report.categoryLabel}, ${report.reference}`}
       onPress={onPress}
-      style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
     >
       <View style={styles.cardRow}>
         <View style={styles.cardMain}>
@@ -86,7 +85,7 @@ function ReportCard({ report, onPress }: ReportCardProps) {
           />
         ) : null}
       </View>
-    </Pressable>
+    </PressableCard>
   );
 }
 
@@ -196,14 +195,6 @@ const styles = StyleSheet.create({
   },
   tabLabelActive: { color: colors.white },
   list: { gap: spacing[2] },
-  card: {
-    borderWidth: 1,
-    borderColor: colors.graphite,
-    borderRadius: radius.lg,
-    backgroundColor: colors.white,
-    padding: spacing[2],
-  },
-  cardPressed: { opacity: 0.8 },
   cardRow: {
     flexDirection: 'row',
     gap: spacing[2],
@@ -211,7 +202,7 @@ const styles = StyleSheet.create({
   },
   cardMain: { flex: 1, gap: spacing[1] },
   cardTitle: {
-    color: colors.softBlack,
+    color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 16,
     fontWeight: '600',
@@ -228,7 +219,7 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: radius.md,
-    backgroundColor: colors.warmBone,
+    backgroundColor: colors.coolSurface,
     flexShrink: 0,
   },
 });

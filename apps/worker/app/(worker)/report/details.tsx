@@ -1,237 +1,221 @@
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
-import * as ImagePicker from 'expo-image-picker';
-import { colors, radius, spacing, typography } from '@safira/design-tokens';
-import { Image, Platform, StyleSheet, Text, View } from 'react-native';
+import { colors, spacing, typography } from '@safira/design-tokens';
+import CalendarBlank from 'phosphor-react-native/src/icons/CalendarBlank';
+import Clock from 'phosphor-react-native/src/icons/Clock';
+import MapPin from 'phosphor-react-native/src/icons/MapPin';
+import { StyleSheet, Text, View } from 'react-native';
 import {
-  AppCard,
   Button,
-  InlineAlert,
-  SectionHeader,
-  SelectableCard,
-  TextInput,
+  ChoiceCard,
+  DateTimeField,
+  SelectField,
+  SelectionSheet,
+  TextArea,
+  WorkerHeader,
 } from '@/components/ui';
 import { workerHomeDemo } from '@/demo/worker-data';
 import { useReporting } from '@/reporting/provider';
-import type { LocalPhotoEvidence } from '@/reporting/model';
 
 export default function EvidenceDetailsScreen() {
   const router = useRouter();
   const { state, updateDraft } = useReporting();
   const draft = state.draft;
-  const [error, setError] = useState<string | null>(null);
   const [attempted, setAttempted] = useState(false);
-  const [photoUnavailable, setPhotoUnavailable] = useState(false);
+  const [descriptionTouched, setDescriptionTouched] = useState(false);
+  const [workAreaTouched, setWorkAreaTouched] = useState(false);
+  const [workAreasOpen, setWorkAreasOpen] = useState(false);
+  const [shownAt] = useState(() => new Date());
+  const selectedArea = workerHomeDemo.workAreas.find(
+    (area) => area.id === draft.workAreaId,
+  );
+  const dateLabel = `Today, ${shownAt.toLocaleDateString(undefined, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  })}`;
+  const timeLabel = shownAt.toLocaleTimeString(undefined, {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+  const descriptionInvalid = !draft.description.trim();
+  const workAreaInvalid = !draft.workAreaId;
+  const showDescriptionError =
+    (attempted || descriptionTouched) && descriptionInvalid;
+  const showWorkAreaError = (attempted || workAreaTouched) && workAreaInvalid;
 
-  async function pickPhoto(source: 'camera' | 'library') {
-    setError(null);
-    try {
-      if (source === 'camera' && Platform.OS !== 'web') {
-        const permission = await ImagePicker.requestCameraPermissionsAsync();
-        if (!permission.granted) {
-          setError(
-            'Camera permission was not granted. Your existing report details are unchanged.',
-          );
-          return;
-        }
-      }
-      const result =
-        source === 'camera'
-          ? await ImagePicker.launchCameraAsync({
-              mediaTypes: ['images'],
-              quality: 0.8,
-            })
-          : await ImagePicker.launchImageLibraryAsync({
-              mediaTypes: ['images'],
-              quality: 0.8,
-            });
-      if (result.canceled) return;
-      const asset = result.assets[0];
-      if (!asset?.uri) throw new Error('No photo URI returned');
-      const evidence: LocalPhotoEvidence = {
-        uri: asset.uri,
-        fileName:
-          asset.fileName ||
-          (source === 'camera' ? 'Camera photo' : 'Selected photo'),
-        mimeType: asset.mimeType || null,
-        fileSize: asset.fileSize ?? null,
-        width: asset.width,
-        height: asset.height,
-        source,
-      };
-      updateDraft({ evidenceChoice: 'photo', evidence });
-      setPhotoUnavailable(false);
-    } catch {
-      setError(
-        'The photo could not be added. Your existing report details are unchanged.',
-      );
-    }
+  function closeWorkAreaPicker() {
+    setWorkAreaTouched(true);
+    setWorkAreasOpen(false);
   }
 
-  function continueToQuestions() {
+  function continueToEvidence() {
     setAttempted(true);
-    if (
-      draft.evidenceChoice === 'unanswered' ||
-      (draft.evidenceChoice === 'photo' &&
-        (!draft.evidence || photoUnavailable)) ||
-      !draft.description.trim() ||
-      !draft.workAreaId
-    )
-      return;
-    router.push('/report/questions');
+    if (descriptionInvalid || workAreaInvalid) return;
+    router.push('/report/evidence');
   }
 
   return (
     <View style={styles.content}>
-      <Button
-        label="Back to choices"
-        variant="tertiary"
-        onPress={() => router.replace('/report')}
-      />
-      <SectionHeader
-        title="Evidence & details"
-        description="Add what you know. A photo can help, and you can skip it."
+      <WorkerHeader
+        backLabel="Back to report choices"
+        onBack={() => router.replace('/report')}
+        context={workerHomeDemo.site.name}
+        inset
       />
 
-      <View style={styles.section}>
-        <SectionHeader title="Photo evidence" />
-        <View style={styles.actions}>
-          <Button
-            label="Take photo"
-            variant="secondary"
-            onPress={() => void pickPhoto('camera')}
-          />
-          <Button
-            label="Upload"
-            variant="secondary"
-            onPress={() => void pickPhoto('library')}
-          />
-          <Button
-            label="Skip"
-            variant="tertiary"
-            onPress={() => {
-              updateDraft({ evidenceChoice: 'skipped', evidence: null });
-              setError(null);
-              setPhotoUnavailable(false);
-            }}
-          />
+      <View style={styles.form}>
+        <View style={styles.progress} accessibilityLabel="Report details step">
+          <View style={[styles.progressSegment, styles.progressActive]} />
+          <View style={styles.progressSegment} />
+          <View style={styles.progressSegment} />
         </View>
-        {draft.evidenceChoice === 'photo' && draft.evidence && (
-          <AppCard title="Photo selected">
-            <Image
-              source={{ uri: draft.evidence.uri }}
-              style={styles.photo}
-              accessibilityLabel="Selected report photo"
-              onError={() => setPhotoUnavailable(true)}
-            />
-            <Text style={styles.body}>{draft.evidence.fileName}</Text>
-            <Text style={styles.helper}>
-              Stored locally for this demo. No cloud upload.
-            </Text>
-          </AppCard>
-        )}
-        {draft.evidenceChoice === 'skipped' && (
-          <Text style={styles.body}>
-            Photo skipped. You can still add one before submitting.
+
+        <View style={styles.intro}>
+          <Text style={styles.title}>Tell us what happened</Text>
+          <Text style={styles.guidance}>
+            Provide as much detail as you can. You don&apos;t need to use
+            technical terms.
           </Text>
-        )}
-        {photoUnavailable && (
-          <InlineAlert
-            tone="warning"
-            title="Photo unavailable"
-            message="The local photo URI no longer opens. Choose another photo or Skip before continuing."
-          />
-        )}
-        {attempted && draft.evidenceChoice === 'unanswered' && (
-          <Text style={styles.error}>
-            Take a photo, upload one, or choose Skip.
-          </Text>
-        )}
-        {error && (
-          <InlineAlert
-            tone="critical"
-            title="Photo not added"
-            message={error}
-          />
-        )}
-      </View>
+        </View>
 
-      <TextInput
-        label="What happened or could happen?"
-        helperText="Use your own words. Include the location or equipment if helpful."
-        error={
-          attempted && !draft.description.trim()
-            ? 'Please add a short description.'
-            : undefined
-        }
-        value={draft.description}
-        onChangeText={(description) => updateDraft({ description })}
-        multiline
-        numberOfLines={5}
-        maxLength={2000}
-      />
-
-      <AppCard title="Current site">
-        <Text style={styles.site}>{workerHomeDemo.site.name}</Text>
-        <Text style={styles.helper}>Prefilled for this demo</Text>
-      </AppCard>
-
-      <View
-        style={styles.section}
-        accessibilityRole="radiogroup"
-        accessibilityLabel="Work area"
-      >
-        <SectionHeader
-          title="Work area"
-          description="Choose where you noticed it."
+        <TextArea
+          label="What happened?"
+          placeholder="Describe what you noticed"
+          value={draft.description}
+          onChangeText={(description) => updateDraft({ description })}
+          onBlur={() => setDescriptionTouched(true)}
+          numberOfLines={3}
+          maxLength={2000}
+          error={
+            showDescriptionError ? 'Please add a short description.' : undefined
+          }
         />
+
+        <View style={styles.fieldGroup}>
+          <SelectField
+            label="Where did this happen?"
+            value={selectedArea?.name}
+            placeholder="Choose a work area"
+            leadingIcon={<MapPin size={19} color={colors.graphite} />}
+            expanded={workAreasOpen}
+            error={showWorkAreaError ? 'Choose a work area.' : undefined}
+            onPress={() => setWorkAreasOpen((open) => !open)}
+          />
+          <View
+            style={styles.siteField}
+            accessibilityLabel={`Current site, ${workerHomeDemo.site.name}`}
+          >
+            <MapPin size={19} color={colors.graphite} />
+            <Text style={styles.siteText}>{workerHomeDemo.site.name}</Text>
+          </View>
+        </View>
+
+        <View style={styles.fieldGroup}>
+          <Text style={styles.fieldLabel}>When did this happen?</Text>
+          <View style={styles.dateTimeRow}>
+            <DateTimeField
+              style={styles.dateField}
+              accessibilityLabel={`Current date, ${dateLabel}`}
+              icon={<CalendarBlank size={19} color={colors.graphite} />}
+              value={dateLabel}
+            />
+            <DateTimeField
+              style={styles.timeField}
+              accessibilityLabel={`Current time, ${timeLabel}`}
+              icon={<Clock size={19} color={colors.graphite} />}
+              value={timeLabel}
+            />
+          </View>
+        </View>
+
+        <View style={styles.footer}>
+          <View style={styles.footerAction}>
+            <Button label="Next" onPress={continueToEvidence} />
+          </View>
+        </View>
+      </View>
+      <SelectionSheet
+        visible={workAreasOpen}
+        title="Where did this happen?"
+        onClose={closeWorkAreaPicker}
+      >
         {workerHomeDemo.workAreas.map((area) => (
-          <SelectableCard
+          <ChoiceCard
             key={area.id}
+            accessibilityLabel={area.name}
             title={area.name}
             selected={draft.workAreaId === area.id}
-            onPress={() => updateDraft({ workAreaId: area.id })}
+            onPress={() => {
+              updateDraft({ workAreaId: area.id });
+              setWorkAreasOpen(false);
+            }}
           />
         ))}
-        {attempted && !draft.workAreaId && (
-          <Text style={styles.error}>Choose a work area.</Text>
-        )}
-      </View>
-      <Button label="Continue" onPress={continueToQuestions} />
+      </SelectionSheet>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  content: { gap: spacing[3] },
-  section: { gap: spacing[1] },
-  actions: { gap: spacing[1] },
-  photo: {
-    width: 128,
-    height: 128,
-    borderRadius: radius.md,
-    backgroundColor: colors.warmBone,
+  content: {
+    flexGrow: 1,
+    marginHorizontal: -spacing[2],
+    marginTop: -spacing[2],
+    backgroundColor: colors.white,
   },
-  site: {
-    color: colors.softBlack,
+  form: {
+    flexGrow: 1,
+    gap: spacing[2],
+    paddingHorizontal: spacing[2],
+    paddingBottom: spacing[2],
+  },
+  progress: { flexDirection: 'row', gap: 4 },
+  progressSegment: {
+    flex: 1,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: colors.coolConcrete,
+  },
+  progressActive: { backgroundColor: colors.signalYellow },
+  intro: { gap: spacing[1] },
+  title: {
+    color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 24,
+    fontWeight: '700',
+    lineHeight: 30,
   },
-  body: {
+  guidance: {
+    color: colors.graphite,
+    fontFamily: typography.fontFamily,
+    fontSize: 15,
+    lineHeight: 22,
+  },
+  fieldGroup: { gap: spacing[1] },
+  fieldLabel: {
+    color: colors.deepCharcoal,
+    fontFamily: typography.fontFamily,
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  siteField: {
+    minHeight: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing[1],
+    paddingHorizontal: spacing[1],
+    backgroundColor: colors.coolSurface,
+  },
+  siteText: {
     color: colors.graphite,
     fontFamily: typography.fontFamily,
     fontSize: 15,
   },
-  helper: {
-    color: colors.graphite,
-    fontFamily: typography.fontFamily,
-    fontSize: 13,
-  },
-  error: {
-    color: colors.critical,
-    fontFamily: typography.fontFamily,
-    fontSize: 14,
-    fontWeight: '600',
-  },
+  dateTimeRow: { flexDirection: 'row', gap: spacing[1] },
+  dateField: { flex: 2 },
+  timeField: { flex: 1 },
+  footer: { flexDirection: 'row', gap: spacing[1], marginTop: 'auto' },
+  footerAction: { flex: 1 },
 });

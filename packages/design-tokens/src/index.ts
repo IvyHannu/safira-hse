@@ -1,8 +1,9 @@
 export const colors = {
-  graphite: '#242522',
-  softBlack: '#171816',
-  saffron: '#D8A617',
-  warmBone: '#F4F1E9',
+  signalYellow: '#FFD21A',
+  graphite: '#202220',
+  deepCharcoal: '#121412',
+  coolConcrete: '#E9EBE7',
+  coolSurface: '#F6F7F5',
   white: '#FFFFFF',
   success: '#267A53',
   warning: '#A66A00',

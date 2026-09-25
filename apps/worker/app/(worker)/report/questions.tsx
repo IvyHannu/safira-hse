@@ -2,7 +2,14 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { colors, spacing, typography } from '@safira/design-tokens';
 import { StyleSheet, Text, View } from 'react-native';
-import { Button, SectionHeader, SelectableCard } from '@/components/ui';
+import {
+  Button,
+  ChoiceCard,
+  SectionHeader,
+  ValidationMessage,
+  WorkerHeader,
+} from '@/components/ui';
+import { workerHomeDemo } from '@/demo/worker-data';
 import { useReporting } from '@/reporting/provider';
 import type { QuestionAnswer, QuestionKey } from '@/reporting/model';
 
@@ -21,25 +28,27 @@ const choices: readonly { value: QuestionAnswer; label: string }[] = [
 export default function AdditionalQuestionsScreen() {
   const router = useRouter();
   const { state, updateDraft } = useReporting();
-  const [attempted, setAttempted] = useState(false);
+  const [attemptedFor, setAttemptedFor] = useState<string | null>(null);
   const answers = state.draft.answers;
+  const draftCycle = `${state.submitted?.reference ?? 'first'}:${state.draft.source?.type ?? 'direct'}:${state.draft.source?.itemId ?? ''}`;
+  const attempted = attemptedFor === draftCycle;
 
   function answer(key: QuestionKey, value: QuestionAnswer) {
     updateDraft({ answers: { ...answers, [key]: value } });
   }
 
   function continueToReview() {
-    setAttempted(true);
+    setAttemptedFor(draftCycle);
     if (Object.values(answers).some((value) => value === null)) return;
     router.push('/report/review');
   }
 
   return (
     <View style={styles.content}>
-      <Button
-        label="Back to details"
-        variant="tertiary"
-        onPress={() => router.replace('/report/details')}
+      <WorkerHeader
+        backLabel="Back to details"
+        onBack={() => router.replace('/report/details')}
+        context={workerHomeDemo.site.name}
       />
       <SectionHeader
         title="A few more questions"
@@ -54,16 +63,20 @@ export default function AdditionalQuestionsScreen() {
         >
           <Text style={styles.label}>{question.label}</Text>
           {choices.map((choice) => (
-            <SelectableCard
+            <ChoiceCard
               key={choice.value}
               title={choice.label}
               selected={answers[question.key] === choice.value}
               onPress={() => answer(question.key, choice.value)}
             />
           ))}
-          {attempted && answers[question.key] === null && (
-            <Text style={styles.error}>Choose Yes, No, or Not sure.</Text>
-          )}
+          <ValidationMessage
+            message={
+              attempted && answers[question.key] === null
+                ? 'Choose Yes, No, or Not sure.'
+                : undefined
+            }
+          />
         </View>
       ))}
       <Button label="Continue to review" onPress={continueToReview} />
@@ -73,17 +86,11 @@ export default function AdditionalQuestionsScreen() {
 
 const styles = StyleSheet.create({
   content: { gap: spacing[3] },
-  question: { gap: spacing[1] },
+  question: { gap: spacing[1], maxWidth: 520 },
   label: {
-    color: colors.softBlack,
+    color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 18,
-    fontWeight: '600',
-  },
-  error: {
-    color: colors.critical,
-    fontFamily: typography.fontFamily,
-    fontSize: 14,
     fontWeight: '600',
   },
 });

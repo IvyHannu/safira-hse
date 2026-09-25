@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { colors, radius, spacing, typography } from '@safira/design-tokens';
+import ArrowLeft from 'phosphor-react-native/src/icons/ArrowLeft';
 import {
   Pressable,
   StyleSheet,
@@ -6,6 +8,8 @@ import {
   View,
   type PressableProps,
 } from 'react-native';
+
+export { ChoiceCard as SelectableCard } from './form-controls';
 
 export type ButtonVariant =
   'primary' | 'secondary' | 'tertiary' | 'destructive';
@@ -21,9 +25,15 @@ export function Button({
   variant = 'primary',
   loading = false,
   disabled = false,
+  onHoverIn,
+  onHoverOut,
+  onFocus,
+  onBlur,
   ...props
 }: ButtonProps) {
   const inactive = disabled || loading;
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
   const foreground = variant === 'destructive' ? colors.white : colors.graphite;
   return (
     <Pressable
@@ -32,10 +42,28 @@ export function Button({
       accessibilityLabel={loading ? `${label}, loading` : label}
       accessibilityState={{ disabled: inactive, busy: loading }}
       disabled={inactive}
+      onHoverIn={(event) => {
+        setHovered(true);
+        onHoverIn?.(event);
+      }}
+      onHoverOut={(event) => {
+        setHovered(false);
+        onHoverOut?.(event);
+      }}
+      onFocus={(event) => {
+        setFocused(true);
+        onFocus?.(event);
+      }}
+      onBlur={(event) => {
+        setFocused(false);
+        onBlur?.(event);
+      }}
       style={({ pressed }) => [
         styles.button,
         styles[variant],
-        pressed && !inactive && styles.pressed,
+        hovered && !inactive && styles[`${variant}Hover`],
+        pressed && !inactive && styles[`${variant}Pressed`],
+        focused && !inactive && styles.focused,
         inactive && styles.disabled,
       ]}
     >
@@ -48,40 +76,38 @@ export function Button({
   );
 }
 
-interface SelectableCardProps extends Omit<
-  PressableProps,
-  'children' | 'style'
-> {
-  title: string;
-  description?: string;
-  selected: boolean;
+interface WorkerHeaderProps {
+  backLabel: string;
+  onBack(): void;
+  context?: string;
+  inset?: boolean;
 }
 
-export function SelectableCard({
-  title,
-  description,
-  selected,
-  disabled,
-  ...props
-}: SelectableCardProps) {
+export function WorkerHeader({
+  backLabel,
+  onBack,
+  context,
+  inset = false,
+}: WorkerHeaderProps) {
+  const [hovered, setHovered] = useState(false);
   return (
-    <Pressable
-      {...props}
-      accessibilityRole="radio"
-      accessibilityLabel={title}
-      accessibilityState={{ selected, disabled: !!disabled }}
-      disabled={!!disabled}
-      style={({ pressed }) => [
-        styles.selectableCard,
-        selected && styles.selectedCard,
-        pressed && !disabled && styles.pressed,
-        disabled && styles.disabled,
-      ]}
-    >
-      <Text style={styles.cardTitle}>{title}</Text>
-      {description && <Text style={styles.cardDescription}>{description}</Text>}
-      {selected && <Text style={styles.selectedLabel}>Selected</Text>}
-    </Pressable>
+    <View style={[styles.header, inset && styles.headerInset]}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={backLabel}
+        onPress={onBack}
+        onHoverIn={() => setHovered(true)}
+        onHoverOut={() => setHovered(false)}
+        style={({ pressed }) => [
+          styles.headerBack,
+          hovered && styles.headerBackHover,
+          pressed && styles.headerBackPressed,
+        ]}
+      >
+        <ArrowLeft size={22} color={colors.deepCharcoal} />
+      </Pressable>
+      {context && <Text style={styles.headerContext}>{context}</Text>}
+    </View>
   );
 }
 
@@ -106,40 +132,78 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 16,
   },
-  primary: { backgroundColor: colors.saffron, borderColor: colors.saffron },
+  primary: {
+    backgroundColor: colors.signalYellow,
+    borderColor: colors.signalYellow,
+  },
+  primaryHover: {
+    borderColor: colors.deepCharcoal,
+    shadowColor: colors.graphite,
+    shadowOpacity: 0.12,
+    shadowRadius: 4,
+  },
+  primaryPressed: { borderColor: colors.deepCharcoal, opacity: 0.72 },
   secondary: { backgroundColor: colors.white, borderColor: colors.graphite },
-  tertiary: { backgroundColor: colors.warmBone, borderColor: colors.warmBone },
+  secondaryHover: {
+    backgroundColor: colors.coolSurface,
+    borderColor: colors.deepCharcoal,
+  },
+  secondaryPressed: {
+    backgroundColor: colors.coolConcrete,
+    borderColor: colors.deepCharcoal,
+  },
+  tertiary: {
+    backgroundColor: colors.coolSurface,
+    borderColor: colors.coolSurface,
+  },
+  tertiaryHover: {
+    backgroundColor: colors.coolConcrete,
+    borderColor: colors.coolConcrete,
+  },
+  tertiaryPressed: {
+    backgroundColor: colors.coolConcrete,
+    borderColor: colors.graphite,
+  },
   destructive: {
     backgroundColor: colors.critical,
     borderColor: colors.critical,
   },
-  pressed: { opacity: 0.8 },
-  disabled: { opacity: 0.45 },
-  selectableCard: {
-    minHeight: 64,
-    borderWidth: 1,
+  destructiveHover: {
+    backgroundColor: colors.deepCharcoal,
+    borderColor: colors.deepCharcoal,
+  },
+  destructivePressed: {
+    backgroundColor: colors.graphite,
     borderColor: colors.graphite,
-    borderRadius: radius.lg,
-    backgroundColor: colors.white,
-    padding: spacing[2],
   },
-  selectedCard: { borderWidth: 2, backgroundColor: colors.warmBone },
-  cardTitle: {
-    color: colors.softBlack,
-    fontFamily: typography.fontFamily,
-    fontWeight: '600',
-    fontSize: 16,
+  focused: { borderWidth: 2, borderColor: colors.deepCharcoal },
+  disabled: {
+    opacity: 0.48,
+    backgroundColor: colors.coolConcrete,
+    borderColor: colors.coolConcrete,
   },
-  cardDescription: {
+  header: {
+    minHeight: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.coolConcrete,
+  },
+  headerInset: { paddingHorizontal: spacing[2] },
+  headerBack: {
+    minWidth: 48,
+    minHeight: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: radius.md,
+  },
+  headerBackHover: { backgroundColor: colors.coolSurface },
+  headerBackPressed: { backgroundColor: colors.coolConcrete },
+  headerContext: {
     color: colors.graphite,
     fontFamily: typography.fontFamily,
-    marginTop: spacing[1],
-    lineHeight: 21,
-  },
-  selectedLabel: {
-    color: colors.graphite,
-    fontFamily: typography.fontFamily,
+    fontSize: 13,
     fontWeight: '600',
-    marginTop: spacing[1],
   },
 });

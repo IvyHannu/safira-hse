@@ -1,13 +1,9 @@
-import { Link, useRouter } from 'expo-router';
+import { useState } from 'react';
+import { useRouter } from 'expo-router';
 import type { AuthRole } from '@safira/auth';
 import { colors, spacing, typography } from '@safira/design-tokens';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import {
-  Button,
-  InlineAlert,
-  SectionHeader,
-  SelectableCard,
-} from '@/components/ui';
+import { Linking, StyleSheet, Text, View } from 'react-native';
+import { Button, ChoiceCard, SectionHeader } from '@/components/ui';
 import { useAuth } from '@/lib/demo-auth';
 
 const roles: { value: AuthRole; label: string }[] = [
@@ -20,14 +16,37 @@ const roles: { value: AuthRole; label: string }[] = [
 export default function ProfileScreen() {
   const router = useRouter();
   const { session, loading, error, signIn, signOut } = useAuth();
+  const [routeError, setRouteError] = useState<string | null>(null);
   const activeLabel = roles.find((role) => role.value === session?.role)?.label;
+
+  async function chooseRole(role: AuthRole) {
+    setRouteError(null);
+    if (!(await signIn(role))) return;
+    if (role === 'worker') {
+      router.replace('/');
+      return;
+    }
+    const base =
+      process.env.EXPO_PUBLIC_ADMIN_DEMO_URL || 'http://localhost:3000';
+    try {
+      await Linking.openURL(
+        `${base.replace(/\/$/, '')}/workspace?demoRole=${role}`,
+      );
+    } catch {
+      setRouteError(
+        'Could not open the Admin demo. Your selected role is still saved.',
+      );
+    }
+  }
 
   return (
     <View style={styles.content}>
-      <SectionHeader
-        title="Demo access"
-        description="Choose a local role to test Safira. The Worker home is available with the Worker role."
-      />
+      <View style={styles.heading}>
+        <SectionHeader
+          title="Choose your space"
+          description="Select a demo role to continue."
+        />
+      </View>
       {loading ? (
         <Text style={styles.body}>Restoring demo session…</Text>
       ) : (
@@ -41,11 +60,11 @@ export default function ProfileScreen() {
             style={styles.roles}
           >
             {roles.map(({ value, label }) => (
-              <SelectableCard
+              <ChoiceCard
                 key={value}
                 title={label}
                 selected={session?.role === value}
-                onPress={() => void signIn(value)}
+                onPress={() => void chooseRole(value)}
               />
             ))}
           </View>
@@ -66,17 +85,10 @@ export default function ProfileScreen() {
           {error}
         </Text>
       )}
-      <InlineAlert
-        tone="information"
-        title="Prototype access only"
-        message="This role is stored on this device. It does not grant database access."
-      />
-      {__DEV__ && (
-        <Link href="/design-system" asChild>
-          <Pressable accessibilityRole="link" style={styles.showcaseLink}>
-            <Text style={styles.linkText}>Open design system showcase</Text>
-          </Pressable>
-        </Link>
+      {routeError && (
+        <Text accessibilityRole="alert" style={styles.error}>
+          {routeError}
+        </Text>
       )}
     </View>
   );
@@ -84,6 +96,11 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   content: { gap: spacing[3] },
+  heading: {
+    borderLeftWidth: 4,
+    borderLeftColor: colors.signalYellow,
+    paddingLeft: spacing[2],
+  },
   roles: { gap: spacing[1] },
   body: {
     color: colors.graphite,
@@ -91,7 +108,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   activeRole: {
-    color: colors.softBlack,
+    color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 16,
     fontWeight: '600',
@@ -100,11 +117,5 @@ const styles = StyleSheet.create({
     color: colors.critical,
     fontFamily: typography.fontFamily,
     fontWeight: '600',
-  },
-  showcaseLink: { minHeight: 48, justifyContent: 'center' },
-  linkText: {
-    color: colors.graphite,
-    fontFamily: typography.fontFamily,
-    textDecorationLine: 'underline',
   },
 });

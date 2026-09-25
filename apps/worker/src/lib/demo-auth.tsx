@@ -18,7 +18,7 @@ interface DemoAuthContextValue {
   session: AuthSession | null;
   loading: boolean;
   error: string | null;
-  signIn(role: AuthRole): Promise<void>;
+  signIn(role: AuthRole): Promise<boolean>;
   signOut(): Promise<void>;
 }
 
@@ -51,8 +51,10 @@ export function DemoAuthProvider({ children }: { children: ReactNode }) {
     try {
       setSession(await adapter.signIn(role));
       setError(null);
+      return true;
     } catch {
       setError('Could not save the demo session.');
+      return false;
     }
   }
 

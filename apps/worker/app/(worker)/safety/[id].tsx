@@ -2,23 +2,22 @@ import { useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { colors, radius, spacing, typography } from '@safira/design-tokens';
-import {
-  Image,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Image, Platform, StyleSheet, Text, View } from 'react-native';
 import {
   AppCard,
+  ActionUploadField,
   Button,
+  ChoiceCard,
   EmptyState,
+  FormField,
   InlineAlert,
   StatusBadge,
-  TextInput,
+  TextArea,
+  WorkerHeader,
 } from '@/components/ui';
 import type { LocalPhotoEvidence } from '@/reporting/model';
+import Camera from 'phosphor-react-native/src/icons/Camera';
+import UploadSimple from 'phosphor-react-native/src/icons/UploadSimple';
 import { useReporting } from '@/reporting/provider';
 import type {
   ChecklistAnswerValue,
@@ -86,32 +85,17 @@ function ItemCard({
         accessibilityLabel={item.prompt}
       >
         {(['yes', 'no', 'na'] as const).map((opt) => {
-          const isSelected = answer === opt;
           const label = opt === 'yes' ? 'Yes' : opt === 'no' ? 'No' : 'N/A';
           return (
-            <Pressable
+            <ChoiceCard
               key={opt}
               disabled={readOnly}
-              accessibilityRole="radio"
-              accessibilityState={{ selected: isSelected, disabled: readOnly }}
               accessibilityLabel={`${label} for ${item.prompt}`}
+              title={label}
+              selected={answer === opt}
               onPress={() => onAnswer(opt)}
-              style={[
-                styles.segmentButton,
-                isSelected && styles.segmentButtonSelected,
-                isSelected && opt === 'no' && styles.segmentButtonNoSelected,
-                readOnly && styles.readOnlyButton,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.segmentLabel,
-                  isSelected && styles.segmentLabelSelected,
-                ]}
-              >
-                {label}
-              </Text>
-            </Pressable>
+              style={styles.choiceOption}
+            />
           );
         })}
       </View>
@@ -125,12 +109,11 @@ function ItemCard({
             message="You answered No. Add details or report this issue so HSE can follow up."
           />
 
-          <TextInput
+          <TextArea
             label="Note"
             placeholder="Describe what is wrong..."
             value={response.note || ''}
             onChangeText={onNoteChange}
-            multiline
           />
 
           {response.photo ? (
@@ -149,14 +132,14 @@ function ItemCard({
             </View>
           ) : item.supportsPhotos ? (
             <View style={styles.photoActionsRow}>
-              <Button
+              <ActionUploadField
                 label="Add photo"
-                variant="tertiary"
+                icon={<UploadSimple size={20} color={colors.deepCharcoal} />}
                 onPress={() => onPickPhoto('library')}
               />
-              <Button
+              <ActionUploadField
                 label="Take photo"
-                variant="tertiary"
+                icon={<Camera size={20} color={colors.deepCharcoal} />}
                 onPress={() => onPickPhoto('camera')}
               />
             </View>
@@ -174,7 +157,7 @@ function ItemCard({
       {!isNo && !readOnly && item.supportsNotes ? (
         <View style={styles.optionalNoteSection}>
           {showOptionalNote ? (
-            <TextInput
+            <FormField
               label="Optional note"
               placeholder="Add observation note..."
               value={response.note || ''}
@@ -304,10 +287,10 @@ export default function ChecklistDetailScreen() {
 
   return (
     <View style={styles.content}>
-      <Button
-        label="Back to Safety"
-        variant="tertiary"
-        onPress={() => router.replace('/safety')}
+      <WorkerHeader
+        backLabel="Back to Safety"
+        onBack={() => router.replace('/safety')}
+        context={checklist.siteName}
       />
 
       <View style={styles.header}>
@@ -376,13 +359,7 @@ export default function ChecklistDetailScreen() {
             </Text>
           ) : null}
         </View>
-      ) : (
-        <Button
-          label="Back to Safety"
-          variant="secondary"
-          onPress={() => router.replace('/safety')}
-        />
-      )}
+      ) : null}
     </View>
   );
 }
@@ -391,7 +368,7 @@ const styles = StyleSheet.create({
   content: { gap: spacing[3], paddingBottom: spacing[4] },
   header: { gap: spacing[1] },
   title: {
-    color: colors.softBlack,
+    color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 24,
     fontWeight: '700',
@@ -422,11 +399,11 @@ const styles = StyleSheet.create({
   progressContainer: {
     paddingVertical: spacing[1],
     paddingHorizontal: spacing[2],
-    backgroundColor: colors.warmBone,
+    backgroundColor: colors.coolSurface,
     borderRadius: radius.md,
   },
   progressLabel: {
-    color: colors.softBlack,
+    color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 14,
     fontWeight: '600',
@@ -445,7 +422,7 @@ const styles = StyleSheet.create({
   },
   itemPrompt: {
     flex: 1,
-    color: colors.softBlack,
+    color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 16,
     fontWeight: '600',
@@ -456,36 +433,7 @@ const styles = StyleSheet.create({
     gap: spacing[1],
     marginTop: spacing[2],
   },
-  segmentButton: {
-    flex: 1,
-    minHeight: 44,
-    borderWidth: 1,
-    borderColor: colors.graphite,
-    borderRadius: radius.md,
-    backgroundColor: colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  segmentButtonSelected: {
-    backgroundColor: colors.graphite,
-    borderColor: colors.graphite,
-  },
-  segmentButtonNoSelected: {
-    backgroundColor: colors.critical,
-    borderColor: colors.critical,
-  },
-  readOnlyButton: {
-    opacity: 0.6,
-  },
-  segmentLabel: {
-    fontFamily: typography.fontFamily,
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.graphite,
-  },
-  segmentLabelSelected: {
-    color: colors.white,
-  },
+  choiceOption: { flex: 1 },
   issueBox: {
     marginTop: spacing[2],
     gap: spacing[2],
@@ -500,7 +448,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: radius.md,
-    backgroundColor: colors.warmBone,
+    backgroundColor: colors.coolSurface,
   },
   photoName: {
     color: colors.graphite,
