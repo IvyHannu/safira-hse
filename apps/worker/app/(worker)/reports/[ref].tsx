@@ -229,7 +229,7 @@ export default function ReportDetailScreen() {
       <View style={styles.content}>
         <EmptyState
           title="Report not found"
-          description="This report does not exist in your demo session."
+          description="This report could not be found."
           action={
             <Button
               label="Back to My Reports"

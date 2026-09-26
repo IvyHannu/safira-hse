@@ -22,7 +22,7 @@ export default function SubmittedReportRedirectScreen() {
     return (
       <EmptyState
         title="No report to view"
-        description="Submitted demo reports appear here after you finish the flow."
+        description="Submitted reports appear here after you finish the flow."
         action={
           <Button label="Back Home" onPress={() => router.replace('/')} />
         }

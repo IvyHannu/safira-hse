@@ -33,18 +33,14 @@ export default function ReportChoiceScreen() {
   const selected = state.draft.category;
   const icons = [Warning, ListDashes, FirstAid, Leaf];
 
-  if (loading)
-    return <Text style={styles.body}>Loading your demo session…</Text>;
+  if (loading) return <Text style={styles.body}>Opening Safira…</Text>;
   if (session?.role !== 'worker') {
     return (
       <EmptyState
-        title="Choose the Worker demo role"
-        description="Open Profile to continue with this prototype."
+        title="Choose your workspace"
+        description="Select Worker to continue."
         action={
-          <Button
-            label="Open Profile"
-            onPress={() => router.push('/profile')}
-          />
+          <Button label="Choose workspace" onPress={() => router.push('/')} />
         }
       />
     );

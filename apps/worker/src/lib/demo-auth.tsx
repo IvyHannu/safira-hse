@@ -37,7 +37,7 @@ export function DemoAuthProvider({ children }: { children: ReactNode }) {
         if (active) setSession(saved);
       })
       .catch(() => {
-        if (active) setError('Demo session storage is unavailable.');
+        if (active) setError('Your session could not be restored.');
       })
       .finally(() => {
         if (active) setLoading(false);
@@ -53,7 +53,7 @@ export function DemoAuthProvider({ children }: { children: ReactNode }) {
       setError(null);
       return true;
     } catch {
-      setError('Could not save the demo session.');
+      setError('Could not save your workspace selection.');
       return false;
     }
   }
@@ -64,7 +64,7 @@ export function DemoAuthProvider({ children }: { children: ReactNode }) {
       setSession(null);
       setError(null);
     } catch {
-      setError('Could not clear the demo session.');
+      setError('Could not sign out. Please try again.');
     }
   }
 

@@ -33,7 +33,11 @@ function WorkerShell() {
   const isReady = reportingReady && safetyReady;
 
   return (
-    <ScreenContainer bottomNavigation={<WorkerNavigation />}>
+    <ScreenContainer
+      bottomNavigation={
+        session?.role === 'worker' ? <WorkerNavigation /> : undefined
+      }
+    >
       {!isReady || loading ? (
         <Text
           style={{ color: colors.graphite, fontFamily: typography.fontFamily }}
@@ -45,13 +49,10 @@ function WorkerShell() {
           pathname.startsWith('/safety')) &&
         session?.role !== 'worker' ? (
         <EmptyState
-          title="Choose the Worker demo role"
-          description="Open Profile to continue with this prototype."
+          title="Choose your workspace"
+          description="Select Worker to continue."
           action={
-            <Button
-              label="Open Profile"
-              onPress={() => router.push('/profile')}
-            />
+            <Button label="Choose workspace" onPress={() => router.push('/')} />
           }
         />
       ) : (

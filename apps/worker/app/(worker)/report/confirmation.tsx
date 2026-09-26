@@ -20,7 +20,7 @@ export default function ReportConfirmationScreen() {
   if (!report) {
     return (
       <EmptyState
-        title="No submitted demo report"
+        title="No submitted report"
         description="Start from Home to create a local report."
         action={
           <Button label="Back Home" onPress={() => router.replace('/')} />
@@ -38,7 +38,7 @@ export default function ReportConfirmationScreen() {
       />
       <SectionHeader
         title="Report submitted"
-        description="Your demo report was saved on this device."
+        description="Your report has been saved."
       />
       <AppCard>
         <Text style={styles.reference}>{report.reference}</Text>
@@ -52,9 +52,7 @@ export default function ReportConfirmationScreen() {
           In a connected Safira app, the safety team would review your report
           and share updates here.
         </Text>
-        <Text style={styles.body}>
-          This demo has not sent anything to your organisation.
-        </Text>
+        <Text style={styles.body}>Your report is available in My Reports.</Text>
       </AppCard>
       <Button
         label="View report"

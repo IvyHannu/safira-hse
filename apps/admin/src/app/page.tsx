@@ -1,77 +1,92 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import type { AuthRole } from '@safira/auth';
 import { useAuth } from '@/lib/demo-auth';
-import { Button, PageContainer } from '@/components/ui';
+import { Button } from '@/components/ui';
 
-const roles: { value: AuthRole; label: string }[] = [
-  { value: 'worker', label: 'Worker' },
-  { value: 'hse_officer', label: 'HSE Officer' },
-  { value: 'hse_admin', label: 'HSE Admin' },
-  { value: 'organisation_admin', label: 'Organisation Admin' },
+const roles: { value: AuthRole; label: string; detail: string }[] = [
+  { value: 'worker', label: 'Worker', detail: 'Open the Worker app' },
+  {
+    value: 'hse_officer',
+    label: 'HSE Officer',
+    detail: 'Review work for permitted sites',
+  },
+  {
+    value: 'hse_admin',
+    label: 'HSE Admin',
+    detail: 'Open the HSE admin space',
+  },
+  {
+    value: 'organisation_admin',
+    label: 'Organisation Admin',
+    detail: 'Open the organisation admin space',
+  },
 ];
 
 export default function Home() {
+  const router = useRouter();
   const { session, loading, error, signIn, signOut } = useAuth();
-  const activeLabel = roles.find((role) => role.value === session?.role)?.label;
+
+  async function chooseRole(role: AuthRole) {
+    if (role === 'worker') {
+      if (!(await signIn(role))) return;
+      const base =
+        process.env.NEXT_PUBLIC_WORKER_DEMO_URL || 'http://localhost:8081';
+      window.open(`${base.replace(/\/$/, '')}/?workspaceRole=worker`, '_self');
+      return;
+    }
+    if (await signIn(role)) router.push('/workspace');
+  }
 
   return (
-    <main className="flex min-h-screen items-start justify-center bg-warmBone py-6 text-graphite">
-      <PageContainer narrow>
-        <section className="grid gap-4 rounded-lg bg-white p-5 shadow-sm">
-          <div className="grid gap-1">
-            <h1 className="text-[22px] font-semibold leading-7">Safira Admin</h1>
-            <p className="text-sm leading-6">
-              Development access only. Choose a role to explore the prototype.
-            </p>
-          </div>
-        {loading ? (
-          <p className="mt-6" role="status">
-            Restoring demo session…
+    <main className="flex min-h-screen items-center justify-center bg-coolSurface px-4 py-8 text-graphite">
+      <section className="w-full max-w-[480px] border border-coolConcrete bg-white p-6 sm:p-8">
+        <div className="mb-7 border-l-4 border-signalYellow pl-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em]">
+            Safira
           </p>
+          <h1 className="mt-2 text-[28px] font-semibold leading-8 text-deepCharcoal">
+            Choose your workspace
+          </h1>
+          <p className="mt-2 text-sm leading-6">
+            Continue as the role that matches your work.
+          </p>
+        </div>
+        {loading ? (
+          <p role="status">Opening Safira…</p>
         ) : (
-          <>
-            <p className="text-sm font-semibold" role="status">
-              {activeLabel ? `Signed in as ${activeLabel}` : 'Signed out'}
-            </p>
-            <div className="grid gap-2" aria-label="Demo roles">
-              {roles.map(({ value, label }) => (
+          <div className="grid gap-3">
+            {roles.map(({ value, label, detail }) => (
+              <div key={value} className="grid gap-1">
                 <Button
-                  key={value}
                   variant={session?.role === value ? 'primary' : 'secondary'}
                   aria-pressed={session?.role === value}
-                  onClick={() => void signIn(value)}
-                  className="justify-start"
+                  onClick={() => void chooseRole(value)}
+                  className="w-full justify-start"
                 >
                   {label}
                 </Button>
-              ))}
-            </div>
+                <p className="px-1 text-xs text-graphite">{detail}</p>
+              </div>
+            ))}
             {session && (
-              <Button variant="tertiary" onClick={() => void signOut()} className="justify-start px-0">
+              <Button
+                variant="tertiary"
+                onClick={() => void signOut()}
+                className="mt-2 justify-start"
+              >
                 Sign out
               </Button>
             )}
-          </>
+          </div>
         )}
         {error && (
-          <p className="text-sm font-semibold text-critical" role="alert">
+          <p className="mt-4 text-sm font-semibold text-critical" role="alert">
             {error}
           </p>
         )}
-        <p className="text-xs leading-5">
-          Demo roles are local UI state and do not grant database access.
-        </p>
-        {process.env.NODE_ENV !== 'production' && (
-          <a
-            href="/design-system"
-            className="inline-flex h-9 items-center text-sm underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
-          >
-            Open design system showcase
-          </a>
-        )}
-        </section>
-      </PageContainer>
+      </section>
     </main>
   );
 }

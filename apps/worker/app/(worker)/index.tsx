@@ -5,7 +5,8 @@ import type { ReportStatus } from '@safira/types';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Files from 'phosphor-react-native/src/icons/Files';
 import ListChecks from 'phosphor-react-native/src/icons/ListChecks';
-import { Button, EmptyState, SectionHeader, type Tone } from '@/components/ui';
+import { Button, type Tone } from '@/components/ui';
+import { WorkspaceSelector } from '@/components/workspace-selector';
 import { workerHomeDemo, workerReportCategories } from '@/demo/worker-data';
 import { useAuth } from '@/lib/demo-auth';
 import { isDraftStarted } from '@/reporting/model';
@@ -55,41 +56,23 @@ function HomeNotice({
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { demoRole } = useLocalSearchParams<{ demoRole?: string }>();
+  const { workspaceRole } = useLocalSearchParams<{ workspaceRole?: string }>();
   const { session, loading, signIn } = useAuth();
   const linkHandled = useRef(false);
   const { state } = useReporting();
 
   useEffect(() => {
-    if (loading || demoRole !== 'worker' || linkHandled.current) return;
+    if (loading || workspaceRole !== 'worker' || linkHandled.current) return;
     linkHandled.current = true;
     void signIn('worker').then((saved) => {
       if (saved) router.replace('/');
     });
-  }, [demoRole, loading, router, signIn]);
+  }, [workspaceRole, loading, router, signIn]);
   const { checklists } = useSafety();
 
-  if (loading)
-    return <Text style={styles.body}>Loading your demo session…</Text>;
+  if (loading) return <Text style={styles.body}>Opening Safira…</Text>;
   if (session?.role !== 'worker') {
-    return (
-      <View style={styles.content}>
-        <SectionHeader
-          title="Worker home"
-          description="Choose the Worker demo role to see the prototype."
-        />
-        <EmptyState
-          title="Worker access is ready"
-          description="Open Profile and select Worker. This is local demo access only."
-          action={
-            <Button
-              label="Open Profile"
-              onPress={() => router.push('/profile')}
-            />
-          }
-        />
-      </View>
-    );
+    return <WorkspaceSelector />;
   }
 
   const { worker, site, latestReport, assignedChecklist, activeSafetyAlert } =
