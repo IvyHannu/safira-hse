@@ -33,14 +33,14 @@ export function TableFoundation<TData>({
     <div className="overflow-x-auto rounded-lg border border-graphite/20 bg-white">
       <table className="w-full border-collapse text-left text-sm leading-6">
         <caption className="sr-only">{caption}</caption>
-        <thead className="bg-warmBone">
+        <thead className="bg-coolSurface">
           {table.getHeaderGroups().map((group) => (
             <tr key={group.id}>
               {group.headers.map((header) => (
                 <th
                   key={header.id}
                   scope="col"
-                  className="border-b border-graphite/20 px-3 py-2 font-semibold text-softBlack"
+                  className="border-b border-graphite/20 px-3 py-2 font-semibold text-deepCharcoal"
                 >
                   {header.isPlaceholder
                     ? null
@@ -67,7 +67,10 @@ export function TableFoundation<TData>({
                 className="border-b border-graphite/20 last:border-0"
               >
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-3 py-2 align-top text-graphite">
+                  <td
+                    key={cell.id}
+                    className="px-3 py-2 align-top text-graphite"
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}

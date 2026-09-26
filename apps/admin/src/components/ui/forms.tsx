@@ -23,7 +23,7 @@ function Field({
 }: FieldProps & { id: string; children: ReactNode }) {
   return (
     <div className="grid gap-1">
-      <label htmlFor={id} className="text-sm font-semibold text-softBlack">
+      <label htmlFor={id} className="text-sm font-semibold text-deepCharcoal">
         {label}
       </label>
       {children}
@@ -41,7 +41,7 @@ function Field({
 }
 
 const controlClass =
-  'h-9 w-full rounded-md border border-graphite bg-white px-2.5 text-sm text-softBlack placeholder:text-graphite/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information disabled:cursor-not-allowed disabled:bg-warmBone disabled:opacity-60 aria-invalid:border-critical';
+  'h-9 w-full rounded-md border border-graphite bg-white px-2.5 text-sm text-deepCharcoal placeholder:text-graphite/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information disabled:cursor-not-allowed disabled:bg-coolSurface disabled:opacity-60 aria-invalid:border-critical';
 
 type InputProps = FieldProps &
   Omit<InputHTMLAttributes<HTMLInputElement>, 'children'>;
@@ -146,7 +146,7 @@ function Choice({
     <div className="grid gap-1">
       <label
         htmlFor={fieldId}
-        className="flex min-h-10 cursor-pointer items-center gap-1 text-sm font-medium text-softBlack has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-60"
+        className="flex min-h-10 cursor-pointer items-center gap-1 text-sm font-medium text-deepCharcoal has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-60"
       >
         <input
           {...props}

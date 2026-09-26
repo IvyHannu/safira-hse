@@ -49,7 +49,7 @@ export function DesignSystemShowcase() {
   );
 
   return (
-    <div className="min-h-screen bg-warmBone text-graphite">
+    <div className="min-h-screen bg-coolSurface text-graphite">
       <TopbarShell
         brand="Safira / Design system"
         actions={<Button variant="tertiary">Example action</Button>}
@@ -80,7 +80,9 @@ export function DesignSystemShowcase() {
           />
 
           <section id="actions" className="grid gap-3">
-            <h2 className="text-base font-semibold leading-6 text-softBlack">Buttons</h2>
+            <h2 className="text-base font-semibold leading-6 text-deepCharcoal">
+              Buttons
+            </h2>
             <div className="flex flex-wrap gap-2">
               <Button>Primary</Button>
               <Button variant="secondary">Secondary</Button>
@@ -92,7 +94,7 @@ export function DesignSystemShowcase() {
           </section>
 
           <section id="forms" className="grid gap-3">
-            <h2 className="text-base font-semibold leading-6 text-softBlack">
+            <h2 className="text-base font-semibold leading-6 text-deepCharcoal">
               Form controls
             </h2>
             <Card>
@@ -153,7 +155,7 @@ export function DesignSystemShowcase() {
           </section>
 
           <section className="grid gap-3">
-            <h2 className="text-base font-semibold leading-6 text-softBlack">
+            <h2 className="text-base font-semibold leading-6 text-deepCharcoal">
               Status and feedback
             </h2>
             <div className="flex flex-wrap gap-2">
@@ -185,7 +187,7 @@ export function DesignSystemShowcase() {
           </section>
 
           <section id="data" className="grid gap-3">
-            <h2 className="text-base font-semibold leading-6 text-softBlack">
+            <h2 className="text-base font-semibold leading-6 text-deepCharcoal">
               Table and filter
             </h2>
             <FilterControl value={filter} onChange={setFilter} />

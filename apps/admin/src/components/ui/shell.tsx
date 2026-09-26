@@ -28,12 +28,18 @@ export function PageHeader({
   return (
     <header className="flex flex-wrap items-center justify-between gap-3 border-b border-graphite/20 pb-4">
       <div className="min-w-0">
-        <h1 className="text-[22px] font-semibold leading-7 text-softBlack">{title}</h1>
+        <h1 className="text-[22px] font-semibold leading-7 text-deepCharcoal">
+          {title}
+        </h1>
         {description && (
-          <p className="mt-1 max-w-[768px] text-sm leading-6 text-graphite">{description}</p>
+          <p className="mt-1 max-w-[768px] text-sm leading-6 text-graphite">
+            {description}
+          </p>
         )}
       </div>
-      {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
+      {actions && (
+        <div className="flex shrink-0 items-center gap-2">{actions}</div>
+      )}
     </header>
   );
 }
@@ -66,7 +72,7 @@ export function SidebarShell({
             key={item.href}
             href={item.href}
             aria-current={item.active ? 'page' : undefined}
-            className={`inline-flex h-9 items-center gap-2 rounded-md border-l-4 px-2.5 text-sm font-medium text-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information ${item.active ? 'border-saffron bg-warmBone font-semibold' : 'border-transparent hover:bg-warmBone'}`}
+            className={`inline-flex h-9 items-center gap-2 rounded-md border-l-4 px-2.5 text-sm font-medium text-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information ${item.active ? 'border-signalYellow bg-coolSurface font-semibold' : 'border-transparent hover:bg-coolSurface'}`}
           >
             {item.icon}
             {item.label}
@@ -86,7 +92,7 @@ export function TopbarShell({
 }) {
   return (
     <header className="flex h-14 items-center justify-between gap-3 border-b border-graphite/20 bg-white px-4">
-      <span className="text-sm font-semibold text-softBlack">{brand}</span>
+      <span className="text-sm font-semibold text-deepCharcoal">{brand}</span>
       <div className="flex items-center gap-2">{actions}</div>
     </header>
   );

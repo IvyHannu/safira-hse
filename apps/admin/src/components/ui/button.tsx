@@ -12,9 +12,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variants: Record<ButtonVariant, string> = {
-  primary: 'border-saffron bg-saffron text-graphite hover:bg-warmBone',
-  secondary: 'border-graphite bg-white text-graphite hover:bg-warmBone',
-  tertiary: 'border-transparent bg-transparent text-graphite hover:bg-warmBone',
+  primary:
+    'border-signalYellow bg-signalYellow text-graphite hover:bg-coolSurface',
+  secondary: 'border-graphite bg-white text-graphite hover:bg-coolSurface',
+  tertiary:
+    'border-transparent bg-transparent text-graphite hover:bg-coolSurface',
   destructive:
     'border-critical bg-critical text-white hover:bg-white hover:text-critical',
 };
