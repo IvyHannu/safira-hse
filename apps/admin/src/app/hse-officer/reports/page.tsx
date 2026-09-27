@@ -2,11 +2,31 @@
 
 import { useState, useMemo, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Funnel, X, Calendar, CaretDown } from '@phosphor-icons/react';
+import {
+  ArrowRight,
+  Funnel,
+  X,
+  Calendar,
+  CaretDown,
+} from '@phosphor-icons/react';
 import { TableFoundation } from '@/components/ui/table';
-import { Select, Input } from '@/components/ui/forms';
-import { TypePill, SeverityPill, StatusPill } from '@/components/ui/feedback';
-import { reportList, statusOptions, severityOptions, typeOptions, siteOptions, ReportType, Severity, Status, ReportListItem } from '@/data/reports';
+import { Select, Input, useOfficerLayer } from '@/components/hse-officer/ui';
+import {
+  TypePill,
+  SeverityPill,
+  StatusPill,
+} from '@/components/hse-officer/ui';
+import {
+  reportList,
+  statusOptions,
+  severityOptions,
+  typeOptions,
+  siteOptions,
+  ReportType,
+  Severity,
+  Status,
+  ReportListItem,
+} from '@/data/reports';
 
 function ReportsTable({ reports }: { reports: ReportListItem[] }) {
   const columns = [
@@ -19,9 +39,13 @@ function ReportsTable({ reports }: { reports: ReportListItem[] }) {
           href={`/hse-officer/reports/${row.original.id}`}
           className="flex flex-col gap-0.5 min-w-0 hover:text-signalYellow transition-colors"
         >
-          <span className="text-sm font-medium text-deepCharcoal line-clamp-2 leading-snug">{row.original.title}</span>
+          <span className="text-sm font-medium text-deepCharcoal line-clamp-2 leading-snug">
+            {row.original.title}
+          </span>
           <div className="flex items-center gap-2 text-xs">
-            <span className="font-mono font-medium text-graphite/50">{row.original.id}</span>
+            <span className="font-mono font-medium text-graphite/50">
+              {row.original.id}
+            </span>
             <span className="text-graphite/60">{row.original.site}</span>
           </div>
         </Link>
@@ -56,7 +80,9 @@ function ReportsTable({ reports }: { reports: ReportListItem[] }) {
       header: 'Date',
       size: 110,
       cell: ({ row }: { row: { original: ReportListItem } }) => (
-        <span className="text-sm text-graphite whitespace-nowrap">{formatDate(row.original.date)}</span>
+        <span className="text-sm text-graphite whitespace-nowrap">
+          {formatDate(row.original.date)}
+        </span>
       ),
     },
   ];
@@ -78,9 +104,13 @@ function ReportCard({ report }: { report: ReportListItem }) {
       className="grid gap-2 rounded-lg border border-graphite/10 bg-white p-2.5 hover:border-graphite/30 hover:shadow-sm transition-colors"
     >
       <div className="grid gap-1.5">
-        <p className="text-sm font-medium text-deepCharcoal leading-snug">{report.title}</p>
+        <p className="text-sm font-medium text-deepCharcoal leading-snug">
+          {report.title}
+        </p>
         <div className="flex items-center gap-1.5 flex-wrap text-xs">
-          <span className="font-mono font-medium text-graphite/50">{report.id}</span>
+          <span className="font-mono font-medium text-graphite/50">
+            {report.id}
+          </span>
           <TypePill label={report.type} />
           <span className="text-graphite/60">{report.site}</span>
         </div>
@@ -99,7 +129,11 @@ function ReportCard({ report }: { report: ReportListItem }) {
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
-  return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  return date.toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
 }
 
 function FilterToolbar({
@@ -141,13 +175,15 @@ function FilterToolbar({
   hasActiveFilters: boolean;
   clearFilters: () => void;
 }) {
-  const compactSelectClass = 'h-9 w-full max-w-[140px] text-sm';
+  const compactSelectClass = 'w-full text-sm';
 
   return (
-    <div className="flex flex-col sm:flex-row gap-2 items-center" role="search" aria-label="Report filters">
+    <div className="officer-toolbar" role="search" aria-label="Report filters">
       {/* Search - dominant control */}
       <div className="relative flex-1 min-w-0">
-        <label htmlFor="report-search" className="sr-only">Search reports</label>
+        <label htmlFor="report-search" className="sr-only">
+          Search reports
+        </label>
         <input
           id="report-search"
           type="search"
@@ -156,11 +192,15 @@ function FilterToolbar({
           placeholder="Search by ID, title, location…"
           className="h-9 w-full pl-10 pr-4 rounded-md border border-graphite/20 bg-white text-sm text-deepCharcoal placeholder:text-graphite/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
         />
-        <Funnel size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-graphite/50" aria-hidden="true" />
+        <Funnel
+          size={16}
+          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-graphite/50"
+          aria-hidden="true"
+        />
       </div>
 
       {/* Compact filter selects */}
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="officer-filter-selects">
         <Select
           label="Status"
           value={statusFilter}
@@ -169,18 +209,24 @@ function FilterToolbar({
         >
           <option value="all">Status</option>
           {statusOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
           ))}
         </Select>
         <Select
           label="Severity"
           value={severityFilter}
-          onChange={(e) => setSeverityFilter(e.target.value as Severity | 'all')}
+          onChange={(e) =>
+            setSeverityFilter(e.target.value as Severity | 'all')
+          }
           className={compactSelectClass}
         >
           <option value="all">Severity</option>
           {severityOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
           ))}
         </Select>
         <Select
@@ -191,7 +237,9 @@ function FilterToolbar({
         >
           <option value="all">Type</option>
           {typeOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
           ))}
         </Select>
         <Select
@@ -202,7 +250,9 @@ function FilterToolbar({
         >
           <option value="all">Site</option>
           {siteOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
           ))}
         </Select>
       </div>
@@ -218,39 +268,46 @@ function FilterToolbar({
           <span>{dateFrom || dateTo ? 'Date' : 'Date'}</span>
           <CaretDown size={12} aria-hidden="true" />
         </button>
-{dateFilterOpen && (
-            <div className="fixed inset-0 z-40" onClick={() => setDateFilterOpen(false)} aria-hidden="true" />
-          )}
-          {dateFilterOpen && (
-            <div className="fixed z-50 mt-1 min-w-[280px] rounded-lg border border-graphite/20 bg-white shadow-xl p-3">
-              <div className="grid gap-2">
-                <Input
-                  label="From"
-                  type="date"
-                  value={dateFrom}
-                  onChange={(e) => setDateFrom(e.target.value)}
-                  className="w-full"
-                />
-                <Input
-                  label="To"
-                  type="date"
-                  value={dateTo}
-                  onChange={(e) => setDateTo(e.target.value)}
-                  className="w-full"
-                />
-                <div className="flex gap-2 pt-1">
-                  <button
-                    type="button"
-                    onClick={() => { setDateFrom(''); setDateTo(''); }}
-                    className="inline-flex h-8 items-center justify-center gap-1.5 rounded-md border border-graphite/20 bg-white px-2 text-xs font-medium text-graphite hover:bg-coolSurface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
-                  >
-                    <X size={11} aria-hidden="true" />
-                    <span>Clear</span>
-                  </button>
-                </div>
+        {dateFilterOpen && (
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => setDateFilterOpen(false)}
+            aria-hidden="true"
+          />
+        )}
+        {dateFilterOpen && (
+          <div className="absolute right-0 z-50 mt-1 w-[280px] rounded-lg border border-graphite/20 bg-white shadow-xl p-3">
+            <div className="grid gap-2">
+              <Input
+                label="From"
+                type="date"
+                value={dateFrom}
+                onChange={(e) => setDateFrom(e.target.value)}
+                className="w-full"
+              />
+              <Input
+                label="To"
+                type="date"
+                value={dateTo}
+                onChange={(e) => setDateTo(e.target.value)}
+                className="w-full"
+              />
+              <div className="flex gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDateFrom('');
+                    setDateTo('');
+                  }}
+                  className="inline-flex h-8 items-center justify-center gap-1.5 rounded-md border border-graphite/20 bg-white px-2 text-xs font-medium text-graphite hover:bg-coolSurface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
+                >
+                  <X size={11} aria-hidden="true" />
+                  <span>Clear</span>
+                </button>
               </div>
             </div>
-          )}
+          </div>
+        )}
       </div>
 
       {/* Clear Filters - secondary action */}
@@ -307,6 +364,7 @@ function MobileFilterSheet({
   hasActiveFilters: boolean;
   clearFilters: () => void;
 }) {
+  useOfficerLayer(isOpen, onClose);
   if (!isOpen) return null;
 
   return (
@@ -316,7 +374,13 @@ function MobileFilterSheet({
         onClick={onClose}
         aria-hidden="true"
       />
-      <aside className="fixed inset-y-0 right-0 z-50 w-full max-w-sm md:hidden bg-white border-l border-graphite/20 shadow-xl flex flex-col">
+      <aside
+        role="dialog"
+        aria-modal="true"
+        aria-label="Report filters"
+        data-officer-dialog
+        className="fixed inset-y-0 right-0 z-50 w-full max-w-sm md:hidden bg-white border-l border-graphite/20 shadow-xl flex flex-col"
+      >
         <div className="flex h-14 items-center justify-between border-b border-graphite/20 px-4">
           <h2 className="text-sm font-semibold text-deepCharcoal">Filters</h2>
           <button
@@ -328,9 +392,14 @@ function MobileFilterSheet({
             <CaretDown size={20} aria-hidden="true" />
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto p-4 grid gap-4">
+        <div className="flex-1 overflow-y-auto p-4 grid content-start gap-4">
           <div>
-            <label htmlFor="mobile-search" className="text-xs font-semibold uppercase tracking-wide text-graphite/70">Search</label>
+            <label
+              htmlFor="mobile-search"
+              className="text-xs font-semibold uppercase tracking-wide text-graphite/70"
+            >
+              Search
+            </label>
             <input
               id="mobile-search"
               type="search"
@@ -339,40 +408,56 @@ function MobileFilterSheet({
               placeholder="Search by ID, title, location…"
               className="mt-1.5 h-9 w-full pl-10 pr-4 rounded-md border border-graphite/20 bg-white text-sm text-deepCharcoal placeholder:text-graphite/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
             />
-            <Funnel size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-graphite/50" aria-hidden="true" />
+            <Funnel
+              size={16}
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-graphite/50"
+              aria-hidden="true"
+            />
           </div>
           <div className="grid gap-3">
             <Select
               label="Status"
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value as Status | 'all')}
+              onChange={(e) =>
+                setStatusFilter(e.target.value as Status | 'all')
+              }
               className="w-full"
             >
               <option value="all">All Statuses</option>
               {statusOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
               ))}
             </Select>
             <Select
               label="Severity"
               value={severityFilter}
-              onChange={(e) => setSeverityFilter(e.target.value as Severity | 'all')}
+              onChange={(e) =>
+                setSeverityFilter(e.target.value as Severity | 'all')
+              }
               className="w-full"
             >
               <option value="all">All Severities</option>
               {severityOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
               ))}
             </Select>
             <Select
               label="Type"
               value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value as ReportType | 'all')}
+              onChange={(e) =>
+                setTypeFilter(e.target.value as ReportType | 'all')
+              }
               className="w-full"
             >
               <option value="all">All Types</option>
               {typeOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
               ))}
             </Select>
             <Select
@@ -383,7 +468,9 @@ function MobileFilterSheet({
             >
               <option value="all">All Sites</option>
               {siteOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
               ))}
             </Select>
           </div>
@@ -406,7 +493,10 @@ function MobileFilterSheet({
           {hasActiveFilters && (
             <button
               type="button"
-              onClick={() => { clearFilters(); onClose(); }}
+              onClick={() => {
+                clearFilters();
+                onClose();
+              }}
               className="inline-flex items-center justify-center gap-1.5 rounded-md border border-graphite/20 bg-white px-3 py-2 text-sm font-medium text-graphite hover:bg-coolSurface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information mt-2"
             >
               <X size={14} aria-hidden="true" />
@@ -433,7 +523,10 @@ export default function ReportsPage() {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dateFilterRef.current && !dateFilterRef.current.contains(event.target as Node)) {
+      if (
+        dateFilterRef.current &&
+        !dateFilterRef.current.contains(event.target as Node)
+      ) {
         setDateFilterOpen(false);
       }
     }
@@ -448,18 +541,40 @@ export default function ReportsPage() {
         report.title.toLowerCase().includes(search.toLowerCase()) ||
         report.site.toLowerCase().includes(search.toLowerCase());
 
-      const matchesStatus = statusFilter === 'all' || report.status === statusFilter;
-      const matchesSeverity = severityFilter === 'all' || report.severity === severityFilter;
+      const matchesStatus =
+        statusFilter === 'all' || report.status === statusFilter;
+      const matchesSeverity =
+        severityFilter === 'all' || report.severity === severityFilter;
       const matchesType = typeFilter === 'all' || report.type === typeFilter;
-      const matchesSite = siteFilter === 'all' || report.site.includes(siteOptions.find(s => s.value === siteFilter)?.label ?? '');
+      const matchesSite =
+        siteFilter === 'all' ||
+        report.site.includes(
+          siteOptions.find((s) => s.value === siteFilter)?.label ?? '',
+        );
 
       const reportDate = new Date(report.date);
       const matchesDateFrom = !dateFrom || reportDate >= new Date(dateFrom);
       const matchesDateTo = !dateTo || reportDate <= new Date(dateTo);
 
-      return matchesSearch && matchesStatus && matchesSeverity && matchesType && matchesSite && matchesDateFrom && matchesDateTo;
+      return (
+        matchesSearch &&
+        matchesStatus &&
+        matchesSeverity &&
+        matchesType &&
+        matchesSite &&
+        matchesDateFrom &&
+        matchesDateTo
+      );
     });
-  }, [search, statusFilter, severityFilter, typeFilter, siteFilter, dateFrom, dateTo]);
+  }, [
+    search,
+    statusFilter,
+    severityFilter,
+    typeFilter,
+    siteFilter,
+    dateFrom,
+    dateTo,
+  ]);
 
   const hasActiveFilters: boolean =
     statusFilter !== 'all' ||
@@ -479,12 +594,16 @@ export default function ReportsPage() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-[1120px] px-4 py-3 lg:px-6 lg:py-4">
+    <div className="w-full min-w-0">
       <div ref={dateFilterRef}>
         {/* Page Header */}
         <div className="mb-3">
-          <h1 className="text-[22px] font-semibold leading-7 text-deepCharcoal">Reports</h1>
-          <p className="mt-0.5 text-sm leading-6 text-graphite">Review and manage reports for your permitted sites.</p>
+          <h1 className="text-[22px] font-semibold leading-7 text-deepCharcoal">
+            Reports
+          </h1>
+          <p className="mt-0.5 text-sm leading-6 text-graphite">
+            Review and manage reports for your permitted sites.
+          </p>
         </div>
 
         {/* Desktop Filter Toolbar */}
@@ -515,7 +634,9 @@ export default function ReportsPage() {
         <div className="md:hidden mb-3">
           <div className="flex gap-2">
             <div className="relative flex-1 min-w-0">
-              <label htmlFor="mobile-search-top" className="sr-only">Search reports</label>
+              <label htmlFor="mobile-search-top" className="sr-only">
+                Search reports
+              </label>
               <input
                 id="mobile-search-top"
                 type="search"
@@ -524,7 +645,11 @@ export default function ReportsPage() {
                 placeholder="Search reports…"
                 className="h-9 w-full pl-10 pr-4 rounded-md border border-graphite/20 bg-white text-sm text-deepCharcoal placeholder:text-graphite/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
               />
-              <Funnel size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-graphite/50" aria-hidden="true" />
+              <Funnel
+                size={16}
+                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-graphite/50"
+                aria-hidden="true"
+              />
             </div>
             <button
               type="button"
@@ -546,13 +671,17 @@ export default function ReportsPage() {
         <div className="grid gap-2" role="list" aria-label="Filtered reports">
           {filteredReports.length === 0 ? (
             <div className="rounded-lg border border-graphite/20 bg-white p-6 text-center">
-              <p className="text-sm font-semibold text-deepCharcoal">No reports found</p>
-              <p className="mt-1 text-sm text-graphite">Try adjusting your search or filters.</p>
+              <p className="text-sm font-semibold text-deepCharcoal">
+                No reports found
+              </p>
+              <p className="mt-1 text-sm text-graphite">
+                Try adjusting your search or filters.
+              </p>
               {hasActiveFilters && (
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-signalYellow hover:text-graphite transition-colors"
+                  className="mt-3 inline-flex items-center gap-1 text-sm font-medium officer-link"
                 >
                   <X size={14} aria-hidden="true" />
                   Clear Filters

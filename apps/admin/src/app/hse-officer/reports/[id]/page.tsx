@@ -2,12 +2,49 @@
 
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import NextImage from 'next/image';
 import { useState } from 'react';
-import { ArrowLeft, ArrowRight, Image, FileText, Warning, Clock, User, MapPin, Shield, ChatCircle, Lock, Plus, PaperPlane, Download, Pencil, Calendar } from '@phosphor-icons/react';
-import { TypePill, SeverityPill, StatusPill } from '@/components/ui/feedback';
-import { Select, Textarea, Input } from '@/components/ui/forms';
-import { Button } from '@/components/ui/button';
-import { reportData, ReportDetail, ReportType, Severity, Status, statusOptions, severityOptions, typeOptions, assigneeOptions } from '@/data/reports';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Image,
+  FileText,
+  Warning,
+  Clock,
+  User,
+  MapPin,
+  Shield,
+  ChatCircle,
+  Lock,
+  Plus,
+  PaperPlane,
+  Download,
+  Pencil,
+  Calendar,
+} from '@phosphor-icons/react';
+import {
+  TypePill,
+  SeverityPill,
+  StatusPill,
+} from '@/components/hse-officer/ui';
+import {
+  Select,
+  Textarea,
+  Input,
+  useOfficerLayer,
+} from '@/components/hse-officer/ui';
+import { Button } from '@/components/hse-officer/ui';
+import {
+  reportData,
+  ReportDetail,
+  ReportType,
+  Severity,
+  Status,
+  statusOptions,
+  severityOptions,
+  typeOptions,
+  assigneeOptions,
+} from '@/data/reports';
 
 type ActionPriority = 'low' | 'medium' | 'high' | 'critical';
 type ActionStatus = 'open' | 'in_progress' | 'completed' | 'cancelled';
@@ -44,48 +81,101 @@ interface Resolution {
   confirmed: boolean;
 }
 
-function SectionHeader({ title, icon, action, urgent = false }: { title: string; icon?: React.ReactNode; action?: React.ReactNode; urgent?: boolean }) {
+function SectionHeader({
+  title,
+  icon,
+  action,
+  urgent = false,
+}: {
+  title: string;
+  icon?: React.ReactNode;
+  action?: React.ReactNode;
+  urgent?: boolean;
+}) {
   return (
     <div className="flex items-center justify-between gap-3 mb-3">
       <div className="flex items-center gap-2">
         {icon && <span className="text-graphite/60">{icon}</span>}
-        <h2 className={`text-[14px] font-semibold leading-5 text-deepCharcoal uppercase tracking-wide ${urgent ? 'text-critical' : ''}`}>{title}</h2>
+        <h2
+          className={`text-[14px] font-semibold leading-5 text-deepCharcoal uppercase tracking-wide ${urgent ? 'text-critical' : ''}`}
+        >
+          {title}
+        </h2>
       </div>
       {action}
     </div>
   );
 }
 
-function EvidenceGrid({ evidence }: { evidence: ReportDetail['evidence'] }) {
-  if (!evidence.length) return <p className="text-sm text-graphite/60">No evidence attached.</p>;
-
+function EvidencePreview({ item }: { item: ReportDetail['evidence'][number] }) {
+  const [unavailable, setUnavailable] = useState(false);
   return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      {evidence.map((item, idx) => (
-        <div key={idx} className="grid gap-2 rounded-lg border border-graphite/10 bg-white p-3">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-coolSurface text-graphite/60">
-              {item.type === 'photo' ? <Image size={18} alt="" /> : <FileText size={18} />}
+    <figure className="min-w-0 overflow-hidden rounded-md border border-graphite/10 bg-white">
+      <div className="relative flex aspect-[4/3] items-center justify-center bg-coolSurface">
+        {item.type === 'photo' && !unavailable ? (
+          <NextImage
+            src={item.url}
+            alt={item.caption}
+            fill
+            sizes="(max-width: 767px) 100vw, 360px"
+            className="object-cover"
+            unoptimized
+            onError={() => setUnavailable(true)}
+          />
+        ) : (
+          <div className="grid justify-items-center gap-2 px-4 text-sm text-graphite/70">
+            <Image size={28} alt="" />
+            <span>
+              {item.type === 'photo' ? 'Photo preview unavailable' : 'Document'}
             </span>
-            <span className="text-xs font-medium text-graphite/70 uppercase tracking-wide">{item.type}</span>
           </div>
-          <p className="text-sm text-deepCharcoal line-clamp-2">{item.caption}</p>
-          <button className="inline-flex items-center gap-1 text-xs font-medium text-signalYellow hover:text-graphite transition-colors mt-1">
-            <ArrowRight size={12} aria-hidden="true" />
-            View
-          </button>
-        </div>
+        )}
+      </div>
+      <figcaption className="p-3 text-sm">{item.caption}</figcaption>
+      {!unavailable && (
+        <a
+          href={item.url}
+          target="_blank"
+          rel="noreferrer"
+          className="officer-link mx-3 mb-2 inline-flex items-center gap-2"
+        >
+          <ArrowRight size={16} />
+          View
+        </a>
+      )}
+    </figure>
+  );
+}
+function EvidenceGrid({ evidence }: { evidence: ReportDetail['evidence'] }) {
+  if (!evidence.length)
+    return <p className="text-sm text-graphite/60">No evidence attached.</p>;
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      {evidence.map((item, index) => (
+        <EvidencePreview key={index} item={item} />
       ))}
     </div>
   );
 }
 
-function KeyValueRow({ label, value, icon }: { label: string; value: string; icon?: React.ReactNode }) {
+function KeyValueRow({
+  label,
+  value,
+  icon,
+}: {
+  label: string;
+  value: string;
+  icon?: React.ReactNode;
+}) {
   return (
     <div className="flex items-start gap-3 py-1.5">
-      {icon && <span className="flex-shrink-0 w-5 text-graphite/50">{icon}</span>}
+      {icon && (
+        <span className="flex-shrink-0 w-5 text-graphite/50">{icon}</span>
+      )}
       <div className="grid gap-0.5 min-w-0">
-        <span className="text-xs font-medium text-graphite/70 uppercase tracking-wide">{label}</span>
+        <span className="text-xs font-medium text-graphite/70 uppercase tracking-wide">
+          {label}
+        </span>
         <span className="text-sm text-deepCharcoal">{value}</span>
       </div>
     </div>
@@ -100,10 +190,22 @@ function ActivityItem({ item }: { item: ReportDetail['activity'][0] }) {
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-sm font-medium text-deepCharcoal">{item.event}</span>
-          <span className="text-xs text-graphite/60">{new Date(item.date).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+          <span className="text-sm font-medium text-deepCharcoal">
+            {item.event}
+          </span>
+          <span className="text-xs text-graphite/60">
+            {new Date(item.date).toLocaleString('en-GB', {
+              day: '2-digit',
+              month: 'short',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </span>
         </div>
-        {item.details && <p className="text-sm text-graphite/70 mt-0.5">{item.details}</p>}
+        {item.details && (
+          <p className="text-sm text-graphite/70 mt-0.5">{item.details}</p>
+        )}
         <p className="text-xs text-graphite/50">By {item.user}</p>
       </div>
     </div>
@@ -121,7 +223,7 @@ function RecordActionModal({
   report: ReportDetail;
   onSave: (action: Omit<Action, 'id' | 'createdAt' | 'createdBy'>) => void;
 }) {
-  if (!isOpen) return null;
+  useOfficerLayer(isOpen, onClose);
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -154,6 +256,8 @@ function RecordActionModal({
     onClose();
   };
 
+  if (!isOpen) return null;
+
   return (
     <>
       <div
@@ -161,9 +265,17 @@ function RecordActionModal({
         onClick={onClose}
         aria-hidden="true"
       />
-      <aside className="fixed inset-y-0 right-0 z-50 w-full max-w-lg md:w-2/3 lg:max-w-2xl bg-white shadow-xl flex flex-col md:hidden">
+      <aside
+        role="dialog"
+        aria-modal="true"
+        aria-label="Report action"
+        data-officer-dialog
+        className="fixed inset-y-0 right-0 z-50 w-full max-w-lg md:w-2/3 lg:max-w-2xl bg-white shadow-xl flex flex-col"
+      >
         <div className="flex h-14 items-center justify-between border-b border-graphite/20 px-4">
-          <h2 className="text-sm font-semibold text-deepCharcoal">Record Action</h2>
+          <h2 className="text-sm font-semibold text-deepCharcoal">
+            Record Action
+          </h2>
           <button
             type="button"
             onClick={onClose}
@@ -173,10 +285,18 @@ function RecordActionModal({
             <Pencil size={20} aria-hidden="true" />
           </button>
         </div>
-        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-4 space-y-4">
+        <form
+          onSubmit={handleSubmit}
+          className="flex-1 overflow-y-auto p-4 space-y-4"
+        >
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="sm:col-span-2">
-              <label htmlFor="action-title" className="text-sm font-semibold text-deepCharcoal">Action Title *</label>
+              <label
+                htmlFor="action-title"
+                className="text-sm font-semibold text-deepCharcoal"
+              >
+                Action Title *
+              </label>
               <input
                 id="action-title"
                 type="text"
@@ -194,7 +314,9 @@ function RecordActionModal({
               className="w-full"
             >
               {assigneeOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
               ))}
             </Select>
             <Input
@@ -210,7 +332,9 @@ function RecordActionModal({
               onChange={(e) => setPriority(e.target.value as ActionPriority)}
             >
               {priorityOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
               ))}
             </Select>
             <Select
@@ -226,7 +350,9 @@ function RecordActionModal({
           </div>
 
           <div>
-            <label className="text-sm font-semibold text-deepCharcoal">Description</label>
+            <label className="text-sm font-semibold text-deepCharcoal">
+              Description
+            </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -244,16 +370,29 @@ function RecordActionModal({
               onChange={(e) => setWorkerFacing(e.target.checked)}
               className="size-4 accent-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
             />
-            <label htmlFor="worker-facing" className="text-sm font-medium text-deepCharcoal">
+            <label
+              htmlFor="worker-facing"
+              className="text-sm font-medium text-deepCharcoal"
+            >
               Mark as worker-facing (visible to reporter)
             </label>
           </div>
 
           <div className="flex justify-end gap-2 pt-2 border-t border-graphite/10">
-            <Button type="button" variant="secondary" className="h-9" onClick={onClose}>
+            <Button
+              type="button"
+              variant="secondary"
+              className="h-9"
+              onClick={onClose}
+            >
               Cancel
             </Button>
-            <Button type="submit" variant="primary" className="h-9" disabled={!title.trim()}>
+            <Button
+              type="submit"
+              variant="primary"
+              className="h-9"
+              disabled={!title.trim()}
+            >
               <Plus size={14} aria-hidden="true" />
               Record Action
             </Button>
@@ -273,12 +412,16 @@ function ResolveReportModal({
   isOpen: boolean;
   onClose: () => void;
   report: ReportDetail;
-  onSave: (resolution: Omit<Resolution, 'id' | 'resolvedAt' | 'resolvedBy'>) => void;
+  onSave: (
+    resolution: Omit<Resolution, 'id' | 'resolvedAt' | 'resolvedBy'>,
+  ) => void;
 }) {
-  if (!isOpen) return null;
+  useOfficerLayer(isOpen, onClose);
 
   const [summary, setSummary] = useState('');
-  const [evidence, setEvidence] = useState<{ type: 'photo' | 'document'; url: string; caption: string }[]>([]);
+  const [evidence, setEvidence] = useState<
+    { type: 'photo' | 'document'; url: string; caption: string }[]
+  >([]);
   const [workerUpdate, setWorkerUpdate] = useState('');
   const [confirmed, setConfirmed] = useState(false);
 
@@ -296,6 +439,8 @@ function ResolveReportModal({
     onClose();
   };
 
+  if (!isOpen) return null;
+
   return (
     <>
       <div
@@ -303,9 +448,17 @@ function ResolveReportModal({
         onClick={onClose}
         aria-hidden="true"
       />
-      <aside className="fixed inset-y-0 right-0 z-50 w-full max-w-lg md:w-2/3 lg:max-w-2xl bg-white shadow-xl flex flex-col md:hidden">
+      <aside
+        role="dialog"
+        aria-modal="true"
+        aria-label="Report action"
+        data-officer-dialog
+        className="fixed inset-y-0 right-0 z-50 w-full max-w-lg md:w-2/3 lg:max-w-2xl bg-white shadow-xl flex flex-col"
+      >
         <div className="flex h-14 items-center justify-between border-b border-graphite/20 px-4">
-          <h2 className="text-sm font-semibold text-deepCharcoal">Resolve Report</h2>
+          <h2 className="text-sm font-semibold text-deepCharcoal">
+            Resolve Report
+          </h2>
           <button
             type="button"
             onClick={onClose}
@@ -315,9 +468,17 @@ function ResolveReportModal({
             <Pencil size={20} aria-hidden="true" />
           </button>
         </div>
-        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-4 space-y-4">
+        <form
+          onSubmit={handleSubmit}
+          className="flex-1 overflow-y-auto p-4 space-y-4"
+        >
           <div>
-            <label htmlFor="resolution-summary" className="text-sm font-semibold text-deepCharcoal">Resolution Summary *</label>
+            <label
+              htmlFor="resolution-summary"
+              className="text-sm font-semibold text-deepCharcoal"
+            >
+              Resolution Summary *
+            </label>
             <textarea
               id="resolution-summary"
               value={summary}
@@ -330,14 +491,18 @@ function ResolveReportModal({
           </div>
 
           <div>
-            <label className="text-sm font-semibold text-deepCharcoal">Resolution Evidence (optional)</label>
+            <label className="text-sm font-semibold text-deepCharcoal">
+              Resolution Evidence (optional)
+            </label>
             <div className="mt-1 h-24 w-full rounded-md border border-graphite/20 bg-white p-3 text-sm text-graphite/60 flex items-center justify-center">
               <span>Evidence upload placeholder</span>
             </div>
           </div>
 
           <div>
-            <label className="text-sm font-semibold text-deepCharcoal">Worker-Facing Update (optional)</label>
+            <label className="text-sm font-semibold text-deepCharcoal">
+              Worker-Facing Update (optional)
+            </label>
             <textarea
               value={workerUpdate}
               onChange={(e) => setWorkerUpdate(e.target.value)}
@@ -355,16 +520,30 @@ function ResolveReportModal({
               onChange={(e) => setConfirmed(e.target.checked)}
               className="size-4 accent-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
             />
-            <label htmlFor="resolution-confirmed" className="text-sm font-medium text-deepCharcoal">
-              I confirm this report is resolved and the summary accurately reflects the outcome
+            <label
+              htmlFor="resolution-confirmed"
+              className="text-sm font-medium text-deepCharcoal"
+            >
+              I confirm this report is resolved and the summary accurately
+              reflects the outcome
             </label>
           </div>
 
           <div className="flex justify-end gap-2 pt-2 border-t border-graphite/10">
-            <Button type="button" variant="secondary" className="h-9" onClick={onClose}>
+            <Button
+              type="button"
+              variant="secondary"
+              className="h-9"
+              onClick={onClose}
+            >
               Cancel
             </Button>
-            <Button type="submit" variant="primary" className="h-9" disabled={!summary.trim() || !confirmed}>
+            <Button
+              type="submit"
+              variant="primary"
+              className="h-9"
+              disabled={!summary.trim() || !confirmed}
+            >
               <Plus size={14} aria-hidden="true" />
               Resolve Report
             </Button>
@@ -382,17 +561,8 @@ function AssessmentForm({ report }: { report: ReportDetail }) {
   const [hseStatus, setHseStatus] = useState(report.hseStatus);
 
   return (
-    <div className="space-y-4">
-      <SectionHeader
-        title="HSE Assessment"
-        icon={<Shield size={16} />}
-        action={
-          <Button variant="primary" className="h-9">
-            <Download size={14} aria-hidden="true" />
-            Save Assessment
-          </Button>
-        }
-      />
+    <div className="officer-section space-y-4">
+      <SectionHeader title="HSE Assessment" icon={<Shield size={16} />} />
 
       <div className="grid gap-3 sm:grid-cols-2">
         <Select
@@ -401,7 +571,9 @@ function AssessmentForm({ report }: { report: ReportDetail }) {
           onChange={(e) => setClassification(e.target.value as ReportType)}
         >
           {typeOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
           ))}
         </Select>
 
@@ -411,7 +583,9 @@ function AssessmentForm({ report }: { report: ReportDetail }) {
           onChange={(e) => setSeverity(e.target.value as Severity)}
         >
           {severityOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
           ))}
         </Select>
 
@@ -421,7 +595,9 @@ function AssessmentForm({ report }: { report: ReportDetail }) {
           onChange={(e) => setHseStatus(e.target.value as Status)}
         >
           {statusOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
           ))}
         </Select>
 
@@ -431,33 +607,11 @@ function AssessmentForm({ report }: { report: ReportDetail }) {
           onChange={(e) => setAssignedTo(e.target.value)}
         >
           {assigneeOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
           ))}
         </Select>
-      </div>
-
-      <div className="pt-3 border-t border-graphite/10">
-        <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-2">Worker vs HSE</h3>
-        <div className="grid gap-2 sm:grid-cols-2">
-          <div>
-            <span className="text-xs font-medium text-graphite/70">Classification</span>
-            <div className="flex items-center gap-2 flex-wrap mt-1 text-sm">
-              <span className="text-graphite/60">Worker:</span>
-              <TypePill label={report.type} />
-              <span className="text-graphite/50">→</span>
-              <TypePill label={classification} />
-            </div>
-          </div>
-          <div>
-            <span className="text-xs font-medium text-graphite/70">Severity</span>
-            <div className="flex items-center gap-2 flex-wrap mt-1 text-sm">
-              <span className="text-graphite/60">Worker:</span>
-              <SeverityPill label={report.severity} />
-              <span className="text-graphite/50">→</span>
-              <SeverityPill label={severity} />
-            </div>
-          </div>
-        </div>
       </div>
 
       <div className="pt-3 border-t border-graphite/10">
@@ -470,7 +624,13 @@ function AssessmentForm({ report }: { report: ReportDetail }) {
   );
 }
 
-function WorkerUpdateForm({ updates, onSend }: { updates: ReportDetail['workerUpdates']; onSend: (message: string) => void }) {
+function WorkerUpdateForm({
+  updates,
+  onSend,
+}: {
+  updates: ReportDetail['workerUpdates'];
+  onSend: (message: string) => void;
+}) {
   const [message, setMessage] = useState('');
 
   return (
@@ -479,7 +639,15 @@ function WorkerUpdateForm({ updates, onSend }: { updates: ReportDetail['workerUp
         title="Worker-Facing Update"
         icon={<ChatCircle size={16} />}
         action={
-          <Button variant="primary" className="h-9" onClick={() => { onSend(message); setMessage(''); }} disabled={!message.trim()}>
+          <Button
+            variant="primary"
+            className="h-9"
+            onClick={() => {
+              onSend(message);
+              setMessage('');
+            }}
+            disabled={!message.trim()}
+          >
             <PaperPlane size={14} aria-hidden="true" />
             Send Update
           </Button>
@@ -496,13 +664,28 @@ function WorkerUpdateForm({ updates, onSend }: { updates: ReportDetail['workerUp
 
       {updates.length > 0 && (
         <div className="border-t border-graphite/10 pt-3">
-          <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-2">Previous Updates</h3>
+          <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-2">
+            Previous Updates
+          </h3>
           <div className="space-y-2">
             {updates.map((update, idx) => (
-              <div key={idx} className="rounded-lg border border-graphite/10 bg-coolSurface p-3">
+              <div
+                key={idx}
+                className="rounded-lg border border-graphite/10 bg-coolSurface p-3"
+              >
                 <div className="flex items-center gap-2 flex-wrap text-xs mb-1">
-                  <span className="font-medium text-deepCharcoal">{update.sentBy}</span>
-                  <span className="text-graphite/60">{new Date(update.date).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                  <span className="font-medium text-deepCharcoal">
+                    {update.sentBy}
+                  </span>
+                  <span className="text-graphite/60">
+                    {new Date(update.date).toLocaleString('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </span>
                 </div>
                 <p className="text-sm text-graphite">{update.message}</p>
               </div>
@@ -514,16 +697,30 @@ function WorkerUpdateForm({ updates, onSend }: { updates: ReportDetail['workerUp
   );
 }
 
-function InternalNotesForm({ notes, onAdd }: { notes: ReportDetail['internalNotes']; onAdd: (note: string) => void }) {
+function InternalNotesForm({
+  notes,
+  onAdd,
+}: {
+  notes: ReportDetail['internalNotes'];
+  onAdd: (note: string) => void;
+}) {
   const [note, setNote] = useState('');
 
   return (
-    <div className="space-y-4 border-l-4 border-graphite/30 bg-white/50 rounded-lg p-4">
+    <div className="officer-section space-y-4">
       <SectionHeader
         title="Internal HSE Notes"
         icon={<Lock size={16} />}
         action={
-          <Button variant="secondary" className="h-9" onClick={() => { onAdd(note); setNote(''); }} disabled={!note.trim()}>
+          <Button
+            variant="secondary"
+            className="h-9"
+            onClick={() => {
+              onAdd(note);
+              setNote('');
+            }}
+            disabled={!note.trim()}
+          >
             <Plus size={14} aria-hidden="true" />
             Add Note
           </Button>
@@ -547,13 +744,25 @@ function InternalNotesForm({ notes, onAdd }: { notes: ReportDetail['internalNote
 
       {notes.length > 0 && (
         <div className="border-t border-graphite/10 pt-3">
-          <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-2">Previous Notes</h3>
+          <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-2">
+            Previous Notes
+          </h3>
           <div className="space-y-2">
             {notes.map((n, idx) => (
-              <div key={idx} className="rounded-lg border border-graphite/10 bg-white p-3">
+              <div key={idx} className="border-b border-graphite/10 py-2">
                 <div className="flex items-center gap-2 flex-wrap text-xs mb-1">
-                  <span className="font-medium text-deepCharcoal">{n.author}</span>
-                  <span className="text-graphite/60">{new Date(n.date).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                  <span className="font-medium text-deepCharcoal">
+                    {n.author}
+                  </span>
+                  <span className="text-graphite/60">
+                    {new Date(n.date).toLocaleString('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </span>
                 </div>
                 <p className="text-sm text-graphite">{n.note}</p>
               </div>
@@ -575,12 +784,23 @@ export default function ReportDetailPage() {
 
   if (!report) {
     return (
-      <div className="mx-auto w-full max-w-[1120px] px-4 py-3 lg:px-6 lg:py-4">
+      <div className="w-full min-w-0">
         <div className="grid gap-6 text-center py-12">
-          <Warning size={48} className="mx-auto text-critical" aria-hidden="true" />
-          <h1 className="text-[22px] font-semibold text-deepCharcoal">Report not found</h1>
-          <p className="text-sm text-graphite">The report <code className="font-mono">{id}</code> does not exist.</p>
-          <Link href="/hse-officer/reports" className="inline-flex items-center justify-center gap-1 text-sm font-medium text-signalYellow hover:text-graphite mx-auto mt-4">
+          <Warning
+            size={48}
+            className="mx-auto text-critical"
+            aria-hidden="true"
+          />
+          <h1 className="text-[22px] font-semibold text-deepCharcoal">
+            Report not found
+          </h1>
+          <p className="text-sm text-graphite">
+            The report <code className="font-mono">{id}</code> does not exist.
+          </p>
+          <Link
+            href="/hse-officer/reports"
+            className="inline-flex items-center justify-center gap-1 text-sm font-medium text-signalYellow hover:text-graphite mx-auto mt-4"
+          >
             <ArrowLeft size={14} aria-hidden="true" />
             Back to Reports
           </Link>
@@ -591,22 +811,29 @@ export default function ReportDetailPage() {
 
   const formatDateTime = (dateStr: string) => {
     return new Date(dateStr).toLocaleString('en-GB', {
-      day: '2-digit', month: 'short', year: 'numeric',
-      hour: '2-digit', minute: '2-digit'
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
     });
   };
 
-  const handleRecordActionSave = (actionData: Omit<Action, 'id' | 'createdAt' | 'createdBy'>) => {
+  const handleRecordActionSave = (
+    actionData: Omit<Action, 'id' | 'createdAt' | 'createdBy'>,
+  ) => {
     const newAction: Action = {
       ...actionData,
       id: `ACT-${Date.now()}`,
       createdAt: new Date().toISOString(),
       createdBy: 'Current HSE Officer',
     };
-    setActions(prev => [...prev, newAction]);
+    setActions((prev) => [...prev, newAction]);
   };
 
-  const handleResolveReportSave = (resolutionData: Omit<Resolution, 'id' | 'resolvedAt' | 'resolvedBy'>) => {
+  const handleResolveReportSave = (
+    resolutionData: Omit<Resolution, 'id' | 'resolvedAt' | 'resolvedBy'>,
+  ) => {
     const newResolution: Resolution = {
       ...resolutionData,
       id: `RES-${Date.now()}`,
@@ -616,28 +843,31 @@ export default function ReportDetailPage() {
     // In a real app, this would persist the resolution to the data store.
     // Prototype: resolution exists only in local component state (session only).
     // The Reports list uses shared static data and will NOT reflect Resolved after reload.
-    setActions(prev => [...prev, {
-      id: `RES-${Date.now()}`,
-      reportId: report.id,
-      title: 'Report Resolved',
-      description: resolutionData.summary,
-      assignedTo: 'Current HSE Officer',
-      dueDate: '',
-      priority: 'high' as ActionPriority,
-      status: 'completed' as ActionStatus,
-      createdAt: new Date().toISOString(),
-      createdBy: 'Current HSE Officer',
-      workerFacing: true,
-      // Mark as resolution so timeline can distinguish
-      isResolution: true,
-      resolutionSummary: resolutionData.summary,
-      workerUpdate: resolutionData.workerUpdate,
-    }]);
+    setActions((prev) => [
+      ...prev,
+      {
+        id: `RES-${Date.now()}`,
+        reportId: report.id,
+        title: 'Report Resolved',
+        description: resolutionData.summary,
+        assignedTo: 'Current HSE Officer',
+        dueDate: '',
+        priority: 'high' as ActionPriority,
+        status: 'completed' as ActionStatus,
+        createdAt: new Date().toISOString(),
+        createdBy: 'Current HSE Officer',
+        workerFacing: true,
+        // Mark as resolution so timeline can distinguish
+        isResolution: true,
+        resolutionSummary: resolutionData.summary,
+        workerUpdate: resolutionData.workerUpdate,
+      },
+    ]);
   };
 
   const allActivity = [
     ...report.activity,
-    ...actions.map(a => {
+    ...actions.map((a) => {
       if (a.isResolution) {
         return {
           date: a.createdAt,
@@ -658,31 +888,37 @@ export default function ReportDetailPage() {
   ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   return (
-    <div className="mx-auto w-full max-w-[1120px] px-4 py-3 lg:px-6 lg:py-4">
+    <div className="w-full min-w-0">
       {/* Header */}
       <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
         <Link
           href="/hse-officer/reports"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-signalYellow hover:text-graphite transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm font-medium officer-link"
         >
           <ArrowLeft size={16} aria-hidden="true" />
           Back to Reports
         </Link>
-        <div className="flex items-center gap-2 flex-wrap">
-          <TypePill label={report.type} />
-          <SeverityPill label={report.severity} />
-          <StatusPill label={report.status} />
-        </div>
       </header>
 
       {/* Report Title & Meta */}
       <section className="mb-5">
-        <h1 className="text-[24px] font-semibold leading-7 text-deepCharcoal">{report.title}</h1>
+        <h1 className="text-[24px] font-semibold leading-7 text-deepCharcoal">
+          {report.title}
+        </h1>
         <div className="flex flex-wrap items-center gap-4 mt-2 text-sm text-graphite/70">
-          <span className="flex items-center gap-1"><MapPin size={14} aria-hidden="true" /> {report.site}</span>
-          <span className="flex items-center gap-1"><Clock size={14} aria-hidden="true" /> Submitted {formatDateTime(report.submittedAt)}</span>
-          <span className="flex items-center gap-1"><User size={14} aria-hidden="true" /> {report.submittedBy}</span>
-          <span className="flex items-center gap-1 text-xs font-mono text-graphite/50">{report.id}</span>
+          <span className="flex items-center gap-1">
+            <MapPin size={14} aria-hidden="true" /> {report.site}
+          </span>
+          <span className="flex items-center gap-1">
+            <Clock size={14} aria-hidden="true" /> Submitted{' '}
+            {formatDateTime(report.submittedAt)}
+          </span>
+          <span className="flex items-center gap-1">
+            <User size={14} aria-hidden="true" /> {report.submittedBy}
+          </span>
+          <span className="flex items-center gap-1 text-xs font-mono text-graphite/50">
+            {report.id}
+          </span>
         </div>
         <div className="flex items-center gap-2 flex-wrap mt-3 pt-3 border-t border-graphite/10">
           <TypePill label={report.type} />
@@ -692,29 +928,42 @@ export default function ReportDetailPage() {
       </section>
 
       {/* Two-column layout */}
-      <div className="grid gap-5 lg:grid-cols-[1fr_360px]">
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(320px,380px)]">
         {/* Main Column */}
-        <main className="space-y-4">
+        <div className="min-w-0 space-y-4">
           {/* Worker Report */}
-          <section className="space-y-4">
-            <SectionHeader title="Worker Report" icon={<FileText size={16} />} />
+          <section className="officer-section space-y-4">
+            <SectionHeader
+              title="Worker Report"
+              icon={<FileText size={16} />}
+            />
             <div className="space-y-4">
               <div>
-                <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-2">Description</h3>
-                <p className="text-sm text-graphite whitespace-pre-line leading-relaxed">{report.description}</p>
+                <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-2">
+                  Description
+                </h3>
+                <p className="text-sm text-graphite whitespace-pre-line leading-relaxed">
+                  {report.description}
+                </p>
               </div>
 
               <div>
-                <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-2">Evidence</h3>
+                <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-2">
+                  Evidence
+                </h3>
                 <EvidenceGrid evidence={report.evidence} />
               </div>
 
               <div>
-                <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-2">Worker Answers</h3>
+                <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-2">
+                  Worker Answers
+                </h3>
                 <div className="grid gap-2 sm:grid-cols-2">
                   {report.workerAnswers.map((qa, idx) => (
-                    <div key={idx} className="rounded-lg border border-graphite/10 bg-white p-3">
-                      <p className="text-xs font-medium text-graphite/70">{qa.question}</p>
+                    <div key={idx} className="border-b border-graphite/10 py-2">
+                      <p className="text-xs font-medium text-graphite/70">
+                        {qa.question}
+                      </p>
                       <p className="text-sm text-graphite">{qa.answer}</p>
                     </div>
                   ))}
@@ -722,13 +971,28 @@ export default function ReportDetailPage() {
               </div>
 
               <div className="grid gap-1.5 sm:grid-cols-2 border-t border-graphite/10 pt-3">
-                <KeyValueRow label="Location" value={report.location.area} icon={<MapPin size={14} />} />
+                <KeyValueRow
+                  label="Location"
+                  value={report.location.area}
+                  icon={<MapPin size={14} />}
+                />
                 <KeyValueRow label="Site" value={report.location.site} />
                 {report.location.coordinates && (
-                  <KeyValueRow label="Coordinates" value={report.location.coordinates} />
+                  <KeyValueRow
+                    label="Coordinates"
+                    value={report.location.coordinates}
+                  />
                 )}
-                <KeyValueRow label="Submitted by" value={report.submittedBy} icon={<User size={14} />} />
-                <KeyValueRow label="Submitted" value={formatDateTime(report.submittedAt)} icon={<Clock size={14} />} />
+                <KeyValueRow
+                  label="Submitted by"
+                  value={report.submittedBy}
+                  icon={<User size={14} />}
+                />
+                <KeyValueRow
+                  label="Submitted"
+                  value={formatDateTime(report.submittedAt)}
+                  icon={<Clock size={14} />}
+                />
               </div>
             </div>
           </section>
@@ -747,56 +1011,62 @@ export default function ReportDetailPage() {
 
           {/* Activity Timeline */}
           <section className="space-y-0">
-            <SectionHeader title="Activity Timeline" icon={<Clock size={16} />} />
+            <SectionHeader
+              title="Activity Timeline"
+              icon={<Clock size={16} />}
+            />
             <div className="space-y-0">
               {allActivity.map((item, idx) => (
                 <ActivityItem key={idx} item={item} />
               ))}
             </div>
           </section>
-        </main>
+        </div>
 
         {/* Secondary Column - HSE Assessment + Context */}
-        <aside className="hidden lg:block space-y-4">
-          <section className="space-y-4">
+        <aside className="min-w-0 space-y-4">
+          <section className="officer-section space-y-4">
             <AssessmentForm report={report} />
           </section>
 
           <section className="space-y-2">
-            <h3 className="text-[13px] font-semibold text-deepCharcoal uppercase tracking-wide">Report Reference</h3>
+            <h3 className="text-[13px] font-semibold text-deepCharcoal uppercase tracking-wide">
+              Report Reference
+            </h3>
             <div className="space-y-1.5 rounded-lg border border-graphite/10 bg-white p-3">
               <KeyValueRow label="Report ID" value={report.id} />
-              <KeyValueRow label="Type" value={report.type.replace('_', ' ')} />
-              <KeyValueRow label="Severity" value={report.severity} />
-              <KeyValueRow label="Status" value={report.status.replace('_', ' ')} />
               <KeyValueRow label="Assigned to" value={report.assignedTo} />
             </div>
           </section>
 
           <section className="space-y-2">
-            <h3 className="text-[13px] font-semibold text-deepCharcoal uppercase tracking-wide">Actions</h3>
+            <h3 className="text-[13px] font-semibold text-deepCharcoal uppercase tracking-wide">
+              Actions
+            </h3>
             <div className="space-y-2">
-              <Button variant="primary" className="w-full justify-start h-9" onClick={() => setRecordActionOpen(true)}>
+              <Button
+                variant="primary"
+                className="w-full justify-start h-9"
+                onClick={() => setRecordActionOpen(true)}
+              >
                 <Plus size={14} aria-hidden="true" />
                 Record Action
               </Button>
-              <Button variant="secondary" className="w-full justify-start h-9" onClick={() => setResolveReportOpen(true)}>
+              <Button
+                variant="secondary"
+                className="w-full justify-start h-9"
+                onClick={() => setResolveReportOpen(true)}
+              >
                 <Plus size={14} aria-hidden="true" />
                 Resolve Report
-              </Button>
-              <Button variant="secondary" className="w-full justify-start h-9">
-                <PaperPlane size={14} aria-hidden="true" />
-                Send Worker Update
-              </Button>
-              <Button variant="tertiary" className="w-full justify-start h-9">
-                <Plus size={14} aria-hidden="true" />
-                Add Internal Note
               </Button>
             </div>
           </section>
 
           <section className="space-y-2 pt-2 border-t border-graphite/10">
-            <h3 className="text-[13px] font-semibold text-critical uppercase tracking-wide">Emergency</h3>
+            <h3 className="text-[13px] font-semibold text-critical uppercase tracking-wide">
+              Emergency
+            </h3>
             <div className="p-3 rounded-md bg-graphite/5 border border-graphite/10">
               <p className="text-xs font-medium text-graphite/70 flex items-center gap-1 mb-1">
                 <Warning size={12} aria-hidden="true" />
@@ -821,7 +1091,7 @@ export default function ReportDetailPage() {
             createdAt: new Date().toISOString(),
             createdBy: 'Current HSE Officer',
           };
-          setActions(prev => [...prev, newAction]);
+          setActions((prev) => [...prev, newAction]);
         }}
       />
       <ResolveReportModal
@@ -837,19 +1107,22 @@ export default function ReportDetailPage() {
           };
           // In a real app, this would update the report in the data store
           // For demo, we update local state and activity
-          setActions(prev => [...prev, {
-            id: `ACT-${Date.now()}`,
-            reportId: report.id,
-            title: 'Report Resolved',
-            description: resolutionData.summary,
-            assignedTo: 'Current HSE Officer',
-            dueDate: '',
-            priority: 'high' as ActionPriority,
-            status: 'completed' as ActionStatus,
-            createdAt: new Date().toISOString(),
-            createdBy: 'Current HSE Officer',
-            workerFacing: true,
-          }]);
+          setActions((prev) => [
+            ...prev,
+            {
+              id: `ACT-${Date.now()}`,
+              reportId: report.id,
+              title: 'Report Resolved',
+              description: resolutionData.summary,
+              assignedTo: 'Current HSE Officer',
+              dueDate: '',
+              priority: 'high' as ActionPriority,
+              status: 'completed' as ActionStatus,
+              createdAt: new Date().toISOString(),
+              createdBy: 'Current HSE Officer',
+              workerFacing: true,
+            },
+          ]);
         }}
       />
     </div>

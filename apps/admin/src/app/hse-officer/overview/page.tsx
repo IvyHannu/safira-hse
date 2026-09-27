@@ -1,8 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Warning, CheckCircle, FileText } from '@phosphor-icons/react';
-import { Card, TypePill, SeverityPill, StatusPill } from '@/components/ui';
+import {
+  ArrowRight,
+  Warning,
+  CheckCircle,
+  FileText,
+} from '@phosphor-icons/react';
+import {
+  Card,
+  TypePill,
+  SeverityPill,
+  StatusPill,
+} from '@/components/hse-officer/ui';
 import { PageHeader } from '@/components/ui/shell';
 
 const kpiCards = [
@@ -142,7 +152,9 @@ function KPICard({
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="text-sm font-medium text-graphite">{title}</p>
-          <p className="mt-0 text-[20px] font-semibold leading-6 text-deepCharcoal">{value}</p>
+          <p className="mt-0 text-[20px] font-semibold leading-6 text-deepCharcoal">
+            {value}
+          </p>
         </div>
         <div
           className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md ${toneColors[tone]}`}
@@ -150,10 +162,6 @@ function KPICard({
         >
           <Icon size={16} />
         </div>
-      </div>
-      <div className="flex items-center justify-between border-t border-graphite/10 pt-1">
-        <span className="text-xs font-medium text-graphite">View all</span>
-        <ArrowRight size={9} className="text-graphite group-hover:text-signalYellow transition-colors" aria-hidden="true" />
       </div>
     </Link>
   );
@@ -175,23 +183,27 @@ function ReportRow({
   site: string;
   classification: 'hazard' | 'near_miss' | 'incident' | 'environmental_concern';
   severity: 'low' | 'moderate' | 'high' | 'critical';
-  status: 'submitted' | 'under_review' | 'action_required' | 'resolved' | 'closed';
+  status:
+    'submitted' | 'under_review' | 'action_required' | 'resolved' | 'closed';
   timestampLabel: string;
   timestamp: string;
   isCritical?: boolean;
 }) {
-  const rowClass = isCritical && severity === 'critical'
-    ? 'border-critical/30 bg-critical/5'
-    : 'border-graphite/10';
+  const rowClass =
+    isCritical && severity === 'critical'
+      ? 'border-critical/30 bg-critical/5'
+      : 'border-graphite/10';
 
   return (
     <Link
       href={`/hse-officer/reports/${ref}`}
-      className={`grid gap-1.5 rounded-lg border bg-white p-2 transition-colors hover:border-graphite/30 hover:shadow-sm ${rowClass}`}
+      className={`officer-row grid gap-2 ${rowClass}`}
     >
       <div className="grid gap-0.5 min-w-0">
-        <p className="text-sm font-medium text-deepCharcoal leading-snug truncate">{title}</p>
-        <p className="text-xs text-graphite/70 truncate">{site}</p>
+        <p className="text-sm font-medium text-deepCharcoal leading-snug">
+          {title}
+        </p>
+        <p className="text-xs text-graphite/70">{site}</p>
       </div>
 
       <div className="flex flex-wrap items-center gap-1">
@@ -201,21 +213,43 @@ function ReportRow({
       </div>
 
       <div className="flex items-center justify-between border-t border-graphite/10 pt-1 text-[10px]">
-        <span className="text-graphite/60 uppercase tracking-wide">{timestampLabel}</span>
-        <span className="font-medium text-graphite whitespace-nowrap">{timestamp}</span>
-        <ArrowRight size={9} className="text-graphite/60 group-hover:text-signalYellow transition-colors" aria-hidden="true" />
+        <span className="text-graphite/60 uppercase tracking-wide">
+          {timestampLabel}
+        </span>
+        <span className="font-medium text-graphite whitespace-nowrap">
+          {timestamp}
+        </span>
+        <ArrowRight
+          size={9}
+          className="text-graphite/60 group-hover:text-signalYellow transition-colors"
+          aria-hidden="true"
+        />
       </div>
     </Link>
   );
 }
 
-function SectionHeader({ title, href, actionLabel = 'View all', urgent = false }: { title: string; href: string; actionLabel?: string; urgent?: boolean }) {
+function SectionHeader({
+  title,
+  href,
+  actionLabel = 'View all',
+  urgent = false,
+}: {
+  title: string;
+  href: string;
+  actionLabel?: string;
+  urgent?: boolean;
+}) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 mb-2">
-      <h2 className={`text-[13px] font-semibold leading-5 text-deepCharcoal uppercase tracking-wide ${urgent ? 'text-critical' : ''}`}>{title}</h2>
+      <h2
+        className={`text-[13px] font-semibold leading-5 text-deepCharcoal uppercase tracking-wide ${urgent ? 'text-critical' : ''}`}
+      >
+        {title}
+      </h2>
       <Link
         href={href}
-        className="inline-flex items-center gap-1 text-sm font-medium text-signalYellow hover:text-graphite transition-colors self-start sm:self-auto"
+        className="inline-flex items-center gap-1 text-sm font-medium officer-link self-start sm:self-auto"
       >
         {actionLabel}
         <ArrowRight size={9} aria-hidden="true" />
@@ -226,56 +260,70 @@ function SectionHeader({ title, href, actionLabel = 'View all', urgent = false }
 
 export default function OverviewPage() {
   return (
-    <div className="grid gap-2.5 lg:gap-3">
+    <div className="grid gap-4">
       <PageHeader
         title="Overview"
         description="Operational snapshot for your permitted sites."
       />
 
-      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4" role="list" aria-label="Key metrics">
+      <div
+        className="grid grid-cols-2 gap-3 lg:grid-cols-4"
+        role="list"
+        aria-label="Key metrics"
+      >
         {kpiCards.map((card) => (
           <KPICard key={card.title} {...card} />
         ))}
       </div>
 
-      <Card>
-        <SectionHeader title="Needs Attention" href="/hse-officer/reports?status=action_required" urgent />
-        <div className="grid gap-1" role="list" aria-label="Reports needing attention">
-          {needsAttention.map((report) => (
-            <ReportRow
-              key={report.ref}
-              ref={report.ref}
-              title={report.title}
-              site={report.site}
-              classification={report.classification}
-              severity={report.severity}
-              status={report.status}
-              timestampLabel="Updated"
-              timestamp={report.updated}
-              isCritical={report.severity === 'critical'}
-            />
-          ))}
-        </div>
-      </Card>
+      <div className="grid gap-4 xl:grid-cols-2 items-start">
+        <Card>
+          <SectionHeader
+            title="Needs Attention"
+            href="/hse-officer/reports?status=action_required"
+            urgent
+          />
+          <div
+            className="grid gap-1"
+            role="list"
+            aria-label="Reports needing attention"
+          >
+            {needsAttention.map((report) => (
+              <ReportRow
+                key={report.ref}
+                ref={report.ref}
+                title={report.title}
+                site={report.site}
+                classification={report.classification}
+                severity={report.severity}
+                status={report.status}
+                timestampLabel="Updated"
+                timestamp={report.updated}
+                isCritical={report.severity === 'critical'}
+              />
+            ))}
+          </div>
+        </Card>
 
-      <Card>
-        <SectionHeader title="Recent Reports" href="/hse-officer/reports" />
-        <div className="grid gap-1" role="list" aria-label="Recent reports">
-          {recentReports.map((report) => (
-            <ReportRow
-              key={report.ref}
-              ref={report.ref}
-              title={report.title}
-              site={report.site}
-              classification={report.classification}
-              severity={report.severity}
-              status={report.status}
-              timestampLabel="Submitted"
-              timestamp={report.submitted}
-            />
-          ))}
-        </div>
-      </Card>
+        <Card>
+          <SectionHeader title="Recent Reports" href="/hse-officer/reports" />
+          <div className="grid gap-1" role="list" aria-label="Recent reports">
+            {recentReports.map((report) => (
+              <ReportRow
+                key={report.ref}
+                ref={report.ref}
+                title={report.title}
+                site={report.site}
+                classification={report.classification}
+                severity={report.severity}
+                status={report.status}
+                timestampLabel="Submitted"
+                timestamp={report.submitted}
+              />
+            ))}
+          </div>
+        </Card>
+      </div>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { X } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
+import { useOfficerLayer } from './ui';
 
 interface SidebarItem {
   href: string;
@@ -39,18 +40,27 @@ interface HSEOfficerSidebarProps {
   onCloseMobile: () => void;
 }
 
-export function HSEOfficerSidebar({ mobileOpen, onCloseMobile }: HSEOfficerSidebarProps) {
+export function HSEOfficerSidebar({
+  mobileOpen,
+  onCloseMobile,
+}: HSEOfficerSidebarProps) {
   const pathname = usePathname();
+  useOfficerLayer(mobileOpen, onCloseMobile);
 
   return (
     <>
       <aside
         id="hse-officer-sidebar"
         className={cn(
-          'fixed inset-y-0 left-0 z-40 w-64 transform transition-transform duration-200 ease-out bg-deepCharcoal border-r border-graphite md:relative md:translate-x-0 md:z-auto md:sticky md:top-0 md:h-screen',
-          mobileOpen ? 'translate-x-0' : '-translate-x-full'
+          'fixed inset-y-0 left-0 z-40 w-64 h-dvh shrink-0 transform transition-transform duration-200 ease-out bg-deepCharcoal border-r border-graphite md:relative md:translate-x-0 md:z-auto',
+          mobileOpen
+            ? 'translate-x-0 visible'
+            : '-translate-x-full invisible md:visible',
         )}
         aria-label="HSE Officer navigation"
+        role={mobileOpen ? 'dialog' : undefined}
+        aria-modal={mobileOpen || undefined}
+        data-officer-dialog={mobileOpen ? '' : undefined}
       >
         <div className="flex h-full flex-col">
           <div className="flex h-14 items-center justify-between gap-3 border-b border-graphite px-4">
@@ -65,10 +75,15 @@ export function HSEOfficerSidebar({ mobileOpen, onCloseMobile }: HSEOfficerSideb
             </button>
           </div>
 
-          <nav className="flex-1 overflow-y-auto px-3 py-4" aria-label="Main navigation">
+          <nav
+            className="flex-1 overflow-y-auto px-3 py-4"
+            aria-label="Main navigation"
+          >
             <ul className="grid gap-1" role="list">
               {items.map((item) => {
-                const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+                const isActive =
+                  pathname === item.href ||
+                  pathname.startsWith(item.href + '/');
                 return (
                   <li key={item.href}>
                     <Link
@@ -80,10 +95,12 @@ export function HSEOfficerSidebar({ mobileOpen, onCloseMobile }: HSEOfficerSideb
                         isActive
                           ? 'bg-signalYellow text-deepCharcoal font-semibold'
                           : 'text-white/80 hover:bg-graphite hover:text-white',
-                        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signalYellow'
+                        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signalYellow',
                       )}
                     >
-                      <span aria-hidden="true" className="flex shrink-0">{item.icon}</span>
+                      <span aria-hidden="true" className="flex shrink-0">
+                        {item.icon}
+                      </span>
                       {item.label}
                     </Link>
                   </li>
@@ -118,4 +135,10 @@ export function HSEOfficerSidebar({ mobileOpen, onCloseMobile }: HSEOfficerSideb
   );
 }
 
-import { House, Files, ClipboardText, UserCircle, SignOut } from '@phosphor-icons/react';
+import {
+  House,
+  Files,
+  ClipboardText,
+  UserCircle,
+  SignOut,
+} from '@phosphor-icons/react';
