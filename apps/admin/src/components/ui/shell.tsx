@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { List } from '@phosphor-icons/react';
 
 export function PageContainer({
   children,
@@ -94,6 +95,33 @@ export function TopbarShell({
     <header className="flex h-14 items-center justify-between gap-3 border-b border-graphite/20 bg-white px-4">
       <span className="text-sm font-semibold text-deepCharcoal">{brand}</span>
       <div className="flex items-center gap-2">{actions}</div>
+    </header>
+  );
+}
+
+export function MobileHeader({
+  title,
+  onMenuClick,
+  actions,
+}: {
+  title: string;
+  onMenuClick: () => void;
+  actions?: ReactNode;
+}) {
+  return (
+    <header className="md:hidden fixed top-0 left-0 right-0 z-30 h-12 border-b border-graphite/20 bg-white px-3">
+      <div className="flex h-full items-center justify-between">
+        <button
+          type="button"
+          onClick={onMenuClick}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md text-graphite hover:bg-coolSurface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
+          aria-label="Open navigation menu"
+        >
+          <List size={20} aria-hidden="true" />
+        </button>
+        <h1 className="text-sm font-semibold text-deepCharcoal truncate">{title}</h1>
+        <div className="flex items-center gap-1">{actions}</div>
+      </div>
     </header>
   );
 }

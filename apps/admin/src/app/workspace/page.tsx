@@ -59,6 +59,11 @@ export default function WorkspacePage() {
     );
   }
 
+  if (role === 'hse_officer') {
+    router.replace('/hse-officer/overview');
+    return null;
+  }
+
   return (
     <main className="min-h-screen bg-coolSurface p-6 text-graphite">
       <section className="mx-auto max-w-[720px] border border-coolConcrete bg-white p-6">

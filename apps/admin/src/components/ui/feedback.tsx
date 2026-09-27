@@ -9,6 +9,28 @@ const tones: Record<Tone, string> = {
   information: 'border-information text-information',
 };
 
+const severityFills: Record<'low' | 'moderate' | 'high' | 'critical', string> = {
+  low: 'bg-success/10 text-success border-success/30',
+  moderate: 'bg-information/10 text-information border-information/30',
+  high: 'bg-warning/10 text-warning border-warning/30',
+  critical: 'bg-critical/10 text-critical border-critical/30',
+};
+
+const statusFills: Record<'submitted' | 'under_review' | 'action_required' | 'resolved' | 'closed', string> = {
+  submitted: 'bg-information/10 text-information border-information/30',
+  under_review: 'bg-warning/10 text-warning border-warning/30',
+  action_required: 'bg-critical/10 text-critical border-critical/30',
+  resolved: 'bg-success/10 text-success border-success/30',
+  closed: 'bg-graphite/10 text-graphite border-graphite/30',
+};
+
+const typeOutlines: Record<'hazard' | 'near_miss' | 'incident' | 'environmental_concern', string> = {
+  hazard: 'border-warning text-warning',
+  near_miss: 'border-information text-information',
+  incident: 'border-critical text-critical',
+  environmental_concern: 'border-success text-success',
+};
+
 export function StatusBadge({ label, tone }: { label: string; tone: Tone }) {
   return (
     <span
@@ -19,6 +41,56 @@ export function StatusBadge({ label, tone }: { label: string; tone: Tone }) {
   );
 }
 
+export function Pill({
+  label,
+  fill,
+  className = '',
+}: {
+  label: string;
+  fill: string;
+  className?: string;
+}) {
+  return (
+    <span
+      className={`inline-flex items-center h-5 rounded-full px-2 text-[11px] font-semibold leading-5 ${fill} ${className}`}
+    >
+      {label}
+    </span>
+  );
+}
+
+export function TypePill({
+  label,
+  className = '',
+}: {
+  label: 'hazard' | 'near_miss' | 'incident' | 'environmental_concern';
+  className?: string;
+}) {
+  const displayLabel = label.replace('_', ' ');
+  return <Pill label={displayLabel} fill={typeOutlines[label]} className={className} />;
+}
+
+export function SeverityPill({
+  label,
+  className = '',
+}: {
+  label: 'low' | 'moderate' | 'high' | 'critical';
+  className?: string;
+}) {
+  return <Pill label={label} fill={severityFills[label]} className={className} />;
+}
+
+export function StatusPill({
+  label,
+  className = '',
+}: {
+  label: 'submitted' | 'under_review' | 'action_required' | 'resolved' | 'closed';
+  className?: string;
+}) {
+  const displayLabel = label.replace('_', ' ');
+  return <Pill label={displayLabel} fill={statusFills[label]} className={className} />;
+}
+
 export function Card({
   title,
   children,
@@ -27,9 +99,9 @@ export function Card({
   children: ReactNode;
 }) {
   return (
-    <section className="grid content-start gap-4 rounded-lg border border-graphite/20 bg-white p-4">
+    <section className="grid content-start gap-2.5 rounded-lg border border-graphite/20 bg-white p-2.5">
       {title && (
-        <h2 className="text-[15px] font-semibold leading-6 text-deepCharcoal">
+        <h2 className="text-[13px] font-semibold leading-5 text-deepCharcoal">
           {title}
         </h2>
       )}
