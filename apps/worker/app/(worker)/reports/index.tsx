@@ -65,11 +65,11 @@ function ReportCard({ report, onPress }: ReportCardProps) {
     >
       <View style={styles.cardRow}>
         <View style={styles.cardMain}>
+          <Text style={styles.cardMeta}>{report.reference}</Text>
           <Text style={styles.cardTitle} numberOfLines={2}>
             {report.categoryLabel}
           </Text>
-          <Text style={styles.cardMeta}>{report.reference}</Text>
-          <Text style={styles.cardMeta} numberOfLines={1}>
+          <Text style={styles.cardMeta} numberOfLines={2}>
             {locationParts.join(' · ')}
           </Text>
           <Text style={styles.cardMeta}>{formatDate(report.submittedAt)}</Text>
@@ -93,6 +93,8 @@ export default function MyReportsScreen() {
   const router = useRouter();
   const { state } = useReporting();
   const [filter, setFilter] = useState<FilterKey>('all');
+  const [hoveredFilter, setHoveredFilter] = useState<FilterKey | null>(null);
+  const [focusedFilter, setFocusedFilter] = useState<FilterKey | null>(null);
 
   const filtered = state.demoReports.filter((r) => {
     if (filter === 'active') return ACTIVE_STATUSES.includes(r.status);
@@ -127,7 +129,17 @@ export default function MyReportsScreen() {
             accessibilityLabel={f.label}
             accessibilityState={{ selected: filter === f.key }}
             onPress={() => setFilter(f.key)}
-            style={[styles.tab, filter === f.key && styles.tabActive]}
+            onHoverIn={() => setHoveredFilter(f.key)}
+            onHoverOut={() => setHoveredFilter(null)}
+            onFocus={() => setFocusedFilter(f.key)}
+            onBlur={() => setFocusedFilter(null)}
+            style={({ pressed }) => [
+              styles.tab,
+              hoveredFilter === f.key && filter !== f.key && styles.tabHover,
+              filter === f.key && styles.tabActive,
+              pressed && styles.tabPressed,
+              focusedFilter === f.key && styles.tabFocused,
+            ]}
           >
             <Text
               style={[
@@ -175,37 +187,45 @@ const styles = StyleSheet.create({
   tabs: {
     flexDirection: 'row',
     borderWidth: 1,
-    borderColor: colors.graphite,
-    borderRadius: radius.lg,
+    borderColor: colors.coolConcrete,
+    borderRadius: radius.md,
     overflow: 'hidden',
+    backgroundColor: colors.coolSurface,
   },
   tab: {
     flex: 1,
-    paddingVertical: spacing[1],
+    minHeight: 48,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.white,
+    borderRadius: radius.sm,
   },
-  tabActive: { backgroundColor: colors.graphite },
+  tabActive: {
+    backgroundColor: colors.white,
+    borderWidth: 1,
+    borderColor: colors.graphite,
+  },
+  tabHover: { backgroundColor: colors.coolConcrete },
+  tabPressed: { backgroundColor: colors.coolConcrete },
+  tabFocused: { borderWidth: 2, borderColor: colors.deepCharcoal },
   tabLabel: {
     fontFamily: typography.fontFamily,
     fontSize: 14,
     fontWeight: '600',
     color: colors.graphite,
   },
-  tabLabelActive: { color: colors.white },
+  tabLabelActive: { color: colors.deepCharcoal, fontWeight: '700' },
   list: { gap: spacing[2] },
   cardRow: {
     flexDirection: 'row',
     gap: spacing[2],
     alignItems: 'flex-start',
   },
-  cardMain: { flex: 1, gap: spacing[1] },
+  cardMain: { flex: 1, gap: 3, minWidth: 0 },
   cardTitle: {
     color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
     lineHeight: 22,
   },
   cardMeta: {

@@ -1,5 +1,6 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { colors, radius, spacing, typography } from '@safira/design-tokens';
+import PencilSimple from 'phosphor-react-native/src/icons/PencilSimple';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { InfoRow } from '@/components/ui';
 import { workerHomeDemo, workerReportCategories } from '@/demo/worker-data';
@@ -34,6 +35,8 @@ function SummarySection({
   onEdit(): void;
   children: ReactNode;
 }) {
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
   return (
     <View style={styles.section}>
       <View style={styles.heading}>
@@ -42,8 +45,18 @@ function SummarySection({
           accessibilityRole="button"
           accessibilityLabel={editLabel}
           onPress={onEdit}
-          style={({ pressed }) => [styles.edit, pressed && styles.editPressed]}
+          onHoverIn={() => setHovered(true)}
+          onHoverOut={() => setHovered(false)}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          style={({ pressed }) => [
+            styles.edit,
+            hovered && styles.editHover,
+            pressed && styles.editPressed,
+            focused && styles.editFocused,
+          ]}
         >
+          <PencilSimple size={16} color={colors.deepCharcoal} />
           <Text style={styles.editText}>Edit</Text>
         </Pressable>
       </View>
@@ -173,16 +186,21 @@ const styles = StyleSheet.create({
   edit: {
     minWidth: 48,
     minHeight: 48,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 4,
+    paddingHorizontal: spacing[1],
+    borderRadius: radius.sm,
   },
-  editPressed: { opacity: 0.65 },
+  editHover: { backgroundColor: colors.coolSurface },
+  editPressed: { backgroundColor: colors.coolConcrete },
+  editFocused: { borderWidth: 2, borderColor: colors.deepCharcoal },
   editText: {
-    color: colors.graphite,
+    color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 14,
     fontWeight: '700',
-    textDecorationLine: 'underline',
   },
   primaryValue: {
     color: colors.deepCharcoal,

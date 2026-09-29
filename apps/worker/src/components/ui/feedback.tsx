@@ -69,6 +69,7 @@ export function PressableCard({
   style?: StyleProp<ViewStyle>;
 }) {
   const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
   return (
     <Pressable
       accessibilityRole="button"
@@ -76,10 +77,13 @@ export function PressableCard({
       onPress={onPress}
       onHoverIn={() => setHovered(true)}
       onHoverOut={() => setHovered(false)}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
       style={({ pressed }) => [
         styles.card,
         hovered && styles.cardHover,
         pressed && styles.cardPressed,
+        focused && styles.cardFocused,
         style,
       ]}
     >
@@ -149,14 +153,14 @@ const styles = StyleSheet.create({
   badge: {
     alignSelf: 'flex-start',
     borderWidth: 1,
-    borderRadius: radius.md,
+    borderRadius: radius.sm,
     paddingHorizontal: spacing[1],
-    paddingVertical: spacing[1],
+    paddingVertical: 4,
   },
   badgeText: {
     fontFamily: typography.fontFamily,
-    fontSize: 13,
-    fontWeight: '600',
+    fontSize: 12,
+    fontWeight: '700',
   },
   card: {
     borderWidth: 1,
@@ -167,8 +171,8 @@ const styles = StyleSheet.create({
     gap: spacing[1],
     shadowColor: colors.deepCharcoal,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
+    shadowOpacity: 0.07,
+    shadowRadius: 6,
     elevation: 1,
   },
   cardTitle: {
@@ -180,8 +184,13 @@ const styles = StyleSheet.create({
   cardHover: {
     borderColor: colors.graphite,
     backgroundColor: colors.coolSurface,
+    shadowOpacity: 0.12,
   },
-  cardPressed: { backgroundColor: colors.coolConcrete },
+  cardPressed: {
+    backgroundColor: colors.coolConcrete,
+    transform: [{ scale: 0.99 }],
+  },
+  cardFocused: { borderWidth: 2, borderColor: colors.deepCharcoal },
   infoRow: {
     minHeight: 28,
     flexDirection: 'row',

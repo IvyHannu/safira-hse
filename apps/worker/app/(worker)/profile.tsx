@@ -29,6 +29,7 @@ function ProfileActionRow({
   critical?: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
   return (
     <Pressable
       accessibilityRole="button"
@@ -36,10 +37,13 @@ function ProfileActionRow({
       onPress={onPress}
       onHoverIn={() => setHovered(true)}
       onHoverOut={() => setHovered(false)}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
       style={({ pressed }) => [
         styles.actionRow,
         hovered && styles.actionHover,
         pressed && styles.actionPressed,
+        focused && styles.actionFocused,
       ]}
     >
       <View style={styles.rowIcon}>{icon}</View>
@@ -57,6 +61,8 @@ export default function ProfileScreen() {
   const { session, loading, error, signOut } = useAuth();
   const [infoMessage, setInfoMessage] = useState<string | null>(null);
   const [switchingWorkspace, setSwitchingWorkspace] = useState(false);
+  const [workspaceHovered, setWorkspaceHovered] = useState(false);
+  const [workspaceFocused, setWorkspaceFocused] = useState(false);
 
   if (!loading && (!session || session.role !== 'worker'))
     return <WorkspaceSelector />;
@@ -92,7 +98,9 @@ export default function ProfileScreen() {
             <View style={styles.identityCopy}>
               <Text style={styles.name}>{workerHomeDemo.worker.firstName}</Text>
               <Text style={styles.role}>Worker</Text>
-              <Text style={styles.identityMeta}>Organisation</Text>
+              <Text style={styles.identityMeta}>
+                {workerHomeDemo.site.name}
+              </Text>
             </View>
           </View>
 
@@ -186,12 +194,18 @@ export default function ProfileScreen() {
             accessibilityRole="button"
             accessibilityLabel="Switch workspace"
             onPress={() => setSwitchingWorkspace(true)}
+            onHoverIn={() => setWorkspaceHovered(true)}
+            onHoverOut={() => setWorkspaceHovered(false)}
+            onFocus={() => setWorkspaceFocused(true)}
+            onBlur={() => setWorkspaceFocused(false)}
             style={({ pressed }) => [
-              styles.devToggle,
+              styles.workspaceToggle,
+              workspaceHovered && styles.actionHover,
               pressed && styles.actionPressed,
+              workspaceFocused && styles.actionFocused,
             ]}
           >
-            <Text style={styles.devText}>Switch workspace</Text>
+            <Text style={styles.workspaceText}>Switch workspace</Text>
             <CaretRight size={16} color={colors.graphite} />
           </Pressable>
         </>
@@ -201,18 +215,18 @@ export default function ProfileScreen() {
 }
 
 const styles = StyleSheet.create({
-  content: { gap: spacing[1], paddingBottom: spacing[2] },
+  content: { gap: spacing[2], paddingBottom: spacing[3] },
   title: {
     color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: '700',
   },
   identity: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing[2],
-    paddingVertical: 4,
+    paddingVertical: spacing[1],
   },
   avatar: {
     width: 56,
@@ -251,6 +265,10 @@ const styles = StyleSheet.create({
     borderColor: colors.coolConcrete,
     borderRadius: radius.md,
     backgroundColor: colors.white,
+    shadowColor: colors.deepCharcoal,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 5,
   },
   groupTitle: {
     color: colors.deepCharcoal,
@@ -299,6 +317,7 @@ const styles = StyleSheet.create({
   },
   actionHover: { backgroundColor: colors.coolSurface },
   actionPressed: { backgroundColor: colors.coolConcrete },
+  actionFocused: { borderWidth: 2, borderColor: colors.deepCharcoal },
   criticalText: { color: colors.critical },
   body: {
     color: colors.graphite,
@@ -311,14 +330,14 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 19,
   },
-  devToggle: {
+  workspaceToggle: {
     minHeight: 48,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: spacing[1],
   },
-  devText: {
+  workspaceText: {
     color: colors.graphite,
     fontFamily: typography.fontFamily,
     fontSize: 12,

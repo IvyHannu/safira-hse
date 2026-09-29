@@ -68,6 +68,7 @@ export default function AdditionalQuestionsScreen() {
               title={choice.label}
               selected={answers[question.key] === choice.value}
               onPress={() => answer(question.key, choice.value)}
+              style={styles.answerChoice}
             />
           ))}
           <ValidationMessage
@@ -79,18 +80,22 @@ export default function AdditionalQuestionsScreen() {
           />
         </View>
       ))}
-      <Button label="Continue to review" onPress={continueToReview} />
+      <View style={styles.footer}>
+        <Button label="Continue to review" onPress={continueToReview} />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  content: { gap: spacing[3] },
+  content: { gap: spacing[2] },
   question: { gap: spacing[1], maxWidth: 520 },
+  answerChoice: { minHeight: 48 },
+  footer: { marginTop: spacing[1] },
   label: {
     color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: '700',
   },
 });

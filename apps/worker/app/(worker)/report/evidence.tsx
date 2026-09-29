@@ -31,6 +31,8 @@ export default function AddEvidenceScreen() {
   const [sourceOpen, setSourceOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [photoUnavailable, setPhotoUnavailable] = useState(false);
+  const [removeHovered, setRemoveHovered] = useState(false);
+  const [removeFocused, setRemoveFocused] = useState(false);
   const hasPhoto = evidenceChoice === 'photo' && !!evidence;
 
   async function pickPhoto(source: 'camera' | 'library') {
@@ -128,25 +130,26 @@ export default function AddEvidenceScreen() {
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel="Remove photo"
+                onHoverIn={() => setRemoveHovered(true)}
+                onHoverOut={() => setRemoveHovered(false)}
+                onFocus={() => setRemoveFocused(true)}
+                onBlur={() => setRemoveFocused(false)}
                 onPress={() => {
                   updateDraft({ evidenceChoice: 'unanswered', evidence: null });
                   setPhotoUnavailable(false);
                   setError(null);
                 }}
-                style={styles.removeButton}
+                style={({ pressed }) => [
+                  styles.removeButton,
+                  removeHovered && styles.removeButtonHover,
+                  pressed && styles.removeButtonPressed,
+                  removeFocused && styles.removeButtonFocused,
+                ]}
               >
                 <X size={20} color={colors.white} />
               </Pressable>
             </View>
-          ) : (
-            <ActionUploadField
-              label="Add photo"
-              icon={<Camera size={26} color={colors.deepCharcoal} />}
-              tile
-              style={styles.uploadTile}
-              onPress={() => setSourceOpen(true)}
-            />
-          )}
+          ) : null}
           <ActionUploadField
             label={hasPhoto ? 'Add another photo' : 'Choose a photo'}
             icon={
@@ -216,11 +219,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing[2],
     paddingBottom: spacing[2],
   },
-  progress: { flexDirection: 'row', gap: 4 },
+  progress: { flexDirection: 'row', gap: 4, paddingTop: spacing[1] },
   progressSegment: {
     flex: 1,
-    height: 4,
-    borderRadius: 2,
+    height: 5,
+    borderRadius: 3,
     backgroundColor: colors.coolConcrete,
   },
   progressActive: { backgroundColor: colors.signalYellow },
@@ -228,7 +231,7 @@ const styles = StyleSheet.create({
   title: {
     color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
-    fontSize: 24,
+    fontSize: 23,
     fontWeight: '700',
     lineHeight: 30,
   },
@@ -243,7 +246,9 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 160,
     overflow: 'hidden',
-    borderRadius: radius.sm,
+    borderWidth: 1,
+    borderColor: colors.coolConcrete,
+    borderRadius: radius.md,
     backgroundColor: colors.coolSurface,
   },
   photo: { width: '100%', height: '100%' },
@@ -251,14 +256,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: spacing[1],
     right: spacing[1],
-    width: 40,
-    height: 40,
+    width: 48,
+    height: 48,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: radius.sm,
     backgroundColor: colors.deepCharcoal,
   },
-  uploadTile: { flex: 1 },
+  removeButtonHover: { backgroundColor: colors.graphite },
+  removeButtonPressed: { opacity: 0.8 },
+  removeButtonFocused: { borderWidth: 2, borderColor: colors.signalYellow },
+  uploadTile: { flex: 1, minWidth: 0 },
   footer: { flexDirection: 'row', gap: spacing[1], marginTop: 'auto' },
   footerAction: { flex: 1 },
 });

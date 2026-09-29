@@ -99,9 +99,9 @@ function ReportDetailContent({ report }: { report: DemoReport }) {
 
       <View style={styles.header}>
         <Text style={styles.reference}>{report.reference}</Text>
-        <StatusBadge label={label} tone={tone} />
-        <Text style={styles.headerMeta}>{report.categoryLabel}</Text>
+        <Text style={styles.reportTitle}>{report.categoryLabel}</Text>
         <Text style={styles.headerMeta}>{locationParts.join(' · ')}</Text>
+        <StatusBadge label={label} tone={tone} />
         <Text style={styles.headerMeta}>
           Submitted {formatDate(report.submittedAt)}
         </Text>
@@ -245,13 +245,20 @@ export default function ReportDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  content: { gap: spacing[3] },
-  header: { gap: spacing[1] },
+  content: { gap: spacing[2], paddingBottom: spacing[3] },
+  header: { gap: spacing[1], paddingBottom: spacing[1] },
   section: { gap: spacing[1] },
   reference: {
+    color: colors.graphite,
+    fontFamily: typography.fontFamily,
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  reportTitle: {
     color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
-    fontSize: 28,
+    fontSize: 24,
+    lineHeight: 30,
     fontWeight: '700',
   },
   headerMeta: {
@@ -278,8 +285,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   photo: {
-    width: 160,
-    height: 160,
+    width: '100%',
+    height: 180,
     borderRadius: radius.md,
     backgroundColor: colors.coolSurface,
   },

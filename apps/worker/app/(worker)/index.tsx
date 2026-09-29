@@ -2,10 +2,11 @@ import { useEffect, useRef } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { colors, spacing, typography } from '@safira/design-tokens';
 import type { ReportStatus } from '@safira/types';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import ArrowRight from 'phosphor-react-native/src/icons/ArrowRight';
 import Files from 'phosphor-react-native/src/icons/Files';
 import ListChecks from 'phosphor-react-native/src/icons/ListChecks';
-import { Button, type Tone } from '@/components/ui';
+import { Button, PressableCard, type Tone } from '@/components/ui';
 import { WorkspaceSelector } from '@/components/workspace-selector';
 import { workerHomeDemo, workerReportCategories } from '@/demo/worker-data';
 import { useAuth } from '@/lib/demo-auth';
@@ -95,6 +96,7 @@ export default function HomeScreen() {
     <View style={styles.content}>
       <View style={styles.header}>
         <View style={styles.brandRow}>
+          <View style={styles.brandMark} accessibilityElementsHidden />
           <Text style={styles.brandName}>Safira</Text>
         </View>
         <View style={styles.headerContext}>
@@ -121,6 +123,9 @@ export default function HomeScreen() {
           <Text style={styles.heroMessage}>See something? Report it.</Text>
           <Button
             label="Report something"
+            trailingIcon={
+              <ArrowRight size={20} weight="bold" color={colors.deepCharcoal} />
+            }
             onPress={() => router.push('/report')}
           />
         </View>
@@ -136,18 +141,16 @@ export default function HomeScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Quick access</Text>
           <View style={styles.quickAccess}>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="My Reports"
+            <PressableCard
+              label="My Reports"
               onPress={() =>
                 router.push(submitted ? '/report/view' : '/reports')
               }
-              style={({ pressed }) => [
-                styles.quickTile,
-                pressed && styles.quickTilePressed,
-              ]}
+              style={styles.quickTile}
             >
-              <Files size={25} color={colors.deepCharcoal} />
+              <View style={styles.quickIcon}>
+                <Files size={24} color={colors.deepCharcoal} />
+              </View>
               <Text style={styles.quickTitle}>My Reports</Text>
               <Text style={styles.quickDescription} numberOfLines={2}>
                 {submitted
@@ -159,19 +162,17 @@ export default function HomeScreen() {
                   ? (submittedCategory?.label ?? 'Your report')
                   : latestReport.title}
               </Text>
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Safety Checks"
+            </PressableCard>
+            <PressableCard
+              label="Safety Checks"
               onPress={() =>
                 router.push(assigned ? `/safety/${assigned.id}` : '/safety')
               }
-              style={({ pressed }) => [
-                styles.quickTile,
-                pressed && styles.quickTilePressed,
-              ]}
+              style={styles.quickTile}
             >
-              <ListChecks size={25} color={colors.deepCharcoal} />
+              <View style={styles.quickIcon}>
+                <ListChecks size={24} color={colors.deepCharcoal} />
+              </View>
               <Text style={styles.quickTitle}>Safety Checks</Text>
               <Text style={styles.quickDescription} numberOfLines={2}>
                 {checklistStatus}
@@ -179,7 +180,7 @@ export default function HomeScreen() {
               <Text style={styles.quickDetail} numberOfLines={2}>
                 {assigned?.title ?? assignedChecklist.title}
               </Text>
-            </Pressable>
+            </PressableCard>
           </View>
         </View>
 
@@ -226,13 +227,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: colors.deepCharcoal,
+    gap: spacing[1],
+    borderBottomWidth: 1,
+    borderBottomColor: colors.coolConcrete,
+    backgroundColor: colors.white,
   },
-  brandRow: { flexDirection: 'row', alignItems: 'center' },
+  brandRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  brandMark: {
+    width: 9,
+    height: 21,
+    backgroundColor: colors.signalYellow,
+    transform: [{ skewX: '-20deg' }],
+  },
   brandName: {
-    color: colors.white,
+    color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '700',
   },
   headerContext: {
@@ -240,17 +250,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing[1],
   },
-  siteContext: { alignItems: 'flex-end' },
+  siteContext: { alignItems: 'flex-end', flexShrink: 1, minWidth: 0 },
   headerSite: {
-    color: colors.white,
+    color: colors.graphite,
     fontFamily: typography.fontFamily,
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '600',
   },
   headerArea: {
-    color: colors.coolConcrete,
+    color: colors.graphite,
     fontFamily: typography.fontFamily,
-    fontSize: 11,
+    fontSize: 10,
   },
   avatar: {
     width: 32,
@@ -258,10 +268,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.graphite,
+    backgroundColor: colors.coolConcrete,
   },
   avatarText: {
-    color: colors.white,
+    color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 13,
     fontWeight: '700',
@@ -272,23 +282,25 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 22,
   },
-  main: { gap: spacing[3], padding: spacing[2] },
+  main: { gap: spacing[2], padding: spacing[2] },
   hero: {
     gap: spacing[1],
     padding: spacing[2],
     borderRadius: 8,
-    backgroundColor: colors.graphite,
+    borderWidth: 1,
+    borderColor: `${colors.signalYellow}55`,
+    backgroundColor: `${colors.signalYellow}28`,
   },
   heroTitle: {
-    color: colors.white,
+    color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 23,
     fontWeight: '700',
     lineHeight: 29,
-    maxWidth: 275,
+    maxWidth: 320,
   },
   heroMessage: {
-    color: colors.coolConcrete,
+    color: colors.graphite,
     fontFamily: typography.fontFamily,
     fontSize: 14,
     lineHeight: 21,
@@ -304,25 +316,29 @@ const styles = StyleSheet.create({
   quickAccess: { flexDirection: 'row', gap: spacing[1] },
   quickTile: {
     flex: 1,
-    minHeight: 124,
+    minWidth: 0,
+    minHeight: 152,
     gap: 4,
     padding: spacing[1],
-    borderWidth: 1,
-    borderColor: colors.coolConcrete,
-    borderRadius: 8,
-    backgroundColor: colors.white,
   },
-  quickTilePressed: { backgroundColor: colors.coolSurface },
+  quickIcon: {
+    width: 36,
+    height: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 4,
+    backgroundColor: colors.coolSurface,
+  },
   quickTitle: {
     color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '700',
   },
   quickDescription: {
     color: colors.graphite,
     fontFamily: typography.fontFamily,
-    fontSize: 12,
+    fontSize: 11,
     lineHeight: 16,
   },
   quickDetail: {
@@ -338,6 +354,8 @@ const styles = StyleSheet.create({
     padding: spacing[2],
     borderRadius: 8,
     backgroundColor: colors.coolSurface,
+    borderWidth: 1,
+    borderColor: colors.coolConcrete,
   },
   guidanceCopy: { flex: 1, gap: spacing[1] },
   guidanceTitle: {
@@ -387,13 +405,11 @@ const styles = StyleSheet.create({
     lineHeight: 21,
   },
   illustrationSlot: {
-    width: 100,
+    width: 88,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderStyle: 'dashed',
+    borderLeftWidth: 1,
     borderColor: colors.coolConcrete,
-    backgroundColor: colors.white,
   },
   illustrationSlotLabel: {
     color: colors.graphite,

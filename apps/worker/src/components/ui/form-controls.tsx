@@ -229,6 +229,7 @@ interface ChoiceCardProps extends Omit<PressableProps, 'children' | 'style'> {
   description?: string;
   leading?: ReactNode;
   selected: boolean;
+  selectionColor?: string;
   error?: boolean;
   style?: StyleProp<ViewStyle>;
 }
@@ -238,6 +239,7 @@ export function ChoiceCard({
   description,
   leading,
   selected,
+  selectionColor,
   error,
   disabled,
   style,
@@ -260,6 +262,11 @@ export function ChoiceCard({
         styles.surface,
         styles.choice,
         selected && styles.choiceSelected,
+        selected &&
+          selectionColor && {
+            borderColor: selectionColor,
+            backgroundColor: `${selectionColor}12`,
+          },
         hovered && !disabled && styles.hovered,
         pressed && !disabled && styles.pressed,
         focused && styles.focused,
@@ -275,9 +282,23 @@ export function ChoiceCard({
           <Text style={styles.choiceDescription}>{description}</Text>
         )}
       </View>
-      <View style={[styles.indicator, selected && styles.indicatorSelected]}>
+      <View
+        style={[
+          styles.indicator,
+          selected && styles.indicatorSelected,
+          selected &&
+            selectionColor && {
+              borderColor: selectionColor,
+              backgroundColor: selectionColor,
+            },
+        ]}
+      >
         {selected && (
-          <Check size={14} weight="bold" color={colors.deepCharcoal} />
+          <Check
+            size={14}
+            weight="bold"
+            color={selectionColor ? colors.white : colors.deepCharcoal}
+          />
         )}
       </View>
     </Pressable>
@@ -362,12 +383,18 @@ const styles = StyleSheet.create({
   hovered: {
     borderColor: colors.graphite,
     backgroundColor: colors.coolSurface,
+    shadowOpacity: 0.1,
   },
-  pressed: { backgroundColor: colors.coolConcrete },
+  pressed: {
+    backgroundColor: colors.coolConcrete,
+    transform: [{ scale: 0.995 }],
+  },
   focused: {
     borderWidth: 2,
     borderColor: colors.signalYellow,
     backgroundColor: colors.white,
+    shadowOpacity: 0.12,
+    shadowRadius: 5,
   },
   errorSurface: {
     borderColor: colors.critical,

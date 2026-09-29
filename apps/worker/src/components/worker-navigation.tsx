@@ -1,10 +1,11 @@
 import { usePathname, useRouter } from 'expo-router';
 import House from 'phosphor-react-native/src/icons/House';
 import Files from 'phosphor-react-native/src/icons/Files';
-import PlusCircle from 'phosphor-react-native/src/icons/PlusCircle';
+import Plus from 'phosphor-react-native/src/icons/Plus';
 import ShieldCheck from 'phosphor-react-native/src/icons/ShieldCheck';
 import UserCircle from 'phosphor-react-native/src/icons/UserCircle';
 import { colors } from '@safira/design-tokens';
+import { StyleSheet, View } from 'react-native';
 import {
   BottomNavigationShell,
   type BottomNavigationItem,
@@ -28,29 +29,63 @@ export function WorkerNavigation() {
     {
       key: 'home',
       label: 'Home',
-      icon: <House size={24} color={colors.graphite} />,
+      icon: (
+        <House
+          size={23}
+          color={selectedKey === 'home' ? colors.signalYellow : colors.graphite}
+          weight={selectedKey === 'home' ? 'fill' : 'regular'}
+        />
+      ),
     },
     {
       key: 'reports',
       label: 'Reports',
-      icon: <Files size={24} color={colors.graphite} />,
+      icon: (
+        <Files
+          size={23}
+          color={
+            selectedKey === 'reports' ? colors.signalYellow : colors.graphite
+          }
+          weight={selectedKey === 'reports' ? 'fill' : 'regular'}
+        />
+      ),
     },
     {
       key: 'report',
       label: 'Report',
-      icon: <PlusCircle size={24} color={colors.graphite} />,
+      icon: (
+        <View style={styles.reportIcon}>
+          <Plus size={23} weight="bold" color={colors.deepCharcoal} />
+        </View>
+      ),
       disabled: loading || session?.role !== 'worker',
     },
     {
       key: 'safety',
       label: 'Safety',
-      icon: <ShieldCheck size={24} color={colors.graphite} />,
+      icon: (
+        <ShieldCheck
+          size={23}
+          color={
+            selectedKey === 'safety' ? colors.signalYellow : colors.graphite
+          }
+          weight={selectedKey === 'safety' ? 'fill' : 'regular'}
+        />
+      ),
       disabled: loading || session?.role !== 'worker',
     },
     {
       key: 'profile',
       label: 'Profile',
-      icon: <UserCircle size={24} color={colors.graphite} />,
+      icon: (
+        <UserCircle
+          size={23}
+          color={
+            selectedKey === 'profile' ? colors.signalYellow : colors.graphite
+          }
+          weight={selectedKey === 'profile' ? 'fill' : 'regular'}
+        />
+      ),
     },
   ];
 
@@ -70,3 +105,14 @@ export function WorkerNavigation() {
     />
   );
 }
+
+const styles = StyleSheet.create({
+  reportIcon: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.signalYellow,
+  },
+});

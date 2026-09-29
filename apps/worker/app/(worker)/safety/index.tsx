@@ -111,12 +111,26 @@ export default function SafetyScreen() {
         <FlatList
           data={sorted}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <ChecklistCard
-              checklist={item}
-              onPress={() => router.push(`/safety/${item.id}`)}
-            />
-          )}
+          renderItem={({ item, index }) => {
+            const assigned =
+              item.assignedToWorker && item.status !== 'completed';
+            const previous = sorted[index - 1];
+            const previousAssigned =
+              previous?.assignedToWorker && previous.status !== 'completed';
+            return (
+              <View style={styles.listGroup}>
+                {index === 0 || (previousAssigned && !assigned) ? (
+                  <Text style={styles.listHeading}>
+                    {assigned ? 'Assigned to you' : 'Other checklists'}
+                  </Text>
+                ) : null}
+                <ChecklistCard
+                  checklist={item}
+                  onPress={() => router.push(`/safety/${item.id}`)}
+                />
+              </View>
+            );
+          }}
           contentContainerStyle={styles.list}
           scrollEnabled={false}
         />
@@ -126,8 +140,16 @@ export default function SafetyScreen() {
 }
 
 const styles = StyleSheet.create({
-  content: { gap: spacing[3] },
-  list: { gap: spacing[2] },
+  content: { gap: spacing[2] },
+  list: { gap: spacing[1] },
+  listGroup: { gap: spacing[1] },
+  listHeading: {
+    color: colors.deepCharcoal,
+    fontFamily: typography.fontFamily,
+    fontSize: 15,
+    fontWeight: '700',
+    marginTop: spacing[1],
+  },
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',

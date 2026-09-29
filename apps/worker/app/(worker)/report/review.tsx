@@ -101,8 +101,13 @@ export default function ReviewReportScreen() {
 
 const styles = StyleSheet.create({
   content: { gap: spacing[2] },
-  progress: { flexDirection: 'row', gap: 4 },
-  progressSegment: { flex: 1, height: 4, backgroundColor: colors.coolConcrete },
+  progress: { flexDirection: 'row', gap: 4, paddingTop: spacing[1] },
+  progressSegment: {
+    flex: 1,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: colors.coolConcrete,
+  },
   progressActive: { backgroundColor: colors.signalYellow },
   intro: { gap: 4 },
   title: {
@@ -122,6 +127,10 @@ const styles = StyleSheet.create({
     fontFamily: typography.fontFamily,
     fontSize: 13,
     lineHeight: 19,
+    padding: spacing[1],
+    borderLeftWidth: 3,
+    borderLeftColor: colors.signalYellow,
+    backgroundColor: colors.coolSurface,
   },
   footer: { flexDirection: 'row', gap: spacing[1] },
   footerSubmit: { flex: 2 },

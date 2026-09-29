@@ -93,6 +93,13 @@ function ItemCard({
               accessibilityLabel={`${label} for ${item.prompt}`}
               title={label}
               selected={answer === opt}
+              selectionColor={
+                opt === 'yes'
+                  ? colors.success
+                  : opt === 'no'
+                    ? colors.critical
+                    : colors.information
+              }
               onPress={() => onAnswer(opt)}
               style={styles.choiceOption}
             />
@@ -136,11 +143,13 @@ function ItemCard({
                 label="Add photo"
                 icon={<UploadSimple size={20} color={colors.deepCharcoal} />}
                 onPress={() => onPickPhoto('library')}
+                style={styles.photoAction}
               />
               <ActionUploadField
                 label="Take photo"
                 icon={<Camera size={20} color={colors.deepCharcoal} />}
                 onPress={() => onPickPhoto('camera')}
+                style={styles.photoAction}
               />
             </View>
           ) : null}
@@ -365,7 +374,7 @@ export default function ChecklistDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  content: { gap: spacing[3], paddingBottom: spacing[4] },
+  content: { gap: spacing[2], paddingBottom: spacing[4] },
   header: { gap: spacing[1] },
   title: {
     color: colors.deepCharcoal,
@@ -401,6 +410,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing[2],
     backgroundColor: colors.coolSurface,
     borderRadius: radius.md,
+    borderLeftWidth: 3,
+    borderLeftColor: colors.signalYellow,
   },
   progressLabel: {
     color: colors.deepCharcoal,
@@ -408,7 +419,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-  itemsList: { gap: spacing[2] },
+  itemsList: { gap: spacing[1] },
   itemHeader: {
     flexDirection: 'row',
     gap: spacing[1],
@@ -430,16 +441,18 @@ const styles = StyleSheet.create({
   },
   segmentedRow: {
     flexDirection: 'row',
-    gap: spacing[1],
+    gap: 4,
     marginTop: spacing[2],
   },
-  choiceOption: { flex: 1 },
+  choiceOption: { flex: 1, minWidth: 0, paddingHorizontal: 8 },
   issueBox: {
     marginTop: spacing[2],
     gap: spacing[2],
     borderLeftWidth: 3,
     borderLeftColor: colors.warning,
     paddingLeft: spacing[2],
+    paddingVertical: spacing[1],
+    backgroundColor: `${colors.warning}08`,
   },
   photoContainer: {
     gap: spacing[1],
@@ -459,6 +472,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing[1],
   },
+  photoAction: { flex: 1, minWidth: 0 },
   optionalNoteSection: {
     marginTop: spacing[1],
   },

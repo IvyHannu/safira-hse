@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { colors, radius, spacing, typography } from '@safira/design-tokens';
 import ArrowLeft from 'phosphor-react-native/src/icons/ArrowLeft';
 import {
@@ -18,12 +18,14 @@ interface ButtonProps extends Omit<PressableProps, 'children' | 'style'> {
   label: string;
   variant?: ButtonVariant;
   loading?: boolean;
+  trailingIcon?: ReactNode;
 }
 
 export function Button({
   label,
   variant = 'primary',
   loading = false,
+  trailingIcon,
   disabled = false,
   onHoverIn,
   onHoverOut,
@@ -71,6 +73,7 @@ export function Button({
         <Text style={[styles.buttonLabel, { color: foreground }]}>
           {loading ? `${label}…` : label}
         </Text>
+        {!loading && trailingIcon}
       </View>
     </Pressable>
   );
@@ -90,6 +93,7 @@ export function WorkerHeader({
   inset = false,
 }: WorkerHeaderProps) {
   const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
   return (
     <View style={[styles.header, inset && styles.headerInset]}>
       <Pressable
@@ -98,10 +102,13 @@ export function WorkerHeader({
         onPress={onBack}
         onHoverIn={() => setHovered(true)}
         onHoverOut={() => setHovered(false)}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
         style={({ pressed }) => [
           styles.headerBack,
           hovered && styles.headerBackHover,
           pressed && styles.headerBackPressed,
+          focused && styles.headerBackFocused,
         ]}
       >
         <ArrowLeft size={22} color={colors.deepCharcoal} />
@@ -142,7 +149,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.12,
     shadowRadius: 4,
   },
-  primaryPressed: { borderColor: colors.deepCharcoal, opacity: 0.72 },
+  primaryPressed: {
+    borderColor: colors.deepCharcoal,
+    backgroundColor: colors.signalYellow,
+    opacity: 0.86,
+    transform: [{ scale: 0.985 }],
+  },
   secondary: { backgroundColor: colors.white, borderColor: colors.graphite },
   secondaryHover: {
     backgroundColor: colors.coolSurface,
@@ -176,7 +188,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.graphite,
     borderColor: colors.graphite,
   },
-  focused: { borderWidth: 2, borderColor: colors.deepCharcoal },
+  focused: {
+    borderWidth: 2,
+    borderColor: colors.deepCharcoal,
+    shadowColor: colors.deepCharcoal,
+    shadowOpacity: 0.16,
+    shadowRadius: 4,
+  },
   disabled: {
     opacity: 0.48,
     backgroundColor: colors.coolConcrete,
@@ -200,6 +218,7 @@ const styles = StyleSheet.create({
   },
   headerBackHover: { backgroundColor: colors.coolSurface },
   headerBackPressed: { backgroundColor: colors.coolConcrete },
+  headerBackFocused: { borderWidth: 2, borderColor: colors.deepCharcoal },
   headerContext: {
     color: colors.graphite,
     fontFamily: typography.fontFamily,

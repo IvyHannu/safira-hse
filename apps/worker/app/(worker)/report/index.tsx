@@ -90,6 +90,7 @@ export default function ReportChoiceScreen() {
               title={category.label}
               description={category.description}
               selected={isSelected}
+              selectionColor={accent.border}
               onPress={() => updateDraft({ category: category.value })}
               style={styles.choice}
               leading={
@@ -128,9 +129,9 @@ const styles = StyleSheet.create({
   title: {
     color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: '700',
-    lineHeight: 32,
+    lineHeight: 30,
   },
   description: {
     color: colors.graphite,
@@ -144,6 +145,9 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     gap: spacing[1],
     padding: spacing[1],
+    borderLeftWidth: 3,
+    borderLeftColor: colors.critical,
+    borderRadius: 4,
     backgroundColor: `${colors.critical}0D`,
   },
   emergencyIcon: {
