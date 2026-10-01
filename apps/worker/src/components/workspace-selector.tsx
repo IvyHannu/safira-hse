@@ -17,7 +17,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import { ValidationMessage } from '@/components/ui';
+import { SignOutButton, ValidationMessage } from '@/components/ui';
 import { useAuth } from '@/lib/demo-auth';
 
 const fullLogo = require('../../../../docs/references/brand/Safira Logo Full.png');
@@ -95,7 +95,7 @@ function WorkspaceRow({
 
 export function WorkspaceSelector() {
   const router = useRouter();
-  const { signIn, error } = useAuth();
+  const { signIn, signOut, error } = useAuth();
   const [routeError, setRouteError] = useState<string | null>(null);
   const { width } = useWindowDimensions();
   const wide = width >= 800;
@@ -154,6 +154,9 @@ export function WorkspaceSelector() {
               onPress={() => void chooseWorkspace(role)}
             />
           ))}
+          <View style={styles.signOut}>
+            <SignOutButton onPress={() => void signOut()} />
+          </View>
         </View>
         <ValidationMessage message={routeError || error || undefined} />
       </View>
@@ -238,6 +241,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   roles: { gap: spacing[2] },
+  signOut: { alignSelf: 'flex-start', marginTop: spacing[1] },
   row: {
     minHeight: 84,
     flexDirection: 'row',

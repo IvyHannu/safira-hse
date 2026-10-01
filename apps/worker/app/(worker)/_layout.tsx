@@ -9,16 +9,19 @@ import {
 } from '@/components/ui';
 import { WorkerNavigation } from '@/components/worker-navigation';
 import { useAuth } from '@/lib/demo-auth';
+import { ProfilePhotoProvider } from '@/profile/photo-provider';
 import { ReportingProvider, useReporting } from '@/reporting/provider';
 import { SafetyProvider, useSafety } from '@/safety/provider';
 
 export default function WorkerLayout() {
   return (
-    <ReportingProvider>
-      <SafetyProvider>
-        <WorkerShell />
-      </SafetyProvider>
-    </ReportingProvider>
+    <ProfilePhotoProvider>
+      <ReportingProvider>
+        <SafetyProvider>
+          <WorkerShell />
+        </SafetyProvider>
+      </ReportingProvider>
+    </ProfilePhotoProvider>
   );
 }
 

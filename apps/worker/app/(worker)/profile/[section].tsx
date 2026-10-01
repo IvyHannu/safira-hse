@@ -1,7 +1,7 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { colors, radius, spacing, typography } from '@safira/design-tokens';
 import { StyleSheet, Text, View } from 'react-native';
-import { WorkerHeader } from '@/components/ui';
+import { ProfilePhotoEditor, WorkerHeader } from '@/components/ui';
 import { WorkspaceSelector } from '@/components/workspace-selector';
 import { workerHomeDemo } from '@/demo/worker-data';
 import { useAuth } from '@/lib/demo-auth';
@@ -34,6 +34,13 @@ export default function ProfileSectionScreen() {
         <View style={styles.section}>
           {section === 'personal-details' && (
             <>
+              <View style={styles.photoSection}>
+                <ProfilePhotoEditor name={workerHomeDemo.worker.firstName} />
+                <View style={styles.photoCopy}>
+                  <Text style={styles.detailValue}>Profile photo</Text>
+                  <Text style={styles.detailLabel}>Saved on this device.</Text>
+                </View>
+              </View>
               <Detail label="Name" value={workerHomeDemo.worker.firstName} />
               <Detail label="Role" value="Worker" />
               <Detail label="Current site" value={workerHomeDemo.site.name} />
@@ -89,6 +96,8 @@ const styles = StyleSheet.create({
     gap: spacing[2],
   },
   detail: { gap: 4 },
+  photoSection: { flexDirection: 'row', alignItems: 'center', gap: spacing[2] },
+  photoCopy: { flex: 1, gap: 4 },
   detailLabel: {
     color: colors.graphite,
     fontFamily: typography.fontFamily,

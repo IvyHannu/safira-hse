@@ -11,7 +11,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import {
   SettingsRow,
   SignOutButton,
-  ProfileAvatar,
+  ProfilePhotoEditor,
   ValidationMessage,
   WorkerHeader,
 } from '@/components/ui';
@@ -47,10 +47,7 @@ export default function ProfileScreen() {
       ) : (
         <>
           <View style={styles.identity}>
-            <ProfileAvatar
-              name={workerHomeDemo.worker.firstName}
-              photoUri={workerHomeDemo.worker.photoUri}
-            />
+            <ProfilePhotoEditor name={workerHomeDemo.worker.firstName} />
             <View style={styles.identityCopy}>
               <Text style={styles.name}>{workerHomeDemo.worker.firstName}</Text>
               <Text style={styles.role}>Worker</Text>

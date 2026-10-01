@@ -18,6 +18,7 @@ import { WorkspaceSelector } from '@/components/workspace-selector';
 import { workerHomeDemo } from '@/demo/worker-data';
 import { useAuth } from '@/lib/demo-auth';
 import { isDraftStarted } from '@/reporting/model';
+import { useProfilePhoto } from '@/profile/photo-provider';
 import { useReporting } from '@/reporting/provider';
 import { useSafety } from '@/safety/provider';
 
@@ -35,6 +36,7 @@ export default function HomeScreen() {
   const { session, loading, signIn } = useAuth();
   const linkHandled = useRef(false);
   const { state } = useReporting();
+  const { photoUri } = useProfilePhoto();
 
   useEffect(() => {
     if (loading || workspaceRole !== 'worker' || linkHandled.current) return;
@@ -69,7 +71,7 @@ export default function HomeScreen() {
         siteName={site.name}
         area={site.area}
         firstName={worker.firstName}
-        photoUri={worker.photoUri}
+        photoUri={photoUri}
       />
       <View style={styles.main}>
         <HeroActionCard onReport={() => router.push('/report')} />
