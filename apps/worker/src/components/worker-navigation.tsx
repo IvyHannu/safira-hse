@@ -6,10 +6,7 @@ import ShieldCheck from 'phosphor-react-native/src/icons/ShieldCheck';
 import UserCircle from 'phosphor-react-native/src/icons/UserCircle';
 import { colors } from '@safira/design-tokens';
 import { StyleSheet, View } from 'react-native';
-import {
-  BottomNavigationShell,
-  type BottomNavigationItem,
-} from '@/components/ui';
+import { WorkerBottomNav, type BottomNavigationItem } from '@/components/ui';
 import { useAuth } from '@/lib/demo-auth';
 
 export function WorkerNavigation() {
@@ -22,7 +19,7 @@ export function WorkerNavigation() {
       ? 'report'
       : pathname.startsWith('/safety')
         ? 'safety'
-        : pathname === '/profile'
+        : pathname.startsWith('/profile')
           ? 'profile'
           : 'home';
   const items: BottomNavigationItem[] = [
@@ -31,8 +28,8 @@ export function WorkerNavigation() {
       label: 'Home',
       icon: (
         <House
-          size={23}
-          color={selectedKey === 'home' ? colors.signalYellow : colors.graphite}
+          size={21}
+          color={selectedKey === 'home' ? colors.white : colors.graphite}
           weight={selectedKey === 'home' ? 'fill' : 'regular'}
         />
       ),
@@ -42,10 +39,8 @@ export function WorkerNavigation() {
       label: 'Reports',
       icon: (
         <Files
-          size={23}
-          color={
-            selectedKey === 'reports' ? colors.signalYellow : colors.graphite
-          }
+          size={21}
+          color={selectedKey === 'reports' ? colors.white : colors.graphite}
           weight={selectedKey === 'reports' ? 'fill' : 'regular'}
         />
       ),
@@ -55,7 +50,7 @@ export function WorkerNavigation() {
       label: 'Report',
       icon: (
         <View style={styles.reportIcon}>
-          <Plus size={23} weight="bold" color={colors.deepCharcoal} />
+          <Plus size={24} weight="bold" color={colors.deepCharcoal} />
         </View>
       ),
       disabled: loading || session?.role !== 'worker',
@@ -65,10 +60,8 @@ export function WorkerNavigation() {
       label: 'Safety',
       icon: (
         <ShieldCheck
-          size={23}
-          color={
-            selectedKey === 'safety' ? colors.signalYellow : colors.graphite
-          }
+          size={21}
+          color={selectedKey === 'safety' ? colors.white : colors.graphite}
           weight={selectedKey === 'safety' ? 'fill' : 'regular'}
         />
       ),
@@ -79,10 +72,8 @@ export function WorkerNavigation() {
       label: 'Profile',
       icon: (
         <UserCircle
-          size={23}
-          color={
-            selectedKey === 'profile' ? colors.signalYellow : colors.graphite
-          }
+          size={21}
+          color={selectedKey === 'profile' ? colors.white : colors.graphite}
           weight={selectedKey === 'profile' ? 'fill' : 'regular'}
         />
       ),
@@ -98,7 +89,7 @@ export function WorkerNavigation() {
   }
 
   return (
-    <BottomNavigationShell
+    <WorkerBottomNav
       items={items}
       selectedKey={selectedKey}
       onSelect={select}
@@ -108,11 +99,13 @@ export function WorkerNavigation() {
 
 const styles = StyleSheet.create({
   reportIcon: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.signalYellow,
+    borderWidth: 1,
+    borderColor: colors.deepCharcoal,
   },
 });

@@ -79,6 +79,10 @@ export function Button({
   );
 }
 
+export function PrimaryButton(props: Omit<ButtonProps, 'variant'>) {
+  return <Button {...props} variant="primary" />;
+}
+
 interface WorkerHeaderProps {
   backLabel: string;
   onBack(): void;
@@ -127,7 +131,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: radius.md,
     paddingHorizontal: spacing[2],
-    paddingVertical: spacing[1],
+    paddingVertical: 0,
   },
   buttonContent: {
     flexDirection: 'row',
@@ -138,6 +142,10 @@ const styles = StyleSheet.create({
     fontFamily: typography.fontFamily,
     fontWeight: '600',
     fontSize: 16,
+    lineHeight: 20,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    includeFontPadding: false,
   },
   primary: {
     backgroundColor: colors.signalYellow,
@@ -196,7 +204,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   disabled: {
-    opacity: 0.48,
+    opacity: 0.72,
     backgroundColor: colors.coolConcrete,
     borderColor: colors.coolConcrete,
   },

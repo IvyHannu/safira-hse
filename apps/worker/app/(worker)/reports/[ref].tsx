@@ -11,7 +11,8 @@ import {
   WorkerHeader,
   type Tone,
 } from '@/components/ui';
-import type { DemoReport, DemoStatusStep } from '@/reporting/model';
+import { ReportStatusTimeline } from '@/components/report-status-timeline';
+import type { DemoReport } from '@/reporting/model';
 import { useReporting } from '@/reporting/provider';
 
 const STATUS_CONFIG: Record<ReportStatus, { label: string; tone: Tone }> = {
@@ -43,44 +44,6 @@ function formatDate(iso: string): string {
     hour: '2-digit',
     minute: '2-digit',
   });
-}
-
-function StatusTimeline({ steps }: { steps: readonly DemoStatusStep[] }) {
-  return (
-    <View style={styles.timeline}>
-      {steps.map((step, index) => {
-        const { tone } = STATUS_CONFIG[step.status];
-        const isLast = index === steps.length - 1;
-        return (
-          <View key={step.status + step.timestamp} style={styles.timelineRow}>
-            {/* Connector line */}
-            <View style={styles.timelineIndicatorCol}>
-              <View
-                style={[
-                  styles.timelineDot,
-                  isLast && { backgroundColor: colors[tone] },
-                ]}
-              />
-              {!isLast && <View style={styles.timelineLine} />}
-            </View>
-            <View style={styles.timelineContent}>
-              <Text
-                style={[
-                  styles.timelineLabel,
-                  isLast && { color: colors[tone] },
-                ]}
-              >
-                {step.label}
-              </Text>
-              <Text style={styles.timelineMeta}>
-                {formatDate(step.timestamp)}
-              </Text>
-            </View>
-          </View>
-        );
-      })}
-    </View>
-  );
 }
 
 function ReportDetailContent({ report }: { report: DemoReport }) {
@@ -177,7 +140,7 @@ function ReportDetailContent({ report }: { report: DemoReport }) {
       <View style={styles.section}>
         <SectionHeader title="Status timeline" />
         <AppCard>
-          <StatusTimeline steps={report.timeline} />
+          <ReportStatusTimeline steps={report.timeline} />
         </AppCard>
       </View>
 
@@ -308,44 +271,5 @@ const styles = StyleSheet.create({
     fontFamily: typography.fontFamily,
     fontSize: 14,
     fontWeight: '600',
-  },
-  timeline: { gap: 0 },
-  timelineRow: {
-    flexDirection: 'row',
-    gap: spacing[2],
-  },
-  timelineIndicatorCol: {
-    alignItems: 'center',
-    width: 16,
-  },
-  timelineDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    backgroundColor: colors.graphite,
-    marginTop: 4,
-  },
-  timelineLine: {
-    flex: 1,
-    width: 2,
-    backgroundColor: colors.graphite,
-    opacity: 0.25,
-    marginVertical: 2,
-  },
-  timelineContent: {
-    flex: 1,
-    paddingBottom: spacing[2],
-    gap: 2,
-  },
-  timelineLabel: {
-    color: colors.deepCharcoal,
-    fontFamily: typography.fontFamily,
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  timelineMeta: {
-    color: colors.graphite,
-    fontFamily: typography.fontFamily,
-    fontSize: 13,
   },
 });

@@ -3,12 +3,19 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { colors, spacing, typography } from '@safira/design-tokens';
 import type { ReportStatus } from '@safira/types';
 import { StyleSheet, Text, View } from 'react-native';
-import ArrowRight from 'phosphor-react-native/src/icons/ArrowRight';
 import Files from 'phosphor-react-native/src/icons/Files';
 import ListChecks from 'phosphor-react-native/src/icons/ListChecks';
-import { Button, PressableCard, type Tone } from '@/components/ui';
+import {
+  DraftStatusCard,
+  GuidanceCard,
+  HeroActionCard,
+  NoticeCard,
+  QuickAccessCard,
+  type Tone,
+  WorkerHomeHeader,
+} from '@/components/ui';
 import { WorkspaceSelector } from '@/components/workspace-selector';
-import { workerHomeDemo, workerReportCategories } from '@/demo/worker-data';
+import { workerHomeDemo } from '@/demo/worker-data';
 import { useAuth } from '@/lib/demo-auth';
 import { isDraftStarted } from '@/reporting/model';
 import { useReporting } from '@/reporting/provider';
@@ -21,39 +28,6 @@ const workerStatus: Record<ReportStatus, { label: string; tone: Tone }> = {
   resolved: { label: 'Resolved', tone: 'success' },
   closed: { label: 'Closed', tone: 'success' },
 };
-
-function HomeNotice({
-  tone,
-  title,
-  message,
-}: {
-  tone: Tone;
-  title: string;
-  message: string;
-}) {
-  const statusColor = colors[tone];
-
-  return (
-    <View
-      accessibilityRole="alert"
-      style={[styles.notice, { backgroundColor: `${statusColor}0D` }]}
-    >
-      <View
-        accessibilityElementsHidden
-        style={[
-          styles.noticeIndicator,
-          { backgroundColor: `${statusColor}1A` },
-        ]}
-      >
-        <View style={[styles.noticeDot, { backgroundColor: statusColor }]} />
-      </View>
-      <View style={styles.noticeCopy}>
-        <Text style={styles.noticeTitle}>{title}</Text>
-        <Text style={styles.noticeMessage}>{message}</Text>
-      </View>
-    </View>
-  );
-}
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -72,17 +46,14 @@ export default function HomeScreen() {
   const { checklists } = useSafety();
 
   if (loading) return <Text style={styles.body}>Opening Safira…</Text>;
-  if (session?.role !== 'worker') {
-    return <WorkspaceSelector />;
-  }
+  if (session?.role !== 'worker') return <WorkspaceSelector />;
 
-  const { worker, site, latestReport, assignedChecklist, activeSafetyAlert } =
-    workerHomeDemo;
-  const status = workerStatus[latestReport.status];
-  const submitted = state.submitted;
-  const submittedCategory = workerReportCategories.find(
-    (category) => category.value === submitted?.content.category,
-  );
+  const { worker, site, assignedChecklist, activeSafetyAlert } = workerHomeDemo;
+  const latestReport = [...state.demoReports].sort(
+    (a, b) =>
+      new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime(),
+  )[0];
+  const status = latestReport ? workerStatus[latestReport.status] : null;
   const assigned = checklists.find((c) => c.assignedToWorker) ?? checklists[0];
   const isDone = assigned?.status === 'completed';
   const isInProgress = assigned?.status === 'in_progress';
@@ -94,117 +65,55 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.content}>
-      <View style={styles.header}>
-        <View style={styles.brandRow}>
-          <View style={styles.brandMark} accessibilityElementsHidden />
-          <Text style={styles.brandName}>Safira</Text>
-        </View>
-        <View style={styles.headerContext}>
-          <View style={styles.siteContext}>
-            <Text style={styles.headerSite}>{site.name}</Text>
-            <Text style={styles.headerArea}>{site.area}</Text>
-          </View>
-          <View
-            style={styles.avatar}
-            accessibilityLabel={`${worker.firstName} profile`}
-          >
-            <Text style={styles.avatarText}>
-              {worker.firstName.slice(0, 1)}
-            </Text>
-          </View>
-        </View>
-      </View>
-
+      <WorkerHomeHeader
+        siteName={site.name}
+        area={site.area}
+        firstName={worker.firstName}
+        photoUri={worker.photoUri}
+      />
       <View style={styles.main}>
-        <View style={styles.hero}>
-          <Text style={styles.heroTitle}>
-            A safer workplace starts with you.
-          </Text>
-          <Text style={styles.heroMessage}>See something? Report it.</Text>
-          <Button
-            label="Report something"
-            trailingIcon={
-              <ArrowRight size={20} weight="bold" color={colors.deepCharcoal} />
-            }
-            onPress={() => router.push('/report')}
-          />
-        </View>
+        <HeroActionCard onReport={() => router.push('/report')} />
 
         {isDraftStarted(state.draft) && (
-          <HomeNotice
-            tone="information"
-            title="Report in progress"
-            message="Your draft is saved on this device. Choose Report something to continue."
-          />
+          <DraftStatusCard onContinue={() => router.push('/report')} />
         )}
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Quick access</Text>
           <View style={styles.quickAccess}>
-            <PressableCard
+            <QuickAccessCard
               label="My Reports"
-              onPress={() =>
-                router.push(submitted ? '/report/view' : '/reports')
+              icon={<Files size={22} color={colors.deepCharcoal} />}
+              description={
+                latestReport
+                  ? `${latestReport.reference} · ${status?.label}`
+                  : 'No reports yet'
               }
-              style={styles.quickTile}
-            >
-              <View style={styles.quickIcon}>
-                <Files size={24} color={colors.deepCharcoal} />
-              </View>
-              <Text style={styles.quickTitle}>My Reports</Text>
-              <Text style={styles.quickDescription} numberOfLines={2}>
-                {submitted
-                  ? `${submitted.reference} · Submitted`
-                  : `${latestReport.reference} · ${status.label}`}
-              </Text>
-              <Text style={styles.quickDetail} numberOfLines={2}>
-                {submitted
-                  ? (submittedCategory?.label ?? 'Your report')
-                  : latestReport.title}
-              </Text>
-            </PressableCard>
-            <PressableCard
+              detail={latestReport?.categoryLabel ?? 'View your report history'}
+              onPress={() =>
+                router.push(
+                  latestReport
+                    ? `/reports/${latestReport.reference}`
+                    : '/reports',
+                )
+              }
+            />
+            <QuickAccessCard
               label="Safety Checks"
+              icon={<ListChecks size={22} color={colors.deepCharcoal} />}
+              description={checklistStatus}
+              detail={assigned?.title ?? assignedChecklist.title}
               onPress={() =>
                 router.push(assigned ? `/safety/${assigned.id}` : '/safety')
               }
-              style={styles.quickTile}
-            >
-              <View style={styles.quickIcon}>
-                <ListChecks size={24} color={colors.deepCharcoal} />
-              </View>
-              <Text style={styles.quickTitle}>Safety Checks</Text>
-              <Text style={styles.quickDescription} numberOfLines={2}>
-                {checklistStatus}
-              </Text>
-              <Text style={styles.quickDetail} numberOfLines={2}>
-                {assigned?.title ?? assignedChecklist.title}
-              </Text>
-            </PressableCard>
+            />
           </View>
         </View>
 
-        <View style={styles.guidance}>
-          <View style={styles.guidanceCopy}>
-            <Text style={styles.guidanceTitle}>Keep our workplace safe</Text>
-            <Text style={styles.guidanceMessage}>
-              Your awareness helps prevent incidents and protects our people,
-              our environment and our communities.
-            </Text>
-          </View>
-          <View
-            style={styles.illustrationSlot}
-            accessibilityLabel="Workplace illustration slot"
-          >
-            <Text style={styles.illustrationSlotLabel}>
-              Workplace illustration
-            </Text>
-          </View>
-        </View>
+        <GuidanceCard />
 
         {activeSafetyAlert && (
-          <HomeNotice
-            tone="warning"
+          <NoticeCard
             title={activeSafetyAlert.title}
             message={activeSafetyAlert.message}
           />
@@ -219,62 +128,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     marginHorizontal: -spacing[2],
     marginTop: -spacing[2],
-    backgroundColor: colors.white,
-  },
-  header: {
-    minHeight: 64,
-    paddingHorizontal: spacing[2],
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: spacing[1],
-    borderBottomWidth: 1,
-    borderBottomColor: colors.coolConcrete,
-    backgroundColor: colors.white,
-  },
-  brandRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  brandMark: {
-    width: 9,
-    height: 21,
-    backgroundColor: colors.signalYellow,
-    transform: [{ skewX: '-20deg' }],
-  },
-  brandName: {
-    color: colors.deepCharcoal,
-    fontFamily: typography.fontFamily,
-    fontSize: 20,
-    fontWeight: '700',
-  },
-  headerContext: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing[1],
-  },
-  siteContext: { alignItems: 'flex-end', flexShrink: 1, minWidth: 0 },
-  headerSite: {
-    color: colors.graphite,
-    fontFamily: typography.fontFamily,
-    fontSize: 11,
-    fontWeight: '600',
-  },
-  headerArea: {
-    color: colors.graphite,
-    fontFamily: typography.fontFamily,
-    fontSize: 10,
-  },
-  avatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.coolConcrete,
-  },
-  avatarText: {
-    color: colors.deepCharcoal,
-    fontFamily: typography.fontFamily,
-    fontSize: 13,
-    fontWeight: '700',
+    backgroundColor: colors.coolSurface,
   },
   body: {
     color: colors.graphite,
@@ -283,29 +137,6 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   main: { gap: spacing[2], padding: spacing[2] },
-  hero: {
-    gap: spacing[1],
-    padding: spacing[2],
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: `${colors.signalYellow}55`,
-    backgroundColor: `${colors.signalYellow}28`,
-  },
-  heroTitle: {
-    color: colors.deepCharcoal,
-    fontFamily: typography.fontFamily,
-    fontSize: 23,
-    fontWeight: '700',
-    lineHeight: 29,
-    maxWidth: 320,
-  },
-  heroMessage: {
-    color: colors.graphite,
-    fontFamily: typography.fontFamily,
-    fontSize: 14,
-    lineHeight: 21,
-    marginBottom: spacing[1],
-  },
   section: { gap: spacing[1] },
   sectionTitle: {
     color: colors.deepCharcoal,
@@ -314,107 +145,4 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   quickAccess: { flexDirection: 'row', gap: spacing[1] },
-  quickTile: {
-    flex: 1,
-    minWidth: 0,
-    minHeight: 152,
-    gap: 4,
-    padding: spacing[1],
-  },
-  quickIcon: {
-    width: 36,
-    height: 36,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 4,
-    backgroundColor: colors.coolSurface,
-  },
-  quickTitle: {
-    color: colors.deepCharcoal,
-    fontFamily: typography.fontFamily,
-    fontSize: 13,
-    fontWeight: '700',
-  },
-  quickDescription: {
-    color: colors.graphite,
-    fontFamily: typography.fontFamily,
-    fontSize: 11,
-    lineHeight: 16,
-  },
-  quickDetail: {
-    color: colors.graphite,
-    fontFamily: typography.fontFamily,
-    fontSize: 11,
-    lineHeight: 15,
-  },
-  guidance: {
-    minHeight: 120,
-    flexDirection: 'row',
-    gap: spacing[1],
-    padding: spacing[2],
-    borderRadius: 8,
-    backgroundColor: colors.coolSurface,
-    borderWidth: 1,
-    borderColor: colors.coolConcrete,
-  },
-  guidanceCopy: { flex: 1, gap: spacing[1] },
-  guidanceTitle: {
-    color: colors.deepCharcoal,
-    fontFamily: typography.fontFamily,
-    fontSize: 17,
-    fontWeight: '700',
-  },
-  guidanceMessage: {
-    color: colors.graphite,
-    fontFamily: typography.fontFamily,
-    fontSize: 13,
-    lineHeight: 19,
-  },
-  notice: {
-    gap: spacing[1],
-    padding: spacing[2],
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-  },
-  noticeIndicator: {
-    width: 24,
-    height: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  noticeDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  noticeCopy: {
-    flex: 1,
-    gap: spacing[1],
-  },
-  noticeTitle: {
-    color: colors.deepCharcoal,
-    fontFamily: typography.fontFamily,
-    fontSize: 17,
-    fontWeight: '700',
-    lineHeight: 24,
-  },
-  noticeMessage: {
-    color: colors.graphite,
-    fontFamily: typography.fontFamily,
-    fontSize: 14,
-    lineHeight: 21,
-  },
-  illustrationSlot: {
-    width: 88,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderLeftWidth: 1,
-    borderColor: colors.coolConcrete,
-  },
-  illustrationSlotLabel: {
-    color: colors.graphite,
-    fontFamily: typography.fontFamily,
-    fontSize: 11,
-    textAlign: 'center',
-  },
 });

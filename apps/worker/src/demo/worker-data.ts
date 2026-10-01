@@ -1,7 +1,7 @@
 import type { ReportStatus } from '@safira/types';
 
 export interface WorkerHomeDemoData {
-  worker: { firstName: string };
+  worker: { firstName: string; photoUri?: string | null };
   site: { id: string; name: string; area: string };
   workAreas: readonly { id: string; name: string }[];
   latestReport: {

@@ -7,11 +7,13 @@ import {
   AppCard,
   ActionUploadField,
   Button,
+  ChecklistProgress,
   ChoiceCard,
   EmptyState,
   FormField,
-  InlineAlert,
-  StatusBadge,
+  IssuePanel,
+  StatusCard,
+  StatusLabel,
   TextArea,
   WorkerHeader,
 } from '@/components/ui';
@@ -101,7 +103,7 @@ function ItemCard({
                     : colors.information
               }
               onPress={() => onAnswer(opt)}
-              style={styles.choiceOption}
+              style={[styles.choiceOption, readOnly && styles.completedChoice]}
             />
           );
         })}
@@ -109,13 +111,10 @@ function ItemCard({
 
       {/* When answer is No and issue trigger is enabled: reveal Add note, Add photo, Report this issue */}
       {showIssueBox ? (
-        <View style={styles.issueBox}>
-          <InlineAlert
-            tone="warning"
-            title="Issue identified"
-            message="You answered No. Add details or report this issue so HSE can follow up."
-          />
-
+        <IssuePanel
+          title="Issue identified"
+          message="You answered No. Add details or report this issue so HSE can follow up."
+        >
           <TextArea
             label="Note"
             placeholder="Describe what is wrong..."
@@ -159,7 +158,7 @@ function ItemCard({
             variant="secondary"
             onPress={onReportIssue}
           />
-        </View>
+        </IssuePanel>
       ) : null}
 
       {/* Optional note when answer is Yes or NA */}
@@ -230,10 +229,10 @@ export default function ChecklistDetailScreen() {
 
   const readOnly = checklist.status === 'completed';
   const totalItems = checklist.items.length;
-  const answeredCount = Object.values(checklist.responses).filter(
-    (r) => r.answer !== null,
+  const answeredCount = checklist.items.filter(
+    (item) => checklist.responses[item.id]?.answer != null,
   ).length;
-  const allAnswered = answeredCount === totalItems;
+  const allAnswered = totalItems > 0 && answeredCount === totalItems;
 
   async function handlePickPhoto(itemId: string, source: 'camera' | 'library') {
     if (!checklist) return;
@@ -310,11 +309,13 @@ export default function ChecklistDetailScreen() {
             .join(' · ')}
         </Text>
         <View style={styles.statusRow}>
-          <StatusBadge
+          <StatusLabel
             label={checklist.status === 'completed' ? 'Completed' : 'Assigned'}
             tone={checklist.status === 'completed' ? 'success' : 'information'}
           />
-          <Text style={styles.dueLabel}>{checklist.dueLabel}</Text>
+          {checklist.dueLabel !== 'Completed' && (
+            <Text style={styles.dueLabel}>{checklist.dueLabel}</Text>
+          )}
         </View>
         {checklist.description ? (
           <Text style={styles.description}>{checklist.description}</Text>
@@ -322,7 +323,7 @@ export default function ChecklistDetailScreen() {
       </View>
 
       {submittedBanner || checklist.status === 'completed' ? (
-        <InlineAlert
+        <StatusCard
           tone="success"
           title="Checklist completed"
           message={`Completed on ${formatDate(checklist.submittedAt || new Date().toISOString())}. Recorded locally on this device.`}
@@ -330,11 +331,12 @@ export default function ChecklistDetailScreen() {
       ) : null}
 
       {/* Progress */}
-      <View style={styles.progressContainer}>
-        <Text style={styles.progressLabel}>
-          Progress: {answeredCount} of {totalItems} items answered
-        </Text>
-      </View>
+      <ChecklistProgress
+        label={`Progress: ${answeredCount} of ${totalItems} items answered`}
+        answered={answeredCount}
+        total={totalItems}
+        completed={readOnly}
+      />
 
       {/* Items list */}
       <View style={styles.itemsList}>
@@ -360,6 +362,11 @@ export default function ChecklistDetailScreen() {
           <Button
             label="Submit checklist"
             disabled={!allAnswered}
+            accessibilityHint={
+              allAnswered
+                ? undefined
+                : 'Answer all items to complete this check.'
+            }
             onPress={handleSubmit}
           />
           {!allAnswered ? (
@@ -405,20 +412,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     marginTop: spacing[1],
   },
-  progressContainer: {
-    paddingVertical: spacing[1],
-    paddingHorizontal: spacing[2],
-    backgroundColor: colors.coolSurface,
-    borderRadius: radius.md,
-    borderLeftWidth: 3,
-    borderLeftColor: colors.signalYellow,
-  },
-  progressLabel: {
-    color: colors.deepCharcoal,
-    fontFamily: typography.fontFamily,
-    fontSize: 14,
-    fontWeight: '600',
-  },
   itemsList: { gap: spacing[1] },
   itemHeader: {
     flexDirection: 'row',
@@ -442,18 +435,16 @@ const styles = StyleSheet.create({
   segmentedRow: {
     flexDirection: 'row',
     gap: 4,
-    marginTop: spacing[2],
+    marginTop: spacing[1],
   },
-  choiceOption: { flex: 1, minWidth: 0, paddingHorizontal: 8 },
-  issueBox: {
-    marginTop: spacing[2],
-    gap: spacing[2],
-    borderLeftWidth: 3,
-    borderLeftColor: colors.warning,
-    paddingLeft: spacing[2],
-    paddingVertical: spacing[1],
-    backgroundColor: `${colors.warning}08`,
+  choiceOption: {
+    flex: 1,
+    minWidth: 0,
+    minHeight: 48,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
   },
+  completedChoice: { opacity: 1 },
   photoContainer: {
     gap: spacing[1],
   },

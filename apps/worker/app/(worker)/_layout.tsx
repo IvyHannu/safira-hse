@@ -34,6 +34,7 @@ function WorkerShell() {
 
   return (
     <ScreenContainer
+      fullWidth={pathname === '/' && session?.role !== 'worker'}
       bottomNavigation={
         session?.role === 'worker' ? <WorkerNavigation /> : undefined
       }

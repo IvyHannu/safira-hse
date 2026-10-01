@@ -20,7 +20,9 @@ import {
   type SubmittedDemoReport,
 } from './model';
 
-const storageKey = 'safira.worker.reporting.v1';
+const legacyStorageKey = 'safira.worker.reporting.v1';
+const storageKey = 'safira.worker.reporting.v2';
+const resetMarkerKey = 'safira.worker.reporting.reset.2026-10-01';
 
 interface ReportingContextValue {
   state: LocalReportingState;
@@ -52,12 +54,21 @@ export function ReportingProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       try {
-        const saved = localStorage.getItem(storageKey);
-        if (saved) {
-          const restored = parseReportingState(saved);
-          if (!restored) throw new Error('Invalid saved report data');
-          stateRef.current = restored;
-          setState(restored);
+        if (localStorage.getItem(resetMarkerKey) !== 'complete') {
+          const fresh = createInitialReportingState();
+          localStorage.setItem(storageKey, JSON.stringify(fresh));
+          localStorage.removeItem(legacyStorageKey);
+          localStorage.setItem(resetMarkerKey, 'complete');
+          stateRef.current = fresh;
+          setState(fresh);
+        } else {
+          const saved = localStorage.getItem(storageKey);
+          if (saved) {
+            const restored = parseReportingState(saved);
+            if (!restored) throw new Error('Invalid saved report data');
+            stateRef.current = restored;
+            setState(restored);
+          }
         }
       } catch {
         unreadableRef.current = true;

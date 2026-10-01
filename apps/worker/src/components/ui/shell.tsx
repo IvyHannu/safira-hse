@@ -6,15 +6,24 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 interface ScreenContainerProps {
   children: ReactNode;
   bottomNavigation?: ReactNode;
+  fullWidth?: boolean;
 }
 
 export function ScreenContainer({
   children,
   bottomNavigation,
+  fullWidth = false,
 }: ScreenContainerProps) {
   return (
     <SafeAreaView style={styles.screen}>
-      <ScrollView contentContainerStyle={styles.content}>{children}</ScrollView>
+      <ScrollView
+        contentContainerStyle={[
+          styles.content,
+          fullWidth && styles.fullWidthContent,
+        ]}
+      >
+        {children}
+      </ScrollView>
       {bottomNavigation}
     </SafeAreaView>
   );
@@ -27,27 +36,29 @@ export interface BottomNavigationItem {
   disabled?: boolean;
 }
 
-interface BottomNavigationShellProps {
+interface WorkerBottomNavProps {
   items: BottomNavigationItem[];
   selectedKey: string;
   onSelect(key: string): void;
 }
 
-export function BottomNavigationShell({
+export function WorkerBottomNav({
   items,
   selectedKey,
   onSelect,
-}: BottomNavigationShellProps) {
+}: WorkerBottomNavProps) {
   return (
-    <View accessibilityLabel="Bottom navigation" style={styles.navigation}>
-      {items.map((item) => (
-        <BottomNavigationButton
-          key={item.key}
-          item={item}
-          selected={item.key === selectedKey}
-          onSelect={onSelect}
-        />
-      ))}
+    <View style={styles.navigationInset}>
+      <View accessibilityLabel="Bottom navigation" style={styles.navigation}>
+        {items.map((item) => (
+          <BottomNavigationButton
+            key={item.key}
+            item={item}
+            selected={item.key === selectedKey}
+            onSelect={onSelect}
+          />
+        ))}
+      </View>
     </View>
   );
 }
@@ -76,18 +87,31 @@ function BottomNavigationButton({
       onBlur={() => setFocused(false)}
       style={({ pressed }) => [
         styles.navigationItem,
-        selected && styles.navigationSelected,
-        hovered && !item.disabled && styles.navigationHover,
+        item.key === 'report' && styles.navigationReport,
+        hovered && !selected && !item.disabled && styles.navigationHover,
+        selected && item.key !== 'report' && styles.navigationSelected,
         pressed && !item.disabled && styles.navigationPressed,
+        pressed &&
+          selected &&
+          item.key !== 'report' &&
+          styles.navigationSelectedPressed,
         focused && styles.navigationFocused,
+        focused &&
+          selected &&
+          item.key !== 'report' &&
+          styles.navigationSelectedFocused,
         item.disabled && styles.navigationDisabled,
       ]}
     >
+      {selected && item.key !== 'report' && (
+        <View accessibilityElementsHidden style={styles.activeIndicator} />
+      )}
       {item.icon}
       <Text
         style={[
           styles.navigationLabel,
           selected && styles.navigationLabelSelected,
+          item.key === 'report' && styles.navigationReportLabel,
         ]}
       >
         {item.label}
@@ -106,37 +130,67 @@ const styles = StyleSheet.create({
     gap: spacing[2],
     flexGrow: 1,
   },
+  fullWidthContent: { maxWidth: 1200, padding: 0 },
+  navigationInset: {
+    width: '100%',
+    paddingHorizontal: 12,
+    paddingTop: 8,
+    paddingBottom: 8,
+    backgroundColor: colors.coolSurface,
+  },
   navigation: {
     width: '100%',
-    maxWidth: 600,
+    maxWidth: 576,
     alignSelf: 'center',
     flexDirection: 'row',
-    borderTopWidth: 1,
+    alignItems: 'center',
+    minHeight: 76,
+    paddingHorizontal: 5,
+    borderWidth: 1,
     borderColor: colors.coolConcrete,
+    borderRadius: 20,
     backgroundColor: colors.white,
     shadowColor: colors.deepCharcoal,
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    elevation: 5,
   },
   navigationItem: {
     flex: 1,
-    minHeight: 64,
+    minWidth: 48,
+    minHeight: 62,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 2,
-    borderTopWidth: 3,
-    borderTopColor: 'transparent',
+    gap: 1,
+    borderRadius: 15,
+    outlineWidth: 0,
   },
-  navigationSelected: { borderTopColor: colors.signalYellow },
+  navigationReport: { minHeight: 70 },
+  navigationSelected: { backgroundColor: colors.deepCharcoal },
+  navigationSelectedPressed: { backgroundColor: colors.graphite },
+  activeIndicator: {
+    position: 'absolute',
+    top: 3,
+    width: 18,
+    height: 3,
+    borderRadius: 2,
+    backgroundColor: colors.signalYellow,
+  },
   navigationHover: { backgroundColor: colors.coolSurface },
-  navigationPressed: { backgroundColor: colors.coolConcrete },
-  navigationFocused: { borderTopColor: colors.deepCharcoal },
+  navigationPressed: {
+    backgroundColor: colors.coolConcrete,
+    transform: [{ scale: 0.97 }],
+  },
+  navigationFocused: { backgroundColor: colors.coolConcrete },
+  navigationSelectedFocused: { backgroundColor: colors.graphite },
   navigationDisabled: { opacity: 0.45 },
   navigationLabel: {
     color: colors.graphite,
     fontFamily: typography.fontFamily,
-    fontWeight: '600',
-    fontSize: 12,
+    fontWeight: '500',
+    fontSize: 11,
   },
-  navigationLabelSelected: { color: colors.deepCharcoal, fontWeight: '700' },
+  navigationLabelSelected: { color: colors.white, fontWeight: '700' },
+  navigationReportLabel: { color: colors.deepCharcoal, fontWeight: '700' },
 });

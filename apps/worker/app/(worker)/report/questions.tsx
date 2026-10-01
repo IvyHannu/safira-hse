@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
-import { colors, spacing, typography } from '@safira/design-tokens';
+import { colors, typography } from '@safira/design-tokens';
 import { StyleSheet, Text, View } from 'react-native';
 import {
   Button,
@@ -68,7 +68,10 @@ export default function AdditionalQuestionsScreen() {
               title={choice.label}
               selected={answers[question.key] === choice.value}
               onPress={() => answer(question.key, choice.value)}
-              style={styles.answerChoice}
+              style={[
+                styles.answerChoice,
+                answers[question.key] === choice.value && styles.answerSelected,
+              ]}
             />
           ))}
           <ValidationMessage
@@ -88,10 +91,11 @@ export default function AdditionalQuestionsScreen() {
 }
 
 const styles = StyleSheet.create({
-  content: { gap: spacing[2] },
-  question: { gap: spacing[1], maxWidth: 520 },
-  answerChoice: { minHeight: 48 },
-  footer: { marginTop: spacing[1] },
+  content: { gap: 12 },
+  question: { gap: 6, maxWidth: 520 },
+  answerChoice: { minHeight: 48, paddingVertical: 6 },
+  answerSelected: { borderWidth: 1, borderColor: `${colors.signalYellow}80` },
+  footer: { marginTop: 2 },
   label: {
     color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,

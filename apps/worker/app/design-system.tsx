@@ -7,7 +7,7 @@ import { colors, spacing } from '@safira/design-tokens';
 import { StyleSheet, Text, View } from 'react-native';
 import {
   AppCard,
-  BottomNavigationShell,
+  WorkerBottomNav,
   Button,
   EmptyState,
   InlineAlert,
@@ -30,7 +30,7 @@ function DesignSystemShowcase() {
   return (
     <ScreenContainer
       bottomNavigation={
-        <BottomNavigationShell
+        <WorkerBottomNav
           items={[
             {
               key: 'home',

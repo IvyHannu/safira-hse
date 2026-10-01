@@ -112,7 +112,7 @@ export default function AddEvidenceScreen() {
         </View>
 
         <View style={styles.intro}>
-          <Text style={styles.title}>Add evidence (optional)</Text>
+          <Text style={styles.title}>Add evidence</Text>
           <Text style={styles.helper}>
             Photos help the HSE team understand what&apos;s happened.
           </Text>
@@ -124,6 +124,7 @@ export default function AddEvidenceScreen() {
               <Image
                 source={{ uri: evidence.uri }}
                 style={styles.photo}
+                resizeMode="cover"
                 accessibilityLabel={`Selected photo, ${evidence.fileName}`}
                 onError={() => setPhotoUnavailable(true)}
               />
@@ -215,11 +216,11 @@ const styles = StyleSheet.create({
   },
   body: {
     flexGrow: 1,
-    gap: spacing[2],
+    gap: 14,
     paddingHorizontal: spacing[2],
     paddingBottom: spacing[2],
   },
-  progress: { flexDirection: 'row', gap: 4, paddingTop: spacing[1] },
+  progress: { flexDirection: 'row', gap: 4, paddingTop: 6 },
   progressSegment: {
     flex: 1,
     height: 5,
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.coolConcrete,
   },
   progressActive: { backgroundColor: colors.signalYellow },
-  intro: { gap: spacing[1] },
+  intro: { gap: 6 },
   title: {
     color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
@@ -241,15 +242,20 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 22,
   },
-  photoRow: { flexDirection: 'row', gap: spacing[1] },
+  photoRow: { flexDirection: 'row', gap: 10 },
   photoTile: {
     flex: 1,
-    height: 160,
+    height: 156,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: colors.coolConcrete,
     borderRadius: radius.md,
     backgroundColor: colors.coolSurface,
+    shadowColor: colors.deepCharcoal,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
   },
   photo: { width: '100%', height: '100%' },
   removeButton: {
@@ -266,7 +272,20 @@ const styles = StyleSheet.create({
   removeButtonHover: { backgroundColor: colors.graphite },
   removeButtonPressed: { opacity: 0.8 },
   removeButtonFocused: { borderWidth: 2, borderColor: colors.signalYellow },
-  uploadTile: { flex: 1, minWidth: 0 },
-  footer: { flexDirection: 'row', gap: spacing[1], marginTop: 'auto' },
+  uploadTile: {
+    flex: 1,
+    minWidth: 0,
+    minHeight: 156,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    borderStyle: 'dashed',
+    borderColor: colors.graphite,
+  },
+  footer: {
+    flexDirection: 'row',
+    gap: spacing[1],
+    marginTop: 'auto',
+    marginBottom: 12,
+  },
   footerAction: { flex: 1 },
 });

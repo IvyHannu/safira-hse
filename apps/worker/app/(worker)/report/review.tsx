@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { colors, spacing, typography } from '@safira/design-tokens';
 import { StyleSheet, Text, View } from 'react-native';
-import { Button, InlineAlert, WorkerHeader } from '@/components/ui';
+import { Button, InfoCard, InlineAlert, WorkerHeader } from '@/components/ui';
 import { ReportSummary } from '@/components/report-summary';
 import { workerHomeDemo } from '@/demo/worker-data';
 import { reviewIssues } from '@/reporting/model';
@@ -56,10 +56,7 @@ export default function ReviewReportScreen() {
           questions: () => router.push('/report/questions'),
         }}
       />
-      <Text style={styles.note}>
-        The HSE team may confirm or update the classification and severity after
-        reviewing your report.
-      </Text>
+      <InfoCard message="The HSE team may confirm or update the classification and severity after reviewing your report." />
       {attemptedSubmit && issues.length > 0 && (
         <View style={styles.issues} accessibilityRole="alert">
           <Text style={styles.issueTitle}>
@@ -121,16 +118,6 @@ const styles = StyleSheet.create({
     fontFamily: typography.fontFamily,
     fontSize: 14,
     lineHeight: 20,
-  },
-  note: {
-    color: colors.graphite,
-    fontFamily: typography.fontFamily,
-    fontSize: 13,
-    lineHeight: 19,
-    padding: spacing[1],
-    borderLeftWidth: 3,
-    borderLeftColor: colors.signalYellow,
-    backgroundColor: colors.coolSurface,
   },
   footer: { flexDirection: 'row', gap: spacing[1] },
   footerSubmit: { flex: 2 },

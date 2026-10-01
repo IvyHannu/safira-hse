@@ -55,9 +55,9 @@ export function FormField({
           Boolean(value) && styles.filled,
           hovered && !inactive && styles.hovered,
           pressed && !inactive && styles.pressed,
-          focused && styles.focused,
           error && styles.errorSurface,
           inactive && styles.disabled,
+          focused && !inactive && styles.focused,
         ]}
       >
         <NativeTextInput
@@ -136,9 +136,9 @@ export function SelectField({
           value && styles.filled,
           hovered && !disabled && styles.hovered,
           pressed && !disabled && styles.pressed,
-          (focused || expanded) && styles.focused,
           error && styles.errorSurface,
           disabled && styles.disabled,
+          (focused || expanded) && !disabled && styles.focused,
         ]}
       >
         {leadingIcon && <View style={styles.iconArea}>{leadingIcon}</View>}
@@ -197,9 +197,9 @@ export function DateTimeField({
           styles.filled,
           hovered && !disabled && styles.hovered,
           pressed && !disabled && styles.pressed,
-          focused && styles.focused,
           error && styles.errorSurface,
           disabled && styles.disabled,
+          focused && !disabled && styles.focused,
           style,
         ]}
       >
@@ -347,9 +347,9 @@ export function ActionUploadField({
         selected && styles.choiceSelected,
         hovered && !disabled && styles.hovered,
         pressed && !disabled && styles.pressed,
-        focused && styles.focused,
         error && styles.errorSurface,
         disabled && styles.disabled,
+        focused && !disabled && styles.focused,
         style,
       ]}
     >
@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
     transform: [{ scale: 0.995 }],
   },
   focused: {
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: colors.signalYellow,
     backgroundColor: colors.white,
     shadowOpacity: 0.12,
@@ -404,6 +404,9 @@ const styles = StyleSheet.create({
   input: {
     minHeight: 46,
     paddingHorizontal: spacing[2],
+    outlineWidth: 0,
+    outlineStyle: 'solid',
+    outlineColor: 'transparent',
     color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 16,

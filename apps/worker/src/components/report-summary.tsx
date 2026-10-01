@@ -126,7 +126,7 @@ export function ReportSummary({
             </Text>
           </View>
         ) : (
-          <Text style={styles.body}>
+          <Text style={styles.secondaryValue}>
             {content.evidenceChoice === 'skipped'
               ? 'Photo skipped'
               : 'No photo added'}
@@ -169,8 +169,8 @@ const styles = StyleSheet.create({
   section: {
     borderBottomWidth: 1,
     borderBottomColor: colors.coolConcrete,
-    paddingVertical: spacing[1],
-    gap: 4,
+    paddingVertical: 10,
+    gap: 6,
   },
   heading: {
     flexDirection: 'row',
@@ -184,12 +184,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   edit: {
-    minWidth: 48,
+    minWidth: 72,
     minHeight: 48,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 4,
+    gap: 6,
     paddingHorizontal: spacing[1],
     borderRadius: radius.sm,
   },
@@ -201,6 +201,7 @@ const styles = StyleSheet.create({
     fontFamily: typography.fontFamily,
     fontSize: 14,
     fontWeight: '700',
+    lineHeight: 20,
   },
   primaryValue: {
     color: colors.deepCharcoal,

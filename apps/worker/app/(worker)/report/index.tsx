@@ -92,7 +92,13 @@ export default function ReportChoiceScreen() {
               selected={isSelected}
               selectionColor={accent.border}
               onPress={() => updateDraft({ category: category.value })}
-              style={styles.choice}
+              style={[
+                styles.choice,
+                isSelected && {
+                  borderWidth: 1,
+                  borderColor: `${accent.border}80`,
+                },
+              ]}
               leading={
                 <View
                   style={[styles.iconSlot, { backgroundColor: accent.tile }]}
@@ -125,7 +131,11 @@ const styles = StyleSheet.create({
     paddingBottom: spacing[2],
     backgroundColor: colors.white,
   },
-  intro: { gap: spacing[1], paddingHorizontal: spacing[2] },
+  intro: {
+    gap: spacing[1],
+    marginTop: -4,
+    paddingHorizontal: spacing[2],
+  },
   title: {
     color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
@@ -144,15 +154,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: spacing[1],
-    padding: spacing[1],
+    paddingHorizontal: spacing[1],
+    paddingVertical: 6,
     borderLeftWidth: 3,
     borderLeftColor: colors.critical,
     borderRadius: 4,
     backgroundColor: `${colors.critical}0D`,
   },
   emergencyIcon: {
-    width: 32,
-    height: 32,
+    width: 28,
+    height: 28,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: `${colors.critical}14`,
@@ -173,8 +184,9 @@ const styles = StyleSheet.create({
   },
   choices: { gap: spacing[1], paddingHorizontal: spacing[2] },
   choice: {
-    minHeight: 72,
-    padding: spacing[1],
+    minHeight: 68,
+    paddingHorizontal: spacing[1],
+    paddingVertical: 6,
   },
   iconSlot: {
     width: 48,

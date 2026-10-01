@@ -2,10 +2,11 @@ import { useRouter } from 'expo-router';
 import { colors, spacing, typography } from '@safira/design-tokens';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import {
+  ChecklistProgress,
   EmptyState,
   PressableCard,
   SectionHeader,
-  StatusBadge,
+  StatusLabel,
   type Tone,
 } from '@/components/ui';
 import type { SafetyChecklist } from '@/safety/model';
@@ -45,33 +46,42 @@ function getBadgeConfig(checklist: SafetyChecklist): {
 function ChecklistCard({ checklist, onPress }: ChecklistCardProps) {
   const badge = getBadgeConfig(checklist);
   const completionText = getCompletionText(checklist);
+  const answeredCount = Object.values(checklist.responses).filter(
+    (response) => response.answer !== null,
+  ).length;
   const location = [checklist.siteName, checklist.workAreaName]
     .filter(Boolean)
     .join(' · ');
 
   return (
     <PressableCard
-      label={`${checklist.title}, ${badge.label}, ${completionText}`}
+      label={`${checklist.title}, ${badge.label}${completionText === badge.label ? '' : `, ${completionText}`}`}
       onPress={onPress}
     >
       <View style={styles.cardHeader}>
         <Text style={styles.cardTitle}>{checklist.title}</Text>
-        <StatusBadge label={badge.label} tone={badge.tone} />
+        <StatusLabel label={badge.label} tone={badge.tone} />
       </View>
       <Text style={styles.cardMeta}>{location}</Text>
       <View style={styles.metaRow}>
         <Text style={styles.cardMeta}>{checklist.items.length} items</Text>
-        <Text style={styles.cardMeta}>·</Text>
-        <Text style={styles.cardMeta}>{checklist.dueLabel}</Text>
-        <Text style={styles.cardMeta}>·</Text>
-        <Text
-          style={[
-            styles.completionText,
-            checklist.status === 'completed' && styles.completedText,
-          ]}
-        >
-          {completionText}
-        </Text>
+        {checklist.dueLabel !== badge.label && (
+          <>
+            <Text style={styles.cardMeta}>·</Text>
+            <Text style={styles.cardMeta}>{checklist.dueLabel}</Text>
+          </>
+        )}
+        {checklist.status !== 'completed' && (
+          <>
+            <Text style={styles.cardMeta}>·</Text>
+            <ChecklistProgress
+              label={completionText}
+              answered={answeredCount}
+              total={checklist.items.length}
+              compact
+            />
+          </>
+        )}
       </View>
       {checklist.description ? (
         <Text style={styles.cardDescription} numberOfLines={2}>
@@ -174,15 +184,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing[1],
     flexWrap: 'wrap',
-  },
-  completionText: {
-    color: colors.graphite,
-    fontFamily: typography.fontFamily,
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  completedText: {
-    color: colors.success,
   },
   cardDescription: {
     color: colors.graphite,

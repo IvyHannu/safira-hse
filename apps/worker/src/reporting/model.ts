@@ -312,7 +312,7 @@ export function createInitialReportingState(): LocalReportingState {
     draft: createDraft(),
     submitted: null,
     nextReferenceNumber: 2048,
-    demoReports: [...seedDemoReports],
+    demoReports: [],
   };
 }
 
@@ -408,9 +408,9 @@ export function parseReportingState(raw: string): LocalReportingState | null {
     (value.nextReferenceNumber as number) < 2048
   )
     return null;
-  // demoReports: restore from storage if present and an array, else start fresh
+  // Reports submitted after the local reset remain in My Reports.
   const demoReports = Array.isArray(value.demoReports)
     ? (value.demoReports as DemoReport[])
-    : [...seedDemoReports];
+    : [];
   return { ...(value as unknown as LocalReportingState), demoReports };
 }

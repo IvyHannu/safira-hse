@@ -167,11 +167,11 @@ const styles = StyleSheet.create({
   },
   form: {
     flexGrow: 1,
-    gap: spacing[2],
+    gap: 14,
     paddingHorizontal: spacing[2],
     paddingBottom: spacing[2],
   },
-  progress: { flexDirection: 'row', gap: 4, paddingTop: spacing[1] },
+  progress: { flexDirection: 'row', gap: 4, paddingTop: 6 },
   progressSegment: {
     flex: 1,
     height: 5,
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.coolConcrete,
   },
   progressActive: { backgroundColor: colors.signalYellow },
-  intro: { gap: spacing[1] },
+  intro: { gap: 6 },
   title: {
     color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 22,
   },
-  fieldGroup: { gap: spacing[1] },
+  fieldGroup: { gap: 10 },
   fieldLabel: {
     color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing[1],
-    paddingHorizontal: spacing[1],
+    paddingHorizontal: 12,
     borderWidth: 1,
     borderColor: colors.coolConcrete,
     borderRadius: 8,
@@ -217,8 +217,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   dateTimeRow: { flexDirection: 'row', gap: spacing[1] },
-  dateField: { flex: 2, minWidth: 0 },
-  timeField: { flex: 1, minWidth: 0 },
+  dateField: { flex: 2, minWidth: 0, paddingHorizontal: 10 },
+  timeField: { flex: 1, minWidth: 0, paddingHorizontal: 10 },
   footer: { flexDirection: 'row', gap: spacing[1], marginTop: 'auto' },
   footerAction: { flex: 1 },
 });

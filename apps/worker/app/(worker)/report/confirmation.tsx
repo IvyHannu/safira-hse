@@ -36,7 +36,7 @@ export default function ReportConfirmationScreen() {
       <AppCard>
         <Text style={styles.referenceLabel}>Report reference</Text>
         <Text style={styles.reference}>{report.reference}</Text>
-        <StatusBadge label="Submitted" tone="success" />
+        <StatusBadge label="Submitted" tone="information" />
         <Text style={styles.timestamp}>
           Submitted {new Date(report.submittedAt).toLocaleString()}
         </Text>
@@ -61,8 +61,8 @@ export default function ReportConfirmationScreen() {
 }
 
 const styles = StyleSheet.create({
-  content: { gap: spacing[2], paddingTop: spacing[3] },
-  success: { alignItems: 'center', gap: spacing[1], paddingBottom: spacing[1] },
+  content: { gap: spacing[2], paddingTop: spacing[2] },
+  success: { alignItems: 'center', gap: 6, paddingBottom: 4 },
   successIcon: {
     width: 80,
     height: 80,
