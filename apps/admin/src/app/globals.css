@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* One focus treatment for Admin form controls, including search fields. */
+:is(input:not([type='checkbox']):not([type='radio']), select, textarea):focus {
+  border-color: #ffd21a !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+select option {
+  background-color: #fff;
+  color: #121412;
+}
+
+select option:checked {
+  background-color: #ffd21a;
+  color: #121412;
+}
+
+select option:hover {
+  background-color: #f6f7f5;
+}

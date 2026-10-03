@@ -4,14 +4,14 @@ import { useEffect, useState, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   MapPin,
-  SignOut,
   UserCircle,
   Bell,
   Wheelchair,
   Translate,
   Question,
 } from '@phosphor-icons/react';
-import { Button, Select } from '@/components/hse-officer/ui';
+import { Select } from '@/components/hse-officer/ui';
+import { SignOutButton } from '@/components/ui/sign-out-button';
 import { PageHeader } from '@/components/ui/shell';
 import { useAuth } from '@/lib/demo-auth';
 import { officerProfile } from '@/data/officer-profile';
@@ -172,15 +172,11 @@ export default function ProfilePage() {
               </div>
             </dl>
           </section>
-          <Button
-            variant="secondary"
-            className="min-h-12 justify-center"
+          <SignOutButton
             disabled={signingOut && !error}
             onClick={() => void handleSignOut()}
-          >
-            <SignOut size={20} aria-hidden="true" />
-            {signingOut ? 'Signing out…' : 'Sign out'}
-          </Button>
+            busy={signingOut && !error}
+          />
           {error && (
             <p role="alert" className="text-sm text-critical">
               {error}

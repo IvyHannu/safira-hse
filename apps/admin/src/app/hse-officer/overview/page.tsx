@@ -6,13 +6,8 @@ import {
   Warning,
   CheckCircle,
   FileText,
+  Circle,
 } from '@phosphor-icons/react';
-import {
-  Card,
-  TypePill,
-  SeverityPill,
-  StatusPill,
-} from '@/components/hse-officer/ui';
 import { PageHeader } from '@/components/ui/shell';
 
 const kpiCards = [
@@ -124,6 +119,13 @@ const recentReports = [
   },
 ] as const;
 
+const toneIconColors = {
+  critical: 'bg-critical/10 text-critical',
+  warning: 'bg-warning/10 text-warning',
+  success: 'bg-success/10 text-success',
+  information: 'bg-information/10 text-information',
+} as const;
+
 function KPICard({
   title,
   value,
@@ -137,38 +139,34 @@ function KPICard({
   tone: 'success' | 'warning' | 'critical' | 'information';
   href: string;
 }) {
-  const toneColors = {
-    critical: 'bg-critical/10 text-critical border-critical/30',
-    warning: 'bg-warning/10 text-warning border-warning/30',
-    success: 'bg-success/10 text-success border-success/30',
-    information: 'bg-information/10 text-information border-information/30',
-  };
-
   return (
     <Link
       href={href}
-      className="group grid gap-1.5 rounded-lg border bg-white p-2.5 transition-colors hover:border-graphite/30 hover:shadow-sm"
+      role="listitem"
+      className="overview-card group flex flex-col gap-2 p-3 hover:no-underline"
     >
       <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0">
-          <p className="text-sm font-medium text-graphite">{title}</p>
-          <p className="mt-0 text-[20px] font-semibold leading-6 text-deepCharcoal">
-            {value}
-          </p>
-        </div>
+        <p className="text-[13px] font-medium leading-5 text-graphite">{title}</p>
         <div
-          className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md ${toneColors[tone]}`}
+          className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md ${toneIconColors[tone]}`}
           aria-hidden="true"
         >
-          <Icon size={16} />
+          <Icon size={16} weight="bold" />
         </div>
       </div>
+      <p className="text-[22px] font-semibold leading-7 text-deepCharcoal tabular-nums">
+        {value}
+      </p>
     </Link>
   );
 }
 
+/**
+ * Shared report row — used in both Needs Attention and Recent Reports.
+ * isCritical adds a left accent for critical-severity rows in Needs Attention.
+ */
 function ReportRow({
-  ref,
+  reportRef,
   title,
   site,
   classification,
@@ -178,52 +176,80 @@ function ReportRow({
   timestamp,
   isCritical = false,
 }: {
-  ref: string;
+  reportRef: string;
   title: string;
   site: string;
   classification: 'hazard' | 'near_miss' | 'incident' | 'environmental_concern';
   severity: 'low' | 'moderate' | 'high' | 'critical';
   status:
-    'submitted' | 'under_review' | 'action_required' | 'resolved' | 'closed';
+    | 'submitted'
+    | 'under_review'
+    | 'action_required'
+    | 'resolved'
+    | 'closed';
   timestampLabel: string;
   timestamp: string;
   isCritical?: boolean;
 }) {
-  const rowClass =
+  const criticalAccent =
     isCritical && severity === 'critical'
-      ? 'border-critical/30 bg-critical/5'
-      : 'border-graphite/10';
+      ? ' border-l-2 border-l-critical/50'
+      : '';
 
   return (
     <Link
-      href={`/hse-officer/reports/${ref}`}
-      className={`officer-row grid gap-2 ${rowClass}`}
+      href={`/hse-officer/reports/${reportRef}`}
+      role="listitem"
+      aria-label={`${reportRef}: ${title}`}
+      className={`officer-row group${criticalAccent}`}
     >
-      <div className="grid gap-0.5 min-w-0">
-        <p className="text-sm font-medium text-deepCharcoal leading-snug">
-          {title}
-        </p>
-        <p className="text-xs text-graphite/70">{site}</p>
+      {/* Ref + title + site */}
+      <div className="mb-2 min-w-0">
+        <div className="flex items-baseline gap-1.5 min-w-0">
+          <span className="shrink-0 font-mono text-[10px] font-semibold tracking-wide text-graphite/45">
+            {reportRef}
+          </span>
+          <p className="truncate text-[13px] font-semibold leading-snug text-deepCharcoal">
+            {title}
+          </p>
+        </div>
+        <p className="mt-0.5 truncate text-[11px] text-graphite/55">{site}</p>
       </div>
 
-      <div className="flex flex-wrap items-center gap-1">
-        <TypePill label={classification} />
-        <SeverityPill label={severity} />
-        <StatusPill label={status} />
+      {/* Metadata: Type • Severity   Status */}
+      <div className="mb-2 flex flex-wrap items-center gap-2 text-[11px]">
+        <span className="uppercase tracking-wider text-graphite/45 font-medium">
+          {classification.replace(/_/g, ' ').toUpperCase()}
+        </span>
+        <span className="flex items-center gap-1.5">
+          <Circle
+            size={6}
+            weight="fill"
+            className={`severity-dot ${severity}`}
+            aria-hidden="true"
+          />
+          <span className={`font-semibold capitalize severity-text ${severity}`}>
+            {severity.charAt(0).toUpperCase() + severity.slice(1)}
+          </span>
+        </span>
+        <span className={`font-medium capitalize status-text ${status}`}>
+          {status.replace(/_/g, ' ')}
+        </span>
       </div>
 
-      <div className="flex items-center justify-between border-t border-graphite/10 pt-1 text-[10px]">
-        <span className="text-graphite/60 uppercase tracking-wide">
+      {/* Meta footer */}
+      <div className="flex items-center justify-between">
+        <span className="text-[10px] uppercase tracking-wide text-graphite/45">
           {timestampLabel}
         </span>
-        <span className="font-medium text-graphite whitespace-nowrap">
+        <span className="flex items-center gap-1 text-[11px] font-semibold text-graphite/60 whitespace-nowrap">
           {timestamp}
+          <ArrowRight
+            size={11}
+            className="text-graphite/35 transition-colors group-hover:text-information"
+            aria-hidden="true"
+          />
         </span>
-        <ArrowRight
-          size={9}
-          className="text-graphite/60 group-hover:text-signalYellow transition-colors"
-          aria-hidden="true"
-        />
       </div>
     </Link>
   );
@@ -241,18 +267,20 @@ function SectionHeader({
   urgent?: boolean;
 }) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 mb-2">
+    <div className="mb-3 flex items-center justify-between gap-2">
       <h2
-        className={`text-[13px] font-semibold leading-5 text-deepCharcoal uppercase tracking-wide ${urgent ? 'text-critical' : ''}`}
+        className={`overview-section-label font-semibold ${
+          urgent ? 'text-critical' : 'text-graphite/55'
+        }`}
       >
         {title}
       </h2>
       <Link
         href={href}
-        className="inline-flex items-center gap-1 text-sm font-medium officer-link self-start sm:self-auto"
+        className="officer-link"
       >
         {actionLabel}
-        <ArrowRight size={9} aria-hidden="true" />
+        <ArrowRight size={12} aria-hidden="true" />
       </Link>
     </div>
   );
@@ -260,12 +288,13 @@ function SectionHeader({
 
 export default function OverviewPage() {
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-5">
       <PageHeader
         title="Overview"
         description="Operational snapshot for your permitted sites."
       />
 
+      {/* KPI cards */}
       <div
         className="grid grid-cols-2 gap-3 lg:grid-cols-4"
         role="list"
@@ -276,22 +305,22 @@ export default function OverviewPage() {
         ))}
       </div>
 
+      {/* Report sections */}
       <div className="grid gap-4 xl:grid-cols-2 items-start">
-        <Card>
+        <section
+          className="overview-card p-4"
+          aria-label="Reports needing attention"
+        >
           <SectionHeader
             title="Needs Attention"
             href="/hse-officer/reports?status=action_required"
             urgent
           />
-          <div
-            className="grid gap-1"
-            role="list"
-            aria-label="Reports needing attention"
-          >
+          <div role="list">
             {needsAttention.map((report) => (
               <ReportRow
                 key={report.ref}
-                ref={report.ref}
+                reportRef={report.ref}
                 title={report.title}
                 site={report.site}
                 classification={report.classification}
@@ -303,15 +332,18 @@ export default function OverviewPage() {
               />
             ))}
           </div>
-        </Card>
+        </section>
 
-        <Card>
+        <section
+          className="overview-card p-4"
+          aria-label="Recent reports"
+        >
           <SectionHeader title="Recent Reports" href="/hse-officer/reports" />
-          <div className="grid gap-1" role="list" aria-label="Recent reports">
+          <div role="list">
             {recentReports.map((report) => (
               <ReportRow
                 key={report.ref}
-                ref={report.ref}
+                reportRef={report.ref}
                 title={report.title}
                 site={report.site}
                 classification={report.classification}
@@ -322,7 +354,7 @@ export default function OverviewPage() {
               />
             ))}
           </div>
-        </Card>
+        </section>
       </div>
     </div>
   );

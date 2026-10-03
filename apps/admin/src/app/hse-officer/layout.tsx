@@ -40,7 +40,7 @@ export default function HSEOfficerLayout({
         title="Safira"
         onMenuClick={() => setMobileMenuOpen(true)}
       />
-      <main className="flex-1 min-w-0 min-h-0 pt-12 md:pt-0">
+      <main className="w-full md:flex-1 min-w-0 min-h-0 pt-12 md:pt-0">
         <div className="officer-content">
           <div className="officer-page">{children}</div>
         </div>

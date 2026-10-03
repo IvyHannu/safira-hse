@@ -10,60 +10,20 @@
 }
 .officer-page {
   width: 100%;
-  max-width: 1320px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 24px;
+  box-sizing: border-box;
 }
-.officer-ui .officer-button {
-  min-height: 40px;
-  height: auto;
-  padding: 9px 16px;
-  border-radius: 6px;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    background-color 120ms,
-    box-shadow 120ms;
+@media (max-width: 767px) {
+  .officer-page {
+    padding: 16px;
+  }
 }
-.officer-ui .officer-button-primary {
-  background: var(--officer-yellow);
-  color: var(--officer-charcoal);
-  border-color: var(--officer-yellow);
-  box-shadow: 0 1px 2px #00000012;
-}
-.officer-ui .officer-button-primary:hover:not(:disabled) {
-  background: color-mix(
-    in srgb,
-    var(--officer-yellow) 88%,
-    var(--officer-charcoal)
-  );
-  border-color: transparent;
-}
-.officer-ui .officer-button-secondary {
-  background: white;
-  border-color: color-mix(in srgb, var(--officer-graphite) 35%, white);
-  color: var(--officer-charcoal);
-}
-.officer-ui .officer-button-secondary:hover:not(:disabled),
-.officer-ui .officer-button-tertiary:hover:not(:disabled) {
-  background: var(--officer-surface);
-}
-.officer-ui .officer-button:active:not(:disabled) {
-  box-shadow: inset 0 2px 4px #00000024;
-}
-.officer-ui .officer-button:disabled {
-  cursor: not-allowed;
-  background: var(--officer-surface);
-  color: color-mix(in srgb, var(--officer-graphite) 55%, white);
-  border-color: color-mix(in srgb, var(--officer-graphite) 18%, white);
-  opacity: 1;
-  box-shadow: none;
-}
-.officer-ui :is(a, button, input, select, textarea):focus-visible {
-  outline: 2px solid var(--officer-information);
-  outline-offset: 3px;
+.officer-ui :is(a, button):focus-visible {
+  outline: 2px solid var(--officer-yellow);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 .officer-ui :is(input:not([type='checkbox']), select, textarea) {
   min-height: 40px;
@@ -78,9 +38,6 @@
 .officer-ui :is(input, select, textarea):hover:not(:disabled) {
   border-color: var(--officer-graphite);
 }
-.officer-ui :is(input, select, textarea):focus {
-  border-color: var(--officer-information);
-}
 .officer-ui :is(input, select, textarea)[aria-invalid='true'] {
   border-color: var(--officer-critical);
 }
@@ -92,100 +49,386 @@
 .officer-ui .officer-control {
   padding: 9px 12px;
 }
+.officer-ui input[type='search'].officer-control {
+  padding-left: 40px;
+}
 .officer-ui textarea.officer-control {
   min-height: 100px;
-}
-.officer-select {
-  position: relative;
-  min-width: 0;
-}
-.officer-ui .officer-select select {
-  appearance: none;
-  width: 100%;
-  padding-right: 36px;
-}
-.officer-select > svg {
-  position: absolute;
-  right: 12px;
-  bottom: 12px;
-  pointer-events: none;
 }
 .officer-ui label {
   line-height: 20px;
   font-size: 13px;
 }
+/* ── Shared badge base ────────────────────────────────────────── */
 .officer-badge {
   display: inline-flex;
   align-items: center;
-  padding: 3px 8px;
+  gap: 4px;
+  padding: 2px 8px;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 600;
-  line-height: 18px;
+  line-height: 16px;
+  white-space: nowrap;
   max-width: 100%;
+  letter-spacing: 0.02em;
+  height: 20px;
 }
-.officer-type {
-  color: var(--officer-graphite);
-  background: var(--officer-surface);
-  font-weight: 500;
-}
+
+/* ── Severity — strongest: filled background + bold left accent ─ */
 .officer-severity {
+  padding: 2px 8px 2px 6px;
   border-left: 3px solid currentColor;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  height: 20px;
 }
+
+/* ── Status — secondary: filled, lighter weight ─────────────── */
 .officer-status {
-  border-radius: 4px;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.01em;
+  text-transform: capitalize;
+  height: 20px;
 }
+
+/* ── Type — quietest: ghost/outline, muted colour ───────────── */
+.officer-type {
+  color: color-mix(in srgb, var(--officer-graphite) 55%, white);
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--officer-graphite) 18%, white);
+  font-weight: 500;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  height: 20px;
+}
+
+/* ── Shared semantic colours (used by severity + status) ─────── */
 .officer-low,
 .officer-reviewed,
 .officer-resolved {
   color: var(--officer-success);
-  background: color-mix(in srgb, var(--officer-success) 10%, white);
+  background: color-mix(in srgb, var(--officer-success) 12%, white);
 }
 .officer-moderate,
 .officer-submitted {
   color: var(--officer-information);
-  background: color-mix(in srgb, var(--officer-information) 10%, white);
+  background: color-mix(in srgb, var(--officer-information) 12%, white);
 }
 .officer-high,
 .officer-needs_review,
 .officer-under_review {
   color: var(--officer-warning);
-  background: color-mix(in srgb, var(--officer-warning) 12%, white);
+  background: color-mix(in srgb, var(--officer-warning) 16%, white);
 }
 .officer-critical,
 .officer-action_required {
   color: var(--officer-critical);
-  background: color-mix(in srgb, var(--officer-critical) 10%, white);
+  background: color-mix(in srgb, var(--officer-critical) 14%, white);
 }
 .officer-closed {
+  color: color-mix(in srgb, var(--officer-graphite) 55%, white);
   background: var(--officer-surface);
 }
+
+/* ── Report metadata: Type • Severity   Status (text-only, no pills) ── */
+.officer-ui .severity-dot {
+  flex-shrink: 0;
+}
+.officer-ui .severity-dot.low {
+  color: var(--officer-success);
+}
+.officer-ui .severity-dot.moderate {
+  color: var(--officer-information);
+}
+.officer-ui .severity-dot.high {
+  color: var(--officer-warning);
+}
+.officer-ui .severity-dot.critical {
+  color: var(--officer-critical);
+}
+.officer-ui .severity-text {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.officer-ui .severity-text.low {
+  color: var(--officer-success);
+}
+.officer-ui .severity-text.moderate {
+  color: var(--officer-information);
+}
+.officer-ui .severity-text.high {
+  color: var(--officer-warning);
+}
+.officer-ui .severity-text.critical {
+  color: var(--officer-critical);
+  font-weight: 700;
+}
+.officer-ui .status-text {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.officer-ui .status-text.submitted {
+  color: var(--officer-information);
+}
+.officer-ui .status-text.under_review {
+  color: var(--officer-warning);
+}
+.officer-ui .status-text.action_required {
+  color: var(--officer-critical);
+}
+.officer-ui .status-text.resolved {
+  color: var(--officer-success);
+}
+.officer-ui .status-text.closed {
+  color: color-mix(in srgb, var(--officer-graphite) 55%, white);
+}
+
 .officer-ui .officer-link {
   display: inline-flex;
-  min-height: 40px;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   color: var(--officer-information);
+  font-size: 12px;
   font-weight: 600;
+  line-height: 20px;
   text-decoration: none;
-  border-radius: 4px;
+  border-radius: 3px;
+  padding: 2px 6px;
+  transition:
+    color 120ms,
+    background 120ms;
 }
 .officer-ui .officer-link:hover {
-  text-decoration: underline;
+  color: var(--officer-charcoal);
+  background: color-mix(in srgb, var(--officer-information) 10%, white);
+  text-decoration: none;
+}
+.officer-ui .officer-link:focus-visible {
+  outline: 2px solid var(--officer-yellow);
+  outline-offset: 2px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--officer-yellow) 12%, white);
 }
 .officer-ui .officer-row {
+  display: block;
   border: 0;
   border-bottom: 1px solid
     color-mix(in srgb, var(--officer-graphite) 12%, white);
-  border-radius: 0;
-  padding: 12px 0;
+  border-radius: 6px;
+  padding: 12px;
+  margin: 0 -12px;
   box-shadow: none;
+  text-decoration: none;
+  transition:
+    background 100ms,
+    box-shadow 100ms;
 }
 .officer-ui .officer-row:hover {
-  background: var(--officer-surface);
+  background: color-mix(in srgb, var(--officer-graphite) 6%, white);
+  box-shadow: inset 4px 0 0 0 var(--officer-yellow);
+}
+.officer-ui .officer-row:active {
+  background: color-mix(in srgb, var(--officer-graphite) 10%, white);
+  box-shadow: inset 4px 0 0 0 var(--officer-yellow);
+}
+.officer-ui .officer-row:focus-visible {
+  outline: 2px solid var(--officer-yellow);
+  outline-offset: 2px;
+  background: color-mix(in srgb, var(--officer-yellow) 8%, white);
+  box-shadow: inset 4px 0 0 0 var(--officer-yellow);
 }
 .officer-ui .officer-row:last-child {
   border-bottom: 0;
+}
+
+/* Report card (mobile list view) */
+.officer-ui .report-card {
+  display: block;
+  border: 1px solid color-mix(in srgb, var(--officer-graphite) 25%, white);
+  border-radius: 10px;
+  background: white;
+  padding: 12px;
+  text-decoration: none;
+  transition:
+    border-color 150ms,
+    box-shadow 150ms,
+    background 100ms;
+  box-shadow: 0 2px 5px #00000010;
+}
+.officer-ui .report-card:hover {
+  border-color: color-mix(in srgb, var(--officer-graphite) 32%, white);
+  box-shadow:
+    0 4px 12px #00000010,
+    0 2px 4px #00000008;
+}
+.officer-ui .report-card:active {
+  background: color-mix(in srgb, var(--officer-graphite) 6%, white);
+}
+.officer-ui .report-card:focus-visible {
+  outline: 2px solid var(--officer-yellow);
+  outline-offset: 2px;
+  border-color: var(--officer-graphite);
+  box-shadow: 0 2px 5px #00000010;
+}
+
+/* Report metadata inline (used in table cells and cards) */
+.officer-ui .report-meta-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+}
+.officer-ui .report-meta-inline .type-text {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: color-mix(in srgb, var(--officer-graphite) 55%, white);
+  font-weight: 500;
+}
+.officer-ui .report-meta-inline .severity-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+}
+.officer-ui .report-meta-inline .severity-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.officer-ui .report-meta-inline .status-badge {
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+/* Report card — increase contrast for secondary text */
+.officer-ui .report-card .font-mono {
+  color: var(--officer-graphite);
+}
+.officer-ui .report-card .text-graphite\/60 {
+  color: color-mix(in srgb, var(--officer-graphite) 70%, white);
+}
+.officer-ui .report-card .text-graphite\/50 {
+  color: color-mix(in srgb, var(--officer-graphite) 70%, white);
+}
+.officer-ui .report-card .type-text {
+  color: color-mix(in srgb, var(--officer-graphite) 70%, white);
+}
+
+.officer-ui .officer-detail-panel {
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--officer-graphite) 18%, white);
+  border-radius: 10px;
+  background: white;
+  padding: 16px;
+  box-shadow: 0 2px 6px #0000000a;
+}
+
+/* Toolbar button states */
+.officer-ui .officer-toolbar button:not(.officer-button) {
+  transition:
+    background 120ms,
+    color 120ms,
+    border-color 120ms;
+}
+.officer-ui .officer-toolbar button:not(.officer-button):hover {
+  background: var(--officer-surface);
+}
+.officer-ui .officer-toolbar button:not(.officer-button):active {
+  background: color-mix(in srgb, var(--officer-graphite) 10%, white);
+}
+.officer-ui .officer-toolbar button:not(.officer-button):focus-visible {
+  outline: 2px solid var(--officer-yellow);
+  outline-offset: 2px;
+  background: color-mix(in srgb, var(--officer-yellow) 12%, white);
+}
+
+/* Date filter button */
+.officer-ui .date-filter-btn {
+  transition:
+    background 120ms,
+    color 120ms,
+    border-color 120ms;
+}
+.officer-ui .date-filter-btn:hover {
+  background: var(--officer-surface);
+}
+.officer-ui .date-filter-btn:active {
+  background: color-mix(in srgb, var(--officer-graphite) 10%, white);
+}
+.officer-ui .date-filter-btn:focus-visible {
+  outline: 2px solid var(--officer-yellow);
+  outline-offset: 2px;
+  background: color-mix(in srgb, var(--officer-yellow) 12%, white);
+}
+
+/* Clear filters button */
+.officer-ui .clear-filters-btn {
+  transition:
+    background 120ms,
+    color 120ms,
+    border-color 120ms;
+}
+.officer-ui .clear-filters-btn:hover {
+  background: var(--officer-surface);
+  color: var(--officer-graphite);
+}
+.officer-ui .clear-filters-btn:active {
+  background: color-mix(in srgb, var(--officer-graphite) 10%, white);
+}
+.officer-ui .clear-filters-btn:focus-visible {
+  outline: 2px solid var(--officer-yellow);
+  outline-offset: 2px;
+  background: color-mix(in srgb, var(--officer-yellow) 12%, white);
+}
+
+/* Mobile filter sheet */
+.officer-ui .mobile-filter-sheet {
+  animation: slideIn 200ms ease-out;
+}
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Shared card elevation — KPI cards + report section cards */
+.officer-ui .overview-card {
+  background: white;
+  border: 1px solid color-mix(in srgb, var(--officer-graphite) 18%, white);
+  border-radius: 10px;
+  box-shadow:
+    0 1px 3px #0000000a,
+    0 2px 6px #00000008;
+  transition:
+    box-shadow 150ms,
+    border-color 150ms;
+}
+.officer-ui .overview-card:where(a):hover {
+  border-color: color-mix(in srgb, var(--officer-graphite) 32%, white);
+  box-shadow:
+    0 4px 12px #00000010,
+    0 2px 4px #00000008;
+}
+.officer-ui .overview-card:where(a):focus-visible {
+  outline: 2px solid var(--officer-yellow);
+  outline-offset: 2px;
+  border-color: var(--officer-yellow);
+  box-shadow:
+    0 4px 12px #00000010,
+    0 2px 4px #00000008,
+    0 0 0 2px var(--officer-yellow);
 }
 .officer-ui .officer-table table {
   table-layout: fixed;
@@ -243,12 +486,24 @@
     grid-column: span 2;
   }
 }
+@media (min-width: 1280px) {
+  .officer-page {
+    padding: 32px;
+  }
+}
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .officer-page {
+    padding: 28px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .officer-page {
+    padding: 24px;
+  }
+}
 @media (max-width: 767px) {
   .officer-page {
     padding: 16px;
-  }
-  .officer-ui .officer-button {
-    min-height: 44px;
   }
   .officer-ui :is(input:not([type='checkbox']), select) {
     min-height: 44px;
@@ -285,8 +540,8 @@
 }
 .officer-ui button:focus-visible,
 .officer-ui a:focus-visible {
-  outline: 2px solid var(--officer-information);
-  outline-offset: 3px;
+  outline: 2px solid var(--officer-yellow);
+  outline-offset: 2px;
 }
 .officer-ui :is(input, select, textarea):not(:placeholder-shown) {
   color: var(--officer-charcoal);
@@ -306,4 +561,12 @@
 .officer-ui .officer-section .officer-section {
   padding: 0;
   border: 0;
+}
+
+/* Overview-specific overrides */
+.officer-ui .overview-section-label {
+  font-size: 11px;
+  line-height: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { List } from '@phosphor-icons/react';
+import { List } from '@phosphor-icons/react/dist/ssr';
 
 export function PageContainer({
   children,
@@ -119,9 +119,11 @@ export function MobileHeader({
         >
           <List size={20} aria-hidden="true" />
         </button>
-        <h1 className="text-sm font-semibold text-deepCharcoal truncate">{title}</h1>
         <div className="flex items-center gap-1">{actions}</div>
       </div>
+      <h1 className="pointer-events-none absolute inset-x-12 top-0 flex h-full items-center justify-center truncate text-center text-sm font-semibold text-deepCharcoal">
+        {title}
+      </h1>
     </header>
   );
 }

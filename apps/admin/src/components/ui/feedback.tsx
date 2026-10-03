@@ -9,14 +9,18 @@ const tones: Record<Tone, string> = {
   information: 'border-information text-information',
 };
 
-const severityFills: Record<'low' | 'moderate' | 'high' | 'critical', string> = {
-  low: 'bg-success/10 text-success border-success/30',
-  moderate: 'bg-information/10 text-information border-information/30',
-  high: 'bg-warning/10 text-warning border-warning/30',
-  critical: 'bg-critical/10 text-critical border-critical/30',
-};
+const severityFills: Record<'low' | 'moderate' | 'high' | 'critical', string> =
+  {
+    low: 'bg-success/10 text-success border-success/30',
+    moderate: 'bg-information/10 text-information border-information/30',
+    high: 'bg-warning/10 text-warning border-warning/30',
+    critical: 'bg-critical/10 text-critical border-critical/30',
+  };
 
-const statusFills: Record<'submitted' | 'under_review' | 'action_required' | 'resolved' | 'closed', string> = {
+const statusFills: Record<
+  'submitted' | 'under_review' | 'action_required' | 'resolved' | 'closed',
+  string
+> = {
   submitted: 'bg-information/10 text-information border-information/30',
   under_review: 'bg-warning/10 text-warning border-warning/30',
   action_required: 'bg-critical/10 text-critical border-critical/30',
@@ -24,7 +28,10 @@ const statusFills: Record<'submitted' | 'under_review' | 'action_required' | 're
   closed: 'bg-graphite/10 text-graphite border-graphite/30',
 };
 
-const typeOutlines: Record<'hazard' | 'near_miss' | 'incident' | 'environmental_concern', string> = {
+const typeOutlines: Record<
+  'hazard' | 'near_miss' | 'incident' | 'environmental_concern',
+  string
+> = {
   hazard: 'border-warning text-warning',
   near_miss: 'border-information text-information',
   incident: 'border-critical text-critical',
@@ -67,7 +74,13 @@ export function TypePill({
   className?: string;
 }) {
   const displayLabel = label.replace('_', ' ');
-  return <Pill label={displayLabel} fill={typeOutlines[label]} className={className} />;
+  return (
+    <Pill
+      label={displayLabel}
+      fill={typeOutlines[label]}
+      className={className}
+    />
+  );
 }
 
 export function SeverityPill({
@@ -77,18 +90,27 @@ export function SeverityPill({
   label: 'low' | 'moderate' | 'high' | 'critical';
   className?: string;
 }) {
-  return <Pill label={label} fill={severityFills[label]} className={className} />;
+  return (
+    <Pill label={label} fill={severityFills[label]} className={className} />
+  );
 }
 
 export function StatusPill({
   label,
   className = '',
 }: {
-  label: 'submitted' | 'under_review' | 'action_required' | 'resolved' | 'closed';
+  label:
+    'submitted' | 'under_review' | 'action_required' | 'resolved' | 'closed';
   className?: string;
 }) {
   const displayLabel = label.replace('_', ' ');
-  return <Pill label={displayLabel} fill={statusFills[label]} className={className} />;
+  return (
+    <Pill
+      label={displayLabel}
+      fill={statusFills[label]}
+      className={className}
+    />
+  );
 }
 
 export function Card({
@@ -126,6 +148,30 @@ export function Alert({
     >
       <p className="font-semibold">{title}</p>
       <div className="mt-1 text-sm text-graphite">{children}</div>
+    </div>
+  );
+}
+
+export function InfoCard({
+  title,
+  children,
+  icon,
+}: {
+  title: string;
+  children: ReactNode;
+  icon?: ReactNode;
+}) {
+  return (
+    <div className="rounded-md border border-information/25 bg-information/5 p-3 text-graphite">
+      <p className="flex items-center gap-2 text-xs font-semibold text-deepCharcoal">
+        {icon && (
+          <span className="shrink-0 text-information" aria-hidden="true">
+            {icon}
+          </span>
+        )}
+        {title}
+      </p>
+      <div className="mt-1 text-xs leading-5 text-graphite">{children}</div>
     </div>
   );
 }

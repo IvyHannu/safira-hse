@@ -4,9 +4,9 @@ import {
   useId,
   type InputHTMLAttributes,
   type ReactNode,
-  type SelectHTMLAttributes,
   type TextareaHTMLAttributes,
 } from 'react';
+export { Select } from './select';
 
 interface FieldProps {
   label: string;
@@ -41,7 +41,7 @@ function Field({
 }
 
 const controlClass =
-  'h-9 w-full rounded-md border border-graphite bg-white px-2.5 text-sm text-deepCharcoal placeholder:text-graphite/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information disabled:cursor-not-allowed disabled:bg-coolSurface disabled:opacity-60 aria-invalid:border-critical';
+  'h-9 w-full rounded-md border border-graphite bg-white px-2.5 text-sm text-deepCharcoal placeholder:text-graphite/70 disabled:cursor-not-allowed disabled:bg-coolSurface disabled:opacity-60 aria-invalid:border-critical';
 
 type InputProps = FieldProps &
   Omit<InputHTMLAttributes<HTMLInputElement>, 'children'>;
@@ -67,36 +67,6 @@ export function Input({
         }
         className={`${controlClass} ${className}`}
       />
-    </Field>
-  );
-}
-
-type SelectProps = FieldProps & SelectHTMLAttributes<HTMLSelectElement>;
-
-export function Select({
-  label,
-  helperText,
-  error,
-  id,
-  className = '',
-  children,
-  ...props
-}: SelectProps) {
-  const generatedId = useId();
-  const fieldId = id || generatedId;
-  return (
-    <Field id={fieldId} label={label} helperText={helperText} error={error}>
-      <select
-        {...props}
-        id={fieldId}
-        aria-invalid={!!error}
-        aria-describedby={
-          error || helperText ? `${fieldId}-message` : undefined
-        }
-        className={`${controlClass} ${className}`}
-      >
-        {children}
-      </select>
     </Field>
   );
 }
@@ -146,7 +116,7 @@ function Choice({
     <div className="grid gap-1">
       <label
         htmlFor={fieldId}
-        className="flex min-h-10 cursor-pointer items-center gap-1 text-sm font-medium text-deepCharcoal has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-60"
+        className="flex min-h-11 cursor-pointer items-center gap-2 text-sm font-medium text-deepCharcoal has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-60"
       >
         <input
           {...props}
@@ -156,7 +126,7 @@ function Choice({
           aria-describedby={
             error || helperText ? `${fieldId}-message` : undefined
           }
-          className={`size-2 accent-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information ${className}`}
+          className={`size-5 shrink-0 accent-signalYellow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signalYellow ${className}`}
         />
         {label}
       </label>

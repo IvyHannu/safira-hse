@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, type ComponentProps } from 'react';
-import { CaretDown } from '@phosphor-icons/react';
+import { useEffect, type ComponentProps, type ReactNode } from 'react';
+import { Circle } from '@phosphor-icons/react';
 import { Button as BaseButton } from '@/components/ui/button';
 import {
   Input as BaseInput,
@@ -10,18 +10,55 @@ import {
 } from '@/components/ui/forms';
 export { Card, EmptyState } from '@/components/ui/feedback';
 
+export function OfficerPanel({
+  children,
+  className = '',
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <section className={`officer-detail-panel ${className}`}>
+      {children}
+    </section>
+  );
+}
+
+export function SectionHeader({
+  title,
+  icon,
+  action,
+  urgent = false,
+}: {
+  title: string;
+  icon?: ReactNode;
+  action?: ReactNode;
+  urgent?: boolean;
+}) {
+  return (
+    <div className="mb-3 flex items-center justify-between gap-3">
+      <div className="flex items-center gap-2">
+        {icon && (
+          <span className="text-graphite/70" aria-hidden="true">
+            {icon}
+          </span>
+        )}
+        <h2
+          className={`text-sm font-semibold leading-5 ${urgent ? 'text-critical' : 'text-deepCharcoal'}`}
+        >
+          {title}
+        </h2>
+      </div>
+      {action}
+    </div>
+  );
+}
+
 export function Button({
   className = '',
-  variant = 'primary',
   ...props
 }: ComponentProps<typeof BaseButton>) {
-  return (
-    <BaseButton
-      {...props}
-      variant={variant}
-      className={`officer-button officer-button-${variant} ${className}`}
-    />
-  );
+  return <BaseButton {...props} className={`officer-button ${className}`} />;
 }
 export function Input({
   className = '',
@@ -33,12 +70,7 @@ export function Select({
   className = '',
   ...props
 }: ComponentProps<typeof BaseSelect>) {
-  return (
-    <div className="officer-select">
-      <BaseSelect {...props} className={`officer-control ${className}`} />
-      <CaretDown size={16} aria-hidden="true" />
-    </div>
-  );
+  return <BaseSelect {...props} className={`officer-control ${className}`} />;
 }
 export function Textarea({
   className = '',
@@ -46,6 +78,7 @@ export function Textarea({
 }: ComponentProps<typeof BaseTextarea>) {
   return <BaseTextarea {...props} className={`officer-control ${className}`} />;
 }
+
 const labels: Record<string, string> = {
   environmental_concern: 'Environmental concern',
   near_miss: 'Near miss',
@@ -53,9 +86,48 @@ const labels: Record<string, string> = {
   action_required: 'Action required',
   needs_review: 'Needs review',
 };
-function Badge({ label, kind }: { label: string; kind: string }) {
+
+export function ReportMetadata({
+  type,
+  severity,
+  status,
+}: {
+  type: 'hazard' | 'near_miss' | 'incident' | 'environmental_concern';
+  severity: 'low' | 'moderate' | 'high' | 'critical';
+  status:
+    'submitted' | 'under_review' | 'action_required' | 'resolved' | 'closed';
+}) {
   return (
-    <span className={`officer-badge officer-${kind} officer-${label}`}>
+    <div className="flex flex-wrap items-center gap-2 text-[11px]">
+      <span className="uppercase tracking-wider text-graphite/70 font-medium">
+        {type.replace(/_/g, ' ').toUpperCase()}
+      </span>
+      <span className="flex items-center gap-1.5">
+        <Circle
+          size={6}
+          weight="fill"
+          className={`severity-dot ${severity}`}
+          aria-hidden="true"
+        />
+        <span className={`font-semibold capitalize severity-text ${severity}`}>
+          {severity.charAt(0).toUpperCase() + severity.slice(1)}
+        </span>
+      </span>
+      <span className={`font-medium capitalize status-text ${status}`}>
+        {status.replace(/_/g, ' ')}
+      </span>
+    </div>
+  );
+}
+
+export function TypePill({
+  label,
+}: {
+  label: 'hazard' | 'near_miss' | 'incident' | 'environmental_concern';
+  className?: string;
+}) {
+  return (
+    <span className={`officer-badge officer-type officer-${label}`}>
       {labels[label] ||
         label
           .replaceAll('_', ' ')
@@ -63,21 +135,20 @@ function Badge({ label, kind }: { label: string; kind: string }) {
     </span>
   );
 }
-export function TypePill({
-  label,
-}: {
-  label: 'hazard' | 'near_miss' | 'incident' | 'environmental_concern';
-  className?: string;
-}) {
-  return <Badge label={label} kind="type" />;
-}
 export function SeverityPill({
   label,
 }: {
   label: 'low' | 'moderate' | 'high' | 'critical';
   className?: string;
 }) {
-  return <Badge label={label} kind="severity" />;
+  return (
+    <span className={`officer-badge officer-severity officer-${label}`}>
+      {labels[label] ||
+        label
+          .replaceAll('_', ' ')
+          .replace(/^./, (letter) => letter.toUpperCase())}
+    </span>
+  );
 }
 export function StatusPill({
   label,
@@ -86,14 +157,28 @@ export function StatusPill({
     'submitted' | 'under_review' | 'action_required' | 'resolved' | 'closed';
   className?: string;
 }) {
-  return <Badge label={label} kind="status" />;
+  return (
+    <span className={`officer-badge officer-status officer-${label}`}>
+      {labels[label] ||
+        label
+          .replaceAll('_', ' ')
+          .replace(/^./, (letter) => letter.toUpperCase())}
+    </span>
+  );
 }
 export function ChecklistBadge({
   status,
 }: {
   status: 'needs_review' | 'reviewed';
 }) {
-  return <Badge label={status} kind="status" />;
+  return (
+    <span className={`officer-badge officer-status officer-${status}`}>
+      {labels[status] ||
+        status
+          .replaceAll('_', ' ')
+          .replace(/^./, (letter) => letter.toUpperCase())}
+    </span>
+  );
 }
 
 /** Keyboard dismissal and focus containment for Officer drawers only. */

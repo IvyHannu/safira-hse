@@ -2,12 +2,9 @@
 
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import NextImage from 'next/image';
 import { useState } from 'react';
 import {
   ArrowLeft,
-  ArrowRight,
-  Image,
   FileText,
   Warning,
   Clock,
@@ -18,22 +15,23 @@ import {
   Lock,
   Plus,
   PaperPlane,
-  Download,
-  Pencil,
-  Calendar,
+  FloppyDisk,
 } from '@phosphor-icons/react';
 import {
-  TypePill,
-  SeverityPill,
-  StatusPill,
-} from '@/components/hse-officer/ui';
-import {
+  OfficerPanel,
+  ReportMetadata,
+  SectionHeader,
   Select,
   Textarea,
   Input,
-  useOfficerLayer,
+  Button,
 } from '@/components/hse-officer/ui';
-import { Button } from '@/components/hse-officer/ui';
+import { InfoCard } from '@/components/ui/feedback';
+import { Checkbox } from '@/components/ui/forms';
+import { SidePanel } from '@/components/ui/side-panel';
+import { EvidenceCard } from '@/components/ui/evidence-card';
+import { ReportDetailsGrid } from '@/components/ui/report-details-grid';
+import { Timeline } from '@/components/ui/timeline';
 import {
   reportData,
   ReportDetail,
@@ -81,133 +79,14 @@ interface Resolution {
   confirmed: boolean;
 }
 
-function SectionHeader({
-  title,
-  icon,
-  action,
-  urgent = false,
-}: {
-  title: string;
-  icon?: React.ReactNode;
-  action?: React.ReactNode;
-  urgent?: boolean;
-}) {
-  return (
-    <div className="flex items-center justify-between gap-3 mb-3">
-      <div className="flex items-center gap-2">
-        {icon && <span className="text-graphite/60">{icon}</span>}
-        <h2
-          className={`text-[14px] font-semibold leading-5 text-deepCharcoal uppercase tracking-wide ${urgent ? 'text-critical' : ''}`}
-        >
-          {title}
-        </h2>
-      </div>
-      {action}
-    </div>
-  );
-}
-
-function EvidencePreview({ item }: { item: ReportDetail['evidence'][number] }) {
-  const [unavailable, setUnavailable] = useState(false);
-  return (
-    <figure className="min-w-0 overflow-hidden rounded-md border border-graphite/10 bg-white">
-      <div className="relative flex aspect-[4/3] items-center justify-center bg-coolSurface">
-        {item.type === 'photo' && !unavailable ? (
-          <NextImage
-            src={item.url}
-            alt={item.caption}
-            fill
-            sizes="(max-width: 767px) 100vw, 360px"
-            className="object-cover"
-            unoptimized
-            onError={() => setUnavailable(true)}
-          />
-        ) : (
-          <div className="grid justify-items-center gap-2 px-4 text-sm text-graphite/70">
-            <Image size={28} alt="" />
-            <span>
-              {item.type === 'photo' ? 'Photo preview unavailable' : 'Document'}
-            </span>
-          </div>
-        )}
-      </div>
-      <figcaption className="p-3 text-sm">{item.caption}</figcaption>
-      {!unavailable && (
-        <a
-          href={item.url}
-          target="_blank"
-          rel="noreferrer"
-          className="officer-link mx-3 mb-2 inline-flex items-center gap-2"
-        >
-          <ArrowRight size={16} />
-          View
-        </a>
-      )}
-    </figure>
-  );
-}
 function EvidenceGrid({ evidence }: { evidence: ReportDetail['evidence'] }) {
   if (!evidence.length)
     return <p className="text-sm text-graphite/60">No evidence attached.</p>;
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       {evidence.map((item, index) => (
-        <EvidencePreview key={index} item={item} />
+        <EvidenceCard key={index} item={item} />
       ))}
-    </div>
-  );
-}
-
-function KeyValueRow({
-  label,
-  value,
-  icon,
-}: {
-  label: string;
-  value: string;
-  icon?: React.ReactNode;
-}) {
-  return (
-    <div className="flex items-start gap-3 py-1.5">
-      {icon && (
-        <span className="flex-shrink-0 w-5 text-graphite/50">{icon}</span>
-      )}
-      <div className="grid gap-0.5 min-w-0">
-        <span className="text-xs font-medium text-graphite/70 uppercase tracking-wide">
-          {label}
-        </span>
-        <span className="text-sm text-deepCharcoal">{value}</span>
-      </div>
-    </div>
-  );
-}
-
-function ActivityItem({ item }: { item: ReportDetail['activity'][0] }) {
-  return (
-    <div className="flex gap-3 py-2 border-t border-graphite/10">
-      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-coolSurface flex items-center justify-center">
-        <Clock size={14} className="text-graphite/60" aria-hidden="true" />
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-sm font-medium text-deepCharcoal">
-            {item.event}
-          </span>
-          <span className="text-xs text-graphite/60">
-            {new Date(item.date).toLocaleString('en-GB', {
-              day: '2-digit',
-              month: 'short',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
-          </span>
-        </div>
-        {item.details && (
-          <p className="text-sm text-graphite/70 mt-0.5">{item.details}</p>
-        )}
-        <p className="text-xs text-graphite/50">By {item.user}</p>
-      </div>
     </div>
   );
 }
@@ -223,8 +102,6 @@ function RecordActionModal({
   report: ReportDetail;
   onSave: (action: Omit<Action, 'id' | 'createdAt' | 'createdBy'>) => void;
 }) {
-  useOfficerLayer(isOpen, onClose);
-
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [assignedTo, setAssignedTo] = useState(assigneeOptions[0].value);
@@ -256,150 +133,97 @@ function RecordActionModal({
     onClose();
   };
 
-  if (!isOpen) return null;
-
   return (
-    <>
-      <div
-        className="fixed inset-0 z-40 bg-deepCharcoal/60"
-        onClick={onClose}
-        aria-hidden="true"
-      />
-      <aside
-        role="dialog"
-        aria-modal="true"
-        aria-label="Report action"
-        data-officer-dialog
-        className="fixed inset-y-0 right-0 z-50 w-full max-w-lg md:w-2/3 lg:max-w-2xl bg-white shadow-xl flex flex-col"
-      >
-        <div className="flex h-14 items-center justify-between border-b border-graphite/20 px-4">
-          <h2 className="text-sm font-semibold text-deepCharcoal">
-            Record Action
-          </h2>
-          <button
-            type="button"
-            onClick={onClose}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-graphite/70 hover:text-graphite hover:bg-coolSurface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
-            aria-label="Close"
+    <SidePanel
+      open={isOpen}
+      title="Record Action"
+      onClose={onClose}
+      onSubmit={handleSubmit}
+      footer={
+        <>
+          <Button type="button" variant="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            variant="primary"
+            icon={<Plus size={16} aria-hidden="true" />}
+            disabled={!title.trim()}
           >
-            <Pencil size={20} aria-hidden="true" />
-          </button>
+            Record Action
+          </Button>
+        </>
+      }
+    >
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="sm:col-span-2">
+          <Input
+            id="action-title"
+            label="Action Title *"
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Enter action title..."
+            required
+          />
         </div>
-        <form
-          onSubmit={handleSubmit}
-          className="flex-1 overflow-y-auto p-4 space-y-4"
+        <Select
+          label="Assigned To"
+          value={assignedTo}
+          onChange={(e) => setAssignedTo(e.target.value)}
+          className="w-full"
         >
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="action-title"
-                className="text-sm font-semibold text-deepCharcoal"
-              >
-                Action Title *
-              </label>
-              <input
-                id="action-title"
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Enter action title..."
-                className="mt-1 h-9 w-full rounded-md border border-graphite/20 bg-white px-3 text-sm text-deepCharcoal placeholder:text-graphite/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
-                required
-              />
-            </div>
-            <Select
-              label="Assigned To"
-              value={assignedTo}
-              onChange={(e) => setAssignedTo(e.target.value)}
-              className="w-full"
-            >
-              {assigneeOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </Select>
-            <Input
-              label="Due Date"
-              type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-              className="w-full"
-            />
-            <Select
-              label="Priority"
-              value={priority}
-              onChange={(e) => setPriority(e.target.value as ActionPriority)}
-            >
-              {priorityOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </Select>
-            <Select
-              label="Status"
-              value={status}
-              onChange={(e) => setStatus(e.target.value as ActionStatus)}
-            >
-              <option value="open">Open</option>
-              <option value="in_progress">In Progress</option>
-              <option value="completed">Completed</option>
-              <option value="cancelled">Cancelled</option>
-            </Select>
-          </div>
+          {assigneeOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </Select>
+        <Input
+          label="Due Date"
+          type="date"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+          className="w-full"
+        />
+        <Select
+          label="Priority"
+          value={priority}
+          onChange={(e) => setPriority(e.target.value as ActionPriority)}
+        >
+          {priorityOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </Select>
+        <Select
+          label="Status"
+          value={status}
+          onChange={(e) => setStatus(e.target.value as ActionStatus)}
+        >
+          <option value="open">Open</option>
+          <option value="in_progress">In Progress</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </Select>
+      </div>
 
-          <div>
-            <label className="text-sm font-semibold text-deepCharcoal">
-              Description
-            </label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe the action to be taken..."
-              rows={3}
-              className="mt-1 h-24 w-full rounded-md border border-graphite/20 bg-white px-3 text-sm text-deepCharcoal placeholder:text-graphite/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information resize-none"
-            />
-          </div>
+      <Textarea
+        label="Description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        placeholder="Describe the action to be taken..."
+        rows={3}
+      />
 
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="worker-facing"
-              checked={workerFacing}
-              onChange={(e) => setWorkerFacing(e.target.checked)}
-              className="size-4 accent-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
-            />
-            <label
-              htmlFor="worker-facing"
-              className="text-sm font-medium text-deepCharcoal"
-            >
-              Mark as worker-facing (visible to reporter)
-            </label>
-          </div>
-
-          <div className="flex justify-end gap-2 pt-2 border-t border-graphite/10">
-            <Button
-              type="button"
-              variant="secondary"
-              className="h-9"
-              onClick={onClose}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              className="h-9"
-              disabled={!title.trim()}
-            >
-              <Plus size={14} aria-hidden="true" />
-              Record Action
-            </Button>
-          </div>
-        </form>
-      </aside>
-    </>
+      <Checkbox
+        id="worker-facing"
+        label="Mark as worker-facing (visible to reporter)"
+        checked={workerFacing}
+        onChange={(e) => setWorkerFacing(e.target.checked)}
+      />
+    </SidePanel>
   );
 }
 
@@ -416,8 +240,6 @@ function ResolveReportModal({
     resolution: Omit<Resolution, 'id' | 'resolvedAt' | 'resolvedBy'>,
   ) => void;
 }) {
-  useOfficerLayer(isOpen, onClose);
-
   const [summary, setSummary] = useState('');
   const [evidence, setEvidence] = useState<
     { type: 'photo' | 'document'; url: string; caption: string }[]
@@ -439,118 +261,62 @@ function ResolveReportModal({
     onClose();
   };
 
-  if (!isOpen) return null;
-
   return (
-    <>
-      <div
-        className="fixed inset-0 z-40 bg-deepCharcoal/60"
-        onClick={onClose}
-        aria-hidden="true"
-      />
-      <aside
-        role="dialog"
-        aria-modal="true"
-        aria-label="Report action"
-        data-officer-dialog
-        className="fixed inset-y-0 right-0 z-50 w-full max-w-lg md:w-2/3 lg:max-w-2xl bg-white shadow-xl flex flex-col"
-      >
-        <div className="flex h-14 items-center justify-between border-b border-graphite/20 px-4">
-          <h2 className="text-sm font-semibold text-deepCharcoal">
-            Resolve Report
-          </h2>
-          <button
-            type="button"
-            onClick={onClose}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-graphite/70 hover:text-graphite hover:bg-coolSurface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
-            aria-label="Close"
+    <SidePanel
+      open={isOpen}
+      title="Resolve Report"
+      onClose={onClose}
+      onSubmit={handleSubmit}
+      footer={
+        <>
+          <Button type="button" variant="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            variant="primary"
+            icon={<Shield size={16} aria-hidden="true" />}
+            disabled={!summary.trim() || !confirmed}
           >
-            <Pencil size={20} aria-hidden="true" />
-          </button>
+            Resolve Report
+          </Button>
+        </>
+      }
+    >
+      <Textarea
+        id="resolution-summary"
+        label="Resolution Summary *"
+        value={summary}
+        onChange={(e) => setSummary(e.target.value)}
+        placeholder="Describe how the issue was resolved..."
+        rows={3}
+        required
+      />
+
+      <div>
+        <label className="text-sm font-semibold text-deepCharcoal">
+          Resolution Evidence (optional)
+        </label>
+        <div className="mt-1 h-24 w-full rounded-md border border-graphite/20 bg-white p-3 text-sm text-graphite/60 flex items-center justify-center">
+          <span>Evidence upload placeholder</span>
         </div>
-        <form
-          onSubmit={handleSubmit}
-          className="flex-1 overflow-y-auto p-4 space-y-4"
-        >
-          <div>
-            <label
-              htmlFor="resolution-summary"
-              className="text-sm font-semibold text-deepCharcoal"
-            >
-              Resolution Summary *
-            </label>
-            <textarea
-              id="resolution-summary"
-              value={summary}
-              onChange={(e) => setSummary(e.target.value)}
-              placeholder="Describe how the issue was resolved..."
-              rows={3}
-              className="mt-1 h-24 w-full rounded-md border border-graphite/20 bg-white px-3 text-sm text-deepCharcoal placeholder:text-graphite/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information resize-none"
-              required
-            />
-          </div>
+      </div>
 
-          <div>
-            <label className="text-sm font-semibold text-deepCharcoal">
-              Resolution Evidence (optional)
-            </label>
-            <div className="mt-1 h-24 w-full rounded-md border border-graphite/20 bg-white p-3 text-sm text-graphite/60 flex items-center justify-center">
-              <span>Evidence upload placeholder</span>
-            </div>
-          </div>
+      <Textarea
+        label="Worker-Facing Update (optional)"
+        value={workerUpdate}
+        onChange={(e) => setWorkerUpdate(e.target.value)}
+        placeholder="Write an update visible to the reporter..."
+        rows={2}
+      />
 
-          <div>
-            <label className="text-sm font-semibold text-deepCharcoal">
-              Worker-Facing Update (optional)
-            </label>
-            <textarea
-              value={workerUpdate}
-              onChange={(e) => setWorkerUpdate(e.target.value)}
-              placeholder="Write an update visible to the reporter..."
-              rows={2}
-              className="mt-1 h-16 w-full rounded-md border border-graphite/20 bg-white px-3 text-sm text-deepCharcoal placeholder:text-graphite/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information resize-none"
-            />
-          </div>
-
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="resolution-confirmed"
-              checked={confirmed}
-              onChange={(e) => setConfirmed(e.target.checked)}
-              className="size-4 accent-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
-            />
-            <label
-              htmlFor="resolution-confirmed"
-              className="text-sm font-medium text-deepCharcoal"
-            >
-              I confirm this report is resolved and the summary accurately
-              reflects the outcome
-            </label>
-          </div>
-
-          <div className="flex justify-end gap-2 pt-2 border-t border-graphite/10">
-            <Button
-              type="button"
-              variant="secondary"
-              className="h-9"
-              onClick={onClose}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              className="h-9"
-              disabled={!summary.trim() || !confirmed}
-            >
-              <Plus size={14} aria-hidden="true" />
-              Resolve Report
-            </Button>
-          </div>
-        </form>
-      </aside>
-    </>
+      <Checkbox
+        id="resolution-confirmed"
+        label="I confirm this report is resolved and the summary accurately reflects the outcome"
+        checked={confirmed}
+        onChange={(e) => setConfirmed(e.target.checked)}
+      />
+    </SidePanel>
   );
 }
 
@@ -561,10 +327,10 @@ function AssessmentForm({ report }: { report: ReportDetail }) {
   const [hseStatus, setHseStatus] = useState(report.hseStatus);
 
   return (
-    <div className="officer-section space-y-4">
+    <OfficerPanel className="space-y-4 border-t-4 border-t-signalYellow">
       <SectionHeader title="HSE Assessment" icon={<Shield size={16} />} />
 
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-3">
         <Select
           label="Classification"
           value={classification}
@@ -615,12 +381,15 @@ function AssessmentForm({ report }: { report: ReportDetail }) {
       </div>
 
       <div className="pt-3 border-t border-graphite/10">
-        <Button variant="primary" className="w-full sm:w-auto h-9">
-          <Download size={14} aria-hidden="true" />
+        <Button
+          variant="primary"
+          className="w-full sm:w-auto"
+          icon={<FloppyDisk size={16} aria-hidden="true" />}
+        >
           Save Assessment
         </Button>
       </div>
-    </div>
+    </OfficerPanel>
   );
 }
 
@@ -634,21 +403,20 @@ function WorkerUpdateForm({
   const [message, setMessage] = useState('');
 
   return (
-    <div className="space-y-4">
+    <OfficerPanel className="space-y-4 border-l-4 border-l-information">
       <SectionHeader
         title="Worker-Facing Update"
         icon={<ChatCircle size={16} />}
         action={
           <Button
             variant="primary"
-            className="h-9"
+            icon={<PaperPlane size={16} aria-hidden="true" />}
             onClick={() => {
               onSend(message);
               setMessage('');
             }}
             disabled={!message.trim()}
           >
-            <PaperPlane size={14} aria-hidden="true" />
             Send Update
           </Button>
         }
@@ -693,7 +461,7 @@ function WorkerUpdateForm({
           </div>
         </div>
       )}
-    </div>
+    </OfficerPanel>
   );
 }
 
@@ -707,21 +475,20 @@ function InternalNotesForm({
   const [note, setNote] = useState('');
 
   return (
-    <div className="officer-section space-y-4">
+    <OfficerPanel className="space-y-4 border-l-4 border-l-graphite/50">
       <SectionHeader
         title="Internal HSE Notes"
         icon={<Lock size={16} />}
         action={
           <Button
             variant="secondary"
-            className="h-9"
+            icon={<Plus size={16} aria-hidden="true" />}
             onClick={() => {
               onAdd(note);
               setNote('');
             }}
             disabled={!note.trim()}
           >
-            <Plus size={14} aria-hidden="true" />
             Add Note
           </Button>
         }
@@ -770,7 +537,7 @@ function InternalNotesForm({
           </div>
         </div>
       )}
-    </div>
+    </OfficerPanel>
   );
 }
 
@@ -901,11 +668,18 @@ export default function ReportDetailPage() {
       </header>
 
       {/* Report Title & Meta */}
-      <section className="mb-5">
-        <h1 className="text-[24px] font-semibold leading-7 text-deepCharcoal">
+      <section className="mb-6">
+        <h1 className="text-[26px] font-semibold leading-tight text-deepCharcoal">
           {report.title}
         </h1>
-        <div className="flex flex-wrap items-center gap-4 mt-2 text-sm text-graphite/70">
+        <div className="mt-3">
+          <ReportMetadata
+            type={report.classification}
+            severity={report.hseSeverity}
+            status={report.hseStatus}
+          />
+        </div>
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-graphite/10 pt-3 text-sm text-graphite/75">
           <span className="flex items-center gap-1">
             <MapPin size={14} aria-hidden="true" /> {report.site}
           </span>
@@ -916,30 +690,25 @@ export default function ReportDetailPage() {
           <span className="flex items-center gap-1">
             <User size={14} aria-hidden="true" /> {report.submittedBy}
           </span>
-          <span className="flex items-center gap-1 text-xs font-mono text-graphite/50">
+          <span className="flex items-center gap-1 text-xs font-mono text-graphite/65">
             {report.id}
           </span>
-        </div>
-        <div className="flex items-center gap-2 flex-wrap mt-3 pt-3 border-t border-graphite/10">
-          <TypePill label={report.type} />
-          <SeverityPill label={report.severity} />
-          <StatusPill label={report.status} />
         </div>
       </section>
 
       {/* Two-column layout */}
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(320px,380px)]">
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(310px,360px)]">
         {/* Main Column */}
-        <div className="min-w-0 space-y-4">
+        <div className="min-w-0 space-y-5">
           {/* Worker Report */}
-          <section className="officer-section space-y-4">
+          <OfficerPanel>
             <SectionHeader
               title="Worker Report"
               icon={<FileText size={16} />}
             />
-            <div className="space-y-4">
-              <div>
-                <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-2">
+            <div className="divide-y divide-graphite/10">
+              <div className="pb-5">
+                <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-3">
                   Description
                 </h3>
                 <p className="text-sm text-graphite whitespace-pre-line leading-relaxed">
@@ -947,15 +716,15 @@ export default function ReportDetailPage() {
                 </p>
               </div>
 
-              <div>
-                <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-2">
+              <div className="py-5">
+                <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-3">
                   Evidence
                 </h3>
                 <EvidenceGrid evidence={report.evidence} />
               </div>
 
-              <div>
-                <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-2">
+              <div className="py-5">
+                <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-3">
                   Worker Answers
                 </h3>
                 <div className="grid gap-2 sm:grid-cols-2">
@@ -970,32 +739,29 @@ export default function ReportDetailPage() {
                 </div>
               </div>
 
-              <div className="grid gap-1.5 sm:grid-cols-2 border-t border-graphite/10 pt-3">
-                <KeyValueRow
-                  label="Location"
-                  value={report.location.area}
-                  icon={<MapPin size={14} />}
-                />
-                <KeyValueRow label="Site" value={report.location.site} />
-                {report.location.coordinates && (
-                  <KeyValueRow
-                    label="Coordinates"
-                    value={report.location.coordinates}
-                  />
-                )}
-                <KeyValueRow
-                  label="Submitted by"
-                  value={report.submittedBy}
-                  icon={<User size={14} />}
-                />
-                <KeyValueRow
-                  label="Submitted"
-                  value={formatDateTime(report.submittedAt)}
-                  icon={<Clock size={14} />}
+              <div className="pt-5">
+                <ReportDetailsGrid
+                  items={[
+                    { label: 'Location', value: report.location.area },
+                    { label: 'Site', value: report.location.site },
+                    ...(report.location.coordinates
+                      ? [
+                          {
+                            label: 'Coordinates',
+                            value: report.location.coordinates,
+                          },
+                        ]
+                      : []),
+                    { label: 'Submitted by', value: report.submittedBy },
+                    {
+                      label: 'Submitted',
+                      value: formatDateTime(report.submittedAt),
+                    },
+                  ]}
                 />
               </div>
             </div>
-          </section>
+          </OfficerPanel>
 
           {/* Worker-Facing Update */}
           <WorkerUpdateForm
@@ -1010,72 +776,51 @@ export default function ReportDetailPage() {
           />
 
           {/* Activity Timeline */}
-          <section className="space-y-0">
-            <SectionHeader
-              title="Activity Timeline"
-              icon={<Clock size={16} />}
-            />
-            <div className="space-y-0">
-              {allActivity.map((item, idx) => (
-                <ActivityItem key={idx} item={item} />
-              ))}
-            </div>
-          </section>
+          <OfficerPanel>
+            <SectionHeader title="Activity Timeline" />
+            <Timeline items={allActivity} />
+          </OfficerPanel>
         </div>
 
         {/* Secondary Column - HSE Assessment + Context */}
-        <aside className="min-w-0 space-y-4">
-          <section className="officer-section space-y-4">
-            <AssessmentForm report={report} />
-          </section>
+        <aside className="min-w-0 space-y-5">
+          <AssessmentForm report={report} />
 
-          <section className="space-y-2">
-            <h3 className="text-[13px] font-semibold text-deepCharcoal uppercase tracking-wide">
-              Report Reference
-            </h3>
-            <div className="space-y-1.5 rounded-lg border border-graphite/10 bg-white p-3">
-              <KeyValueRow label="Report ID" value={report.id} />
-              <KeyValueRow label="Assigned to" value={report.assignedTo} />
-            </div>
-          </section>
-
-          <section className="space-y-2">
-            <h3 className="text-[13px] font-semibold text-deepCharcoal uppercase tracking-wide">
-              Actions
-            </h3>
+          <OfficerPanel>
+            <SectionHeader title="Actions" />
             <div className="space-y-2">
               <Button
                 variant="primary"
-                className="w-full justify-start h-9"
+                className="w-full"
+                icon={<Plus size={16} aria-hidden="true" />}
                 onClick={() => setRecordActionOpen(true)}
               >
-                <Plus size={14} aria-hidden="true" />
                 Record Action
               </Button>
               <Button
                 variant="secondary"
-                className="w-full justify-start h-9"
+                className="w-full"
+                icon={<Shield size={16} aria-hidden="true" />}
                 onClick={() => setResolveReportOpen(true)}
               >
-                <Plus size={14} aria-hidden="true" />
                 Resolve Report
               </Button>
             </div>
-          </section>
+          </OfficerPanel>
 
-          <section className="space-y-2 pt-2 border-t border-graphite/10">
-            <h3 className="text-[13px] font-semibold text-critical uppercase tracking-wide">
-              Emergency
+          <InfoCard
+            title="Emergency — Not an emergency response tool"
+            icon={<Warning size={16} />}
+          >
+            For immediate danger, follow site emergency procedures first.
+          </InfoCard>
+
+          <section className="border-t border-graphite/10 pt-3 text-xs text-graphite/70">
+            <h3 className="font-semibold uppercase tracking-wide">
+              Report Reference
             </h3>
-            <div className="p-3 rounded-md bg-graphite/5 border border-graphite/10">
-              <p className="text-xs font-medium text-graphite/70 flex items-center gap-1 mb-1">
-                <Warning size={12} aria-hidden="true" />
-                Not an emergency response tool
-              </p>
-              <p className="text-xs text-graphite/60">
-                For immediate danger, follow site emergency procedures first.
-              </p>
-            </div>
+            <p className="mt-1 font-mono">{report.id}</p>
+            <p className="mt-1">Assigned to {report.assignedTo}</p>
           </section>
         </aside>
       </div>

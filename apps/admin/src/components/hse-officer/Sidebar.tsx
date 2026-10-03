@@ -1,10 +1,12 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { X } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 import { useOfficerLayer } from './ui';
+import safiraMark from '../../../../../docs/references/brand/Safira Mark.png';
 
 interface SidebarItem {
   href: string;
@@ -64,7 +66,13 @@ export function HSEOfficerSidebar({
       >
         <div className="flex h-full flex-col">
           <div className="flex h-14 items-center justify-between gap-3 border-b border-graphite px-4">
-            <span className="text-sm font-semibold text-white">Safira</span>
+            <Image
+              src={safiraMark}
+              alt="Safira"
+              width={36}
+              height={36}
+              priority
+            />
             <button
               type="button"
               className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-md text-white/80 hover:text-white hover:bg-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signalYellow"
@@ -76,7 +84,7 @@ export function HSEOfficerSidebar({
           </div>
 
           <nav
-            className="flex-1 overflow-y-auto px-3 py-4"
+            className="flex-1 overflow-y-auto px-3 py-3"
             aria-label="Main navigation"
           >
             <ul className="grid gap-1" role="list">
@@ -91,14 +99,17 @@ export function HSEOfficerSidebar({
                       onClick={onCloseMobile}
                       aria-current={isActive ? 'page' : undefined}
                       className={cn(
-                        'flex h-10 items-center gap-3 rounded-md px-3 text-sm font-medium transition-colors',
+                        'flex h-11 items-center gap-2.5 rounded-md px-3 text-sm font-medium transition-colors',
                         isActive
                           ? 'bg-signalYellow text-deepCharcoal font-semibold'
-                          : 'text-white/80 hover:bg-graphite hover:text-white',
+                          : 'text-white/90 hover:bg-graphite hover:text-white',
                         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signalYellow',
                       )}
                     >
-                      <span aria-hidden="true" className="flex shrink-0">
+                      <span
+                        aria-hidden="true"
+                        className="flex size-5 shrink-0 items-center justify-center"
+                      >
                         {item.icon}
                       </span>
                       {item.label}
@@ -108,19 +119,6 @@ export function HSEOfficerSidebar({
               })}
             </ul>
           </nav>
-
-          <div className="border-t border-graphite p-4 md:hidden">
-            <button
-              type="button"
-              onClick={onCloseMobile}
-              className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-graphite hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signalYellow"
-            >
-              <span className="flex shrink-0">
-                <SignOut size={20} weight="regular" color="currentColor" />
-              </span>
-              Sign out
-            </button>
-          </div>
         </div>
       </aside>
 
@@ -135,10 +133,4 @@ export function HSEOfficerSidebar({
   );
 }
 
-import {
-  House,
-  Files,
-  ClipboardText,
-  UserCircle,
-  SignOut,
-} from '@phosphor-icons/react';
+import { House, Files, ClipboardText, UserCircle } from '@phosphor-icons/react';

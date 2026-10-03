@@ -1,21 +1,15 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
-import Link from 'next/link';
 import {
-  ArrowRight,
   Funnel,
   X,
   Calendar,
   CaretDown,
+  MagnifyingGlass,
 } from '@phosphor-icons/react';
-import { TableFoundation } from '@/components/ui/table';
+import { ReportListCard } from '@/components/hse-officer/report-list-card';
 import { Select, Input, useOfficerLayer } from '@/components/hse-officer/ui';
-import {
-  TypePill,
-  SeverityPill,
-  StatusPill,
-} from '@/components/hse-officer/ui';
 import {
   reportList,
   statusOptions,
@@ -25,116 +19,7 @@ import {
   ReportType,
   Severity,
   Status,
-  ReportListItem,
 } from '@/data/reports';
-
-function ReportsTable({ reports }: { reports: ReportListItem[] }) {
-  const columns = [
-    {
-      accessorKey: 'report',
-      header: 'Report',
-      size: 420,
-      cell: ({ row }: { row: { original: ReportListItem } }) => (
-        <Link
-          href={`/hse-officer/reports/${row.original.id}`}
-          className="flex flex-col gap-0.5 min-w-0 hover:text-signalYellow transition-colors"
-        >
-          <span className="text-sm font-medium text-deepCharcoal line-clamp-2 leading-snug">
-            {row.original.title}
-          </span>
-          <div className="flex items-center gap-2 text-xs">
-            <span className="font-mono font-medium text-graphite/50">
-              {row.original.id}
-            </span>
-            <span className="text-graphite/60">{row.original.site}</span>
-          </div>
-        </Link>
-      ),
-    },
-    {
-      accessorKey: 'type',
-      header: 'Type',
-      size: 130,
-      cell: ({ row }: { row: { original: ReportListItem } }) => (
-        <TypePill label={row.original.type} />
-      ),
-    },
-    {
-      accessorKey: 'severity',
-      header: 'Severity',
-      size: 120,
-      cell: ({ row }: { row: { original: ReportListItem } }) => (
-        <SeverityPill label={row.original.severity} />
-      ),
-    },
-    {
-      accessorKey: 'status',
-      header: 'Status',
-      size: 150,
-      cell: ({ row }: { row: { original: ReportListItem } }) => (
-        <StatusPill label={row.original.status} />
-      ),
-    },
-    {
-      accessorKey: 'date',
-      header: 'Date',
-      size: 110,
-      cell: ({ row }: { row: { original: ReportListItem } }) => (
-        <span className="text-sm text-graphite whitespace-nowrap">
-          {formatDate(row.original.date)}
-        </span>
-      ),
-    },
-  ];
-
-  return (
-    <TableFoundation
-      caption="Reports for permitted sites"
-      columns={columns}
-      data={reports}
-      emptyMessage="No reports match the current filters."
-    />
-  );
-}
-
-function ReportCard({ report }: { report: ReportListItem }) {
-  return (
-    <Link
-      href={`/hse-officer/reports/${report.id}`}
-      className="grid gap-2 rounded-lg border border-graphite/10 bg-white p-2.5 hover:border-graphite/30 hover:shadow-sm transition-colors"
-    >
-      <div className="grid gap-1.5">
-        <p className="text-sm font-medium text-deepCharcoal leading-snug">
-          {report.title}
-        </p>
-        <div className="flex items-center gap-1.5 flex-wrap text-xs">
-          <span className="font-mono font-medium text-graphite/50">
-            {report.id}
-          </span>
-          <TypePill label={report.type} />
-          <span className="text-graphite/60">{report.site}</span>
-        </div>
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <SeverityPill label={report.severity} />
-          <StatusPill label={report.status} />
-        </div>
-      </div>
-      <div className="flex items-center justify-between border-t border-graphite/10 pt-1.5 text-xs">
-        <span className="text-graphite/60">{formatDate(report.date)}</span>
-        <ArrowRight size={12} className="text-graphite/60" aria-hidden="true" />
-      </div>
-    </Link>
-  );
-}
-
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  });
-}
 
 function FilterToolbar({
   search,
@@ -190,11 +75,11 @@ function FilterToolbar({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by ID, title, location…"
-          className="h-9 w-full pl-10 pr-4 rounded-md border border-graphite/20 bg-white text-sm text-deepCharcoal placeholder:text-graphite/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
+          className="officer-control h-9 w-full pl-10 pr-4 rounded-md border border-graphite/20 bg-white text-sm text-deepCharcoal placeholder:text-graphite/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow"
         />
-        <Funnel
+        <MagnifyingGlass
           size={16}
-          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-graphite/50"
+          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-graphite/70"
           aria-hidden="true"
         />
       </div>
@@ -262,7 +147,7 @@ function FilterToolbar({
         <button
           type="button"
           onClick={() => setDateFilterOpen(!dateFilterOpen)}
-          className={`inline-flex h-9 items-center justify-center gap-1.5 rounded-md border border-graphite/20 bg-white px-3 text-sm font-medium text-graphite hover:bg-coolSurface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information ${dateFilterOpen ? 'bg-coolSurface' : ''}`}
+          className={`date-filter-btn inline-flex h-9 items-center justify-center gap-1.5 rounded-md border border-graphite/20 bg-white px-3 text-sm font-medium text-graphite ${dateFilterOpen ? 'bg-coolSurface' : ''}`}
         >
           <Calendar size={14} aria-hidden="true" />
           <span>{dateFrom || dateTo ? 'Date' : 'Date'}</span>
@@ -315,7 +200,7 @@ function FilterToolbar({
         <button
           type="button"
           onClick={clearFilters}
-          className="inline-flex items-center gap-1 rounded-md px-2 text-sm font-medium text-graphite/70 hover:text-graphite hover:bg-coolSurface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
+          className="clear-filters-btn inline-flex items-center gap-1 rounded-md px-2 text-sm font-medium text-graphite/70 hover:text-graphite"
         >
           <X size={12} aria-hidden="true" />
           <span>Clear</span>
@@ -400,19 +285,21 @@ function MobileFilterSheet({
             >
               Search
             </label>
-            <input
-              id="mobile-search"
-              type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by ID, title, location…"
-              className="mt-1.5 h-9 w-full pl-10 pr-4 rounded-md border border-graphite/20 bg-white text-sm text-deepCharcoal placeholder:text-graphite/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
-            />
-            <Funnel
-              size={16}
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-graphite/50"
-              aria-hidden="true"
-            />
+            <div className="relative mt-1.5">
+              <input
+                id="mobile-search"
+                type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search by ID, title, location…"
+                className="officer-control h-9 w-full pl-10 pr-4 rounded-md border border-graphite/20 bg-white text-sm text-deepCharcoal placeholder:text-graphite/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow"
+              />
+              <MagnifyingGlass
+                size={16}
+                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-graphite/70"
+                aria-hidden="true"
+              />
+            </div>
           </div>
           <div className="grid gap-3">
             <Select
@@ -497,7 +384,7 @@ function MobileFilterSheet({
                 clearFilters();
                 onClose();
               }}
-              className="inline-flex items-center justify-center gap-1.5 rounded-md border border-graphite/20 bg-white px-3 py-2 text-sm font-medium text-graphite hover:bg-coolSurface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information mt-2"
+              className="clear-filters-btn inline-flex items-center justify-center gap-1.5 rounded-md border border-graphite/20 bg-white px-3 py-2 text-sm font-medium text-graphite mt-2"
             >
               <X size={14} aria-hidden="true" />
               Clear All Filters
@@ -643,18 +530,18 @@ export default function ReportsPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search reports…"
-                className="h-9 w-full pl-10 pr-4 rounded-md border border-graphite/20 bg-white text-sm text-deepCharcoal placeholder:text-graphite/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
+                className="officer-control h-9 w-full pl-10 pr-4 rounded-md border border-graphite/20 bg-white text-sm text-deepCharcoal placeholder:text-graphite/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow"
               />
-              <Funnel
+              <MagnifyingGlass
                 size={16}
-                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-graphite/50"
+                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-graphite/70"
                 aria-hidden="true"
               />
             </div>
             <button
               type="button"
               onClick={() => setMobileFiltersOpen(true)}
-              className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-graphite/20 bg-white px-3 text-sm font-medium text-graphite hover:bg-coolSurface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
+              className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-graphite/20 bg-white px-3 text-sm font-medium text-graphite hover:bg-coolSurface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow"
             >
               <Funnel size={16} aria-hidden="true" />
               <span>Filters</span>
@@ -689,16 +576,11 @@ export default function ReportsPage() {
               )}
             </div>
           ) : (
-            <>
-              <div className="hidden md:block">
-                <ReportsTable reports={filteredReports} />
+            filteredReports.map((report) => (
+              <div key={report.id} role="listitem">
+                <ReportListCard report={report} />
               </div>
-              <div className="md:hidden grid gap-2" role="list">
-                {filteredReports.map((report) => (
-                  <ReportCard key={report.id} report={report} />
-                ))}
-              </div>
-            </>
+            ))
           )}
         </div>
 

@@ -356,6 +356,13 @@ Do not force mobile and web to share UI components.
 
 Worker and Admin UI implementations may differ.
 
+Repeated UI patterns within a product surface must use shared components. Do not
+create screen-specific duplicates for buttons, focus states, cards and report
+rows, metadata and status labels, inputs and form controls, info cards,
+navigation, sign-out actions, or timelines. If a shared pattern is missing,
+create or refactor it before repeating the UI. Changes to a shared pattern must
+propagate consistently to every Safira surface that uses it.
+
 ---
 
 ## Validation
