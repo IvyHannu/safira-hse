@@ -1,0 +1,411 @@
+.admin-checklists {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  font-size: 13px;
+}
+.admin-checklists > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.admin-checklists h1 {
+  font-size: 22px;
+  font-weight: 600;
+}
+.admin-checklists h2 {
+  font-size: 15px;
+  font-weight: 600;
+}
+.admin-checklists h3 {
+  font-size: 13px;
+  font-weight: 600;
+}
+.admin-checklists p {
+  line-height: 1.5;
+}
+.admin-checklist-muted {
+  color: #5b625b;
+}
+.admin-checklist-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid #dce0da;
+}
+.admin-checklist-tabs button {
+  min-height: 44px;
+  padding: 8px 16px;
+  border-bottom: 3px solid transparent;
+  font-weight: 600;
+}
+.admin-checklist-tabs button[aria-selected='true'] {
+  border-color: #ffd21a;
+  color: #121412;
+}
+.admin-checklist-tabs button:focus-visible,
+.admin-checklist-close:focus-visible {
+  outline: 2px solid #2563a6;
+  outline-offset: 2px;
+}
+.admin-checklist-toolbar {
+  display: grid;
+  grid-template-columns: minmax(180px, 2fr) repeat(2, minmax(145px, 1fr));
+  gap: 10px;
+  align-items: end;
+}
+.admin-checklist-desktop-filter {
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.admin-checklist-toolbar input,
+.admin-checklist-toolbar select,
+.admin-checklists form textarea {
+  min-height: 42px;
+  border-color: #bbc2b9;
+}
+.admin-checklist-mobile-filters {
+  display: none;
+}
+.admin-checklist-count {
+  font-size: 12px;
+  color: #5b625b;
+}
+.admin-checklist-workspace {
+  display: grid;
+  grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
+  gap: 14px;
+  min-width: 0;
+  align-items: start;
+}
+.admin-checklist-template-list {
+  align-content: start;
+}
+.admin-checklist-template-list strong {
+  font-size: 13px;
+}
+.admin-checklist-template-list small {
+  color: #5b625b;
+}
+.admin-checklist-panel {
+  padding: 18px;
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.admin-checklist-template-editor {
+  padding: 16px;
+  gap: 14px;
+}
+.admin-checklist-template-editor > form {
+  display: grid;
+  gap: 14px;
+}
+.admin-checklist-template-editor > form > .admin-checklist-actions {
+  margin-top: 4px;
+}
+.admin-checklist-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.admin-checklist-section {
+  border-top: 1px solid #e4e7e1;
+  padding-top: 14px;
+  display: grid;
+  gap: 12px;
+}
+.hse-admin-shell .admin-checklist-panel section {
+  padding: 14px 0 0;
+  border: 0;
+  border-top: 1px solid #e4e7e1;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+.admin-checklist-detail section:last-of-type .admin-checklist-flag strong {
+  color: #202220;
+}
+.admin-checklist-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.admin-checklist-form-grid .full {
+  grid-column: 1/-1;
+}
+.admin-checklist-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.admin-checklist-template-editor .admin-checklist-builder {
+  gap: 12px;
+  padding-top: 12px;
+}
+.admin-checklist-template-editor .admin-checklist-builder-section {
+  gap: 10px;
+  padding-top: 12px;
+}
+.admin-checklist-question-head,
+.admin-checklist-template-editor .admin-checklist-question {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(150px, 190px) 44px;
+  gap: 10px;
+  min-width: 0;
+}
+.admin-checklist-question-head {
+  padding: 0 12px;
+  color: #525751;
+  font-size: 12px;
+  font-weight: 600;
+}
+.admin-checklist-template-editor .admin-checklist-question {
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid #e4e7e1;
+  border-radius: 6px;
+  background: #fafbf9;
+}
+.admin-checklist-template-editor .admin-checklist-question > div {
+  min-width: 0;
+}
+.admin-checklist-template-editor .admin-checklist-add {
+  justify-self: start;
+  width: 160px;
+}
+@media (min-width: 768px) {
+  .admin-checklist-template-editor .admin-checklist-question label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+}
+.admin-checklist-table-wrap {
+  overflow: hidden;
+}
+.admin-checklist-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  text-align: left;
+}
+.admin-checklist-table th {
+  background: #eef0ed;
+  color: #525751;
+  font-size: 12px;
+}
+.admin-checklist-table th,
+.admin-checklist-table td {
+  padding: 11px;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+.admin-checklist-table td {
+  border-top: 1px solid #e9ebe7;
+}
+.admin-checklist-table tbody tr:nth-child(even) {
+  background: #fafbf9;
+}
+.admin-checklist-link {
+  text-align: left;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: #b9c2b8;
+  text-underline-offset: 3px;
+}
+.admin-checklist-link:focus-visible {
+  outline: 2px solid #2563a6;
+}
+.admin-checklist-cards {
+  display: none;
+}
+.admin-checklist-detail {
+  display: grid;
+  gap: 10px;
+}
+.admin-checklist-detail dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.admin-checklist-detail dt {
+  font-size: 12px;
+  color: #525751;
+}
+.admin-checklist-detail dd {
+  font-weight: 600;
+}
+.admin-checklist-flag {
+  border-top: 1px solid #e9ebe7;
+  padding-top: 10px;
+  display: grid;
+  gap: 4px;
+}
+.admin-checklist-flag strong {
+  color: #b43732;
+}
+.admin-checklist-flag a {
+  color: #2563a6;
+  text-decoration: underline;
+  width: fit-content;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+}
+.admin-checklist-empty {
+  padding: 32px;
+  text-align: center;
+  color: #525751;
+  background: white;
+  border: 1px solid #dfe3dc;
+  border-radius: 8px;
+}
+.admin-checklist-close {
+  display: none;
+}
+.admin-checklist-filter-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+}
+.admin-checklist-filter-backdrop {
+  position: absolute;
+  inset: 0;
+  background: #12141277;
+}
+.admin-checklist-filter-sheet {
+  position: relative;
+  width: 100%;
+  max-height: 90dvh;
+  overflow: auto;
+  background: #f6f7f5;
+  padding: 16px;
+  border-radius: 12px 12px 0 0;
+  display: grid;
+  gap: 16px;
+}
+.admin-checklist-filter-sheet header,
+.admin-checklist-filter-sheet footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.admin-checklist-filter-sheet select,
+.admin-checklist-filter-sheet button {
+  min-height: 48px;
+}
+.admin-checklist-filter-sheet > div {
+  display: grid;
+  gap: 12px;
+}
+@media (max-width: 1099px) {
+  .admin-checklist-table-wrap {
+    display: none;
+  }
+  .admin-checklist-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .admin-checklist-card {
+    display: grid;
+    gap: 8px;
+    min-width: 0;
+    padding: 14px;
+    text-align: left;
+    overflow-wrap: anywhere;
+  }
+  .admin-checklist-card-top {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+}
+@media (max-width: 767px) {
+  .admin-checklists > header {
+    align-items: start;
+  }
+  .admin-checklist-toolbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .admin-checklist-toolbar > .admin-checklist-desktop-filter {
+    display: none;
+  }
+  .admin-checklist-mobile-filters {
+    display: block;
+  }
+  .admin-checklist-toolbar input,
+  .admin-checklist-toolbar button {
+    min-height: 48px;
+  }
+  .admin-checklist-workspace {
+    display: block;
+  }
+  .admin-checklist-workspace
+    > div:last-child:not(.admin-checklist-mobile-open) {
+    display: none;
+  }
+  .admin-checklist-panel {
+    position: fixed;
+    z-index: 60;
+    inset: 0;
+    overflow-y: auto;
+    border-radius: 0;
+    align-content: start;
+    padding: 16px;
+  }
+  .admin-checklist-panel[data-open='false'] {
+    display: none;
+  }
+  .admin-checklist-close {
+    display: inline-flex;
+    width: 48px;
+    padding: 0;
+  }
+  .admin-checklist-close span {
+    display: none;
+  }
+  .admin-checklist-form-grid,
+  .admin-checklist-detail dl {
+    grid-template-columns: 1fr;
+  }
+  .admin-checklist-question-head {
+    display: none;
+  }
+  .admin-checklist-template-editor .admin-checklist-question {
+    grid-template-columns: minmax(0, 1fr) 48px;
+    align-items: end;
+  }
+  .admin-checklist-template-editor .admin-checklist-question > div:first-child {
+    grid-column: 1 / -1;
+  }
+  .admin-checklist-template-editor
+    .admin-checklist-question
+    > div:nth-child(2) {
+    grid-column: 1;
+  }
+  .admin-checklist-template-editor .admin-checklist-question > button {
+    grid-column: 2;
+    width: 48px;
+  }
+  .admin-checklist-cards {
+    grid-template-columns: 1fr;
+  }
+  .admin-checklist-panel input,
+  .admin-checklist-panel select,
+  .admin-checklist-panel textarea,
+  .admin-checklist-panel button {
+    min-height: 48px;
+  }
+}

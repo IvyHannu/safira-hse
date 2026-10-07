@@ -6,6 +6,7 @@ import {
   type ReactNode,
   type TextareaHTMLAttributes,
 } from 'react';
+import { MagnifyingGlass } from '@phosphor-icons/react';
 export { Select } from './select';
 
 interface FieldProps {
@@ -67,6 +68,33 @@ export function Input({
         }
         className={`${controlClass} ${className}`}
       />
+    </Field>
+  );
+}
+
+export function SearchInput(props: Omit<InputProps, 'type'>) {
+  const generatedId = useId();
+  const { label, helperText, error, className = '', id, ...inputProps } = props;
+  const fieldId = id || generatedId;
+  return (
+    <Field id={fieldId} label={label} helperText={helperText} error={error}>
+      <div className="relative">
+        <MagnifyingGlass
+          size={18}
+          aria-hidden="true"
+          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-graphite/70"
+        />
+        <input
+          {...inputProps}
+          id={fieldId}
+          type="search"
+          aria-invalid={!!error}
+          aria-describedby={
+            error || helperText ? `${fieldId}-message` : undefined
+          }
+          className={`${controlClass} min-h-11 border-graphite/25 pl-10 shadow-sm focus:border-signalYellow focus:outline-none focus:ring-0 ${className}`}
+        />
+      </div>
     </Field>
   );
 }

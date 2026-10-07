@@ -1,0 +1,354 @@
+.admin-config {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  color: #202220;
+}
+.admin-config-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.admin-config-header h1 {
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 600;
+}
+.admin-config-header p,
+.admin-config-section-heading p,
+.admin-config-list-heading p,
+.admin-config-hint {
+  font-size: 12px;
+  color: #5b625b;
+  line-height: 1.5;
+}
+.admin-config-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.admin-config-actions button {
+  min-height: 40px;
+}
+.admin-config-message {
+  font-size: 13px;
+  color: #267a53;
+  font-weight: 600;
+}
+.admin-config-warning {
+  border-left: 3px solid #a66a00;
+  padding: 10px 12px;
+  background: #fff5dc;
+  font-size: 13px;
+  color: #65460a;
+}
+.admin-config-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  min-width: 0;
+}
+.admin-config-list,
+.admin-config-editor {
+  min-width: 0;
+}
+.admin-config-list {
+  align-content: start;
+}
+.admin-config-list-heading {
+  padding: 0 0 4px;
+}
+.admin-config-list-heading h2,
+.admin-config-editor-head h2 {
+  font-weight: 600;
+}
+.admin-config-list button {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  min-height: 70px;
+  padding: 12px 14px;
+  text-align: left;
+}
+.admin-config-list button span:first-child {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+.admin-config-list button strong {
+  font-size: 13px;
+}
+.admin-config-list button small {
+  font-size: 11px;
+  color: #5b625b;
+  line-height: 1.4;
+}
+.admin-config-tabs a:focus-visible {
+  outline: 2px solid #2563a6;
+  outline-offset: -2px;
+}
+.admin-config-editor {
+  padding: 18px;
+  display: grid;
+  gap: 16px;
+}
+.admin-config-editor-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.admin-config-eyebrow {
+  font-size: 11px;
+  color: #5b625b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.admin-config-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  border-bottom: 1px solid #e4e7e1;
+}
+.admin-config-tabs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #525751;
+}
+.admin-config-tabs a:first-child {
+  border-bottom: 3px solid #ffd21a;
+  color: #202220;
+}
+.hse-admin-shell .admin-config-section {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 12px 0 0;
+  border: 0;
+  border-top: 1px solid #e4e7e1;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  scroll-margin-top: 16px;
+}
+.admin-config-section-heading h3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.admin-config-type-fields {
+  display: grid;
+  gap: 12px;
+}
+.admin-config-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.admin-config-span {
+  grid-column: 1/-1;
+}
+.admin-config-readonly {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  font-size: 13px;
+}
+.admin-config-readonly span {
+  font-weight: 600;
+}
+.admin-config-readonly strong {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 10px;
+  background: #f6f7f5;
+  border: 1px solid #dfe3dc;
+  border-radius: 8px;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+.admin-config input:not([type='checkbox']),
+.admin-config select {
+  min-height: 42px;
+  border-color: #bbc2b9;
+}
+.admin-config textarea {
+  min-height: 70px;
+  border-color: #bbc2b9;
+}
+.admin-config-toggle,
+.admin-config-required,
+.admin-config-site {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  font-size: 13px;
+}
+.admin-config input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  accent-color: #202220;
+}
+.admin-config-question {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1.6fr) minmax(150px, 1fr) auto auto;
+  gap: 8px;
+  align-items: end;
+  border-top: 1px solid #eef0ed;
+  padding-top: 10px;
+}
+.admin-config-number {
+  align-self: center;
+  font-weight: 600;
+  color: #5b625b;
+}
+.admin-config-question button {
+  min-height: 42px;
+}
+.admin-config-option {
+  grid-column: 2/-1;
+}
+.admin-config-sites {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 14px;
+}
+.admin-config-preview {
+  max-width: 440px;
+  padding: 16px;
+  background: #f6f7f5;
+  border: 1px solid #dfe3dc;
+  border-radius: 8px;
+  display: grid;
+  gap: 12px;
+}
+.admin-config-preview-kicker {
+  font-size: 16px;
+  font-weight: 600;
+}
+.admin-config-preview-choice {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  background: white;
+  border: 1px solid #cfd5cd;
+  border-radius: 8px;
+}
+.admin-config-preview-choice > span {
+  font-size: 20px;
+  line-height: 1;
+  color: #525751;
+}
+.admin-config-preview-choice strong,
+.admin-config-preview-question strong {
+  font-size: 13px;
+}
+.admin-config-preview-choice p {
+  font-size: 12px;
+  color: #525751;
+}
+.admin-config-preview-question {
+  display: grid;
+  gap: 6px;
+  padding-top: 10px;
+  border-top: 1px solid #dfe3dc;
+}
+.admin-config-preview-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.admin-config-preview-options span,
+.admin-config-preview-select {
+  padding: 8px 10px;
+  background: white;
+  border: 1px solid #cfd5cd;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #525751;
+}
+@media (max-width: 1099px) {
+  .admin-config-header {
+    align-items: start;
+  }
+  .admin-config-question {
+    grid-template-columns: 24px minmax(0, 1fr) minmax(140px, 1fr);
+  }
+  .admin-config-question .admin-config-required {
+    grid-column: 2;
+  }
+  .admin-config-option {
+    grid-column: 2/-1;
+  }
+}
+@media (max-width: 767px) {
+  .admin-config-header {
+    display: grid;
+  }
+  .admin-config-header .admin-config-actions {
+    justify-content: flex-start;
+  }
+  .admin-config-header button {
+    min-height: 48px;
+  }
+  .admin-config-layout {
+    grid-template-columns: 1fr;
+  }
+  .admin-config-list {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .admin-config-list-heading {
+    grid-column: 1/-1;
+  }
+  .admin-config-list button {
+    min-height: 60px;
+  }
+  .admin-config-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .admin-config-tabs a {
+    justify-content: center;
+    padding: 8px 4px;
+    font-size: 11px;
+  }
+  .admin-config-editor {
+    padding: 14px;
+  }
+  .admin-config-form-grid,
+  .admin-config-sites {
+    grid-template-columns: 1fr;
+  }
+  .admin-config-question {
+    grid-template-columns: 24px minmax(0, 1fr) auto;
+  }
+  .admin-config-question > div:nth-of-type(2) {
+    grid-column: 2/-1;
+  }
+  .admin-config-question .admin-config-required {
+    grid-column: 2;
+  }
+  .admin-config-option {
+    grid-column: 2/-1;
+  }
+  .admin-config input:not([type='checkbox']),
+  .admin-config select,
+  .admin-config button {
+    min-height: 48px;
+  }
+}

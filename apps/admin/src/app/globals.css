@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:is(.hse-admin-shell, .organisation-shell) :is(button, a):focus-visible {
+  outline: 2px solid #ffd21a;
+  outline-offset: 2px;
+}
+
 /* One focus treatment for Admin form controls, including search fields. */
 :is(input:not([type='checkbox']):not([type='radio']), select, textarea):focus {
   border-color: #ffd21a !important;
@@ -21,4 +26,110 @@ select option:checked {
 
 select option:hover {
   background-color: #f6f7f5;
+}
+
+/* Shared Admin card and selectable-row treatment. */
+.safira-card-surface {
+  min-width: 0;
+  background: #fff;
+  border: 1px solid #dfe3dc;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px #1214120b;
+}
+
+.safira-card-list {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-width: 0;
+}
+
+.safira-card-action {
+  color: #202220;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+.safira-card-action:hover {
+  border-color: #aeb6ac;
+  background: #fafbf9;
+  box-shadow: 0 3px 8px #12141212;
+}
+
+.safira-card-action:active {
+  background: #f0f2ee;
+  transform: translateY(1px);
+}
+
+.safira-card-action:focus-visible {
+  outline: 2px solid #ffd21a;
+  outline-offset: 2px;
+}
+
+.safira-card-action[aria-current='true'] {
+  border-color: #d8a617;
+  background: #fffaf0;
+  box-shadow:
+    inset 3px 0 #ffd21a,
+    0 1px 3px #1214120b;
+}
+
+.safira-clickable-card {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  min-height: 64px;
+  padding: 12px;
+  text-align: left;
+}
+
+.safira-clickable-card[aria-pressed='true'] {
+  border-color: #d8a617;
+  background: #fff;
+  box-shadow:
+    inset 3px 0 #ffd21a,
+    0 1px 3px #1214120b;
+}
+
+/* One compact form size for Admin builder controls. */
+.safira-builder-control {
+  height: 44px !important;
+  min-height: 44px !important;
+  padding-inline: 12px !important;
+  border: 1px solid #bbc2b9 !important;
+  border-radius: 6px !important;
+  background: #fff;
+}
+
+.safira-builder-control:focus,
+.safira-builder-control:focus-visible {
+  border-color: #ffd21a !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 767px) {
+  .safira-builder-control {
+    height: 48px !important;
+    min-height: 48px !important;
+  }
+}
+
+/* Shared compact form size for dense desktop toolbars. */
+@media (min-width: 768px) {
+  .safira-control-compact {
+    height: 40px !important;
+    min-height: 40px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .safira-card-action {
+    transition: none;
+  }
 }

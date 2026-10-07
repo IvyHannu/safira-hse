@@ -1,7 +1,8 @@
 'use client';
 
-import type { ButtonHTMLAttributes } from 'react';
+import { useState, type ButtonHTMLAttributes } from 'react';
 import { SignOut } from '@phosphor-icons/react';
+import { colors } from '@safira/design-tokens';
 
 interface SignOutButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   surface?: 'light' | 'dark';
@@ -14,27 +15,45 @@ export function SignOutButton({
   disabled,
   className = '',
   type = 'button',
+  onFocus,
+  onBlur,
+  style,
   ...props
 }: SignOutButtonProps) {
+  const [focused, setFocused] = useState(false);
+
   return (
     <button
       {...props}
       type={type}
+      data-surface={surface}
       disabled={disabled || busy}
       aria-busy={busy}
-      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-md border px-4 py-1.5 text-sm font-semibold shadow-sm transition-[background-color,border-color,color,transform] hover:border-signalYellow active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signalYellow disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none ${
-        surface === 'dark'
-          ? 'border-coolConcrete/40 bg-transparent text-white hover:bg-graphite active:bg-graphite/80'
-          : 'border-deepCharcoal bg-deepCharcoal text-white hover:bg-graphite active:bg-deepCharcoal'
-      } ${className}`}
+      onFocus={(event) => {
+        setFocused(true);
+        onFocus?.(event);
+      }}
+      onBlur={(event) => {
+        setFocused(false);
+        onBlur?.(event);
+      }}
+      style={{
+        ...style,
+        backgroundColor: colors.deepCharcoal,
+        borderColor: focused ? colors.signalYellow : colors.deepCharcoal,
+        color: colors.white,
+        opacity: 1,
+        outline: 'none',
+      }}
+      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-md border px-4 py-1.5 text-sm font-semibold shadow-sm transition-transform active:scale-[0.98] disabled:cursor-not-allowed motion-reduce:transition-none ${className}`}
     >
       <SignOut
         size={18}
         weight="bold"
         aria-hidden="true"
-        className={surface === 'light' ? 'text-signalYellow' : undefined}
+        style={{ color: colors.signalYellow, opacity: 1 }}
       />
-      <span>{busy ? 'Signing out…' : 'Sign out'}</span>
+      <span style={{ color: colors.white, opacity: 1 }}>Sign out</span>
     </button>
   );
 }

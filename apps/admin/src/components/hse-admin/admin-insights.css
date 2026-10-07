@@ -1,0 +1,287 @@
+.admin-insights {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.admin-insights > * {
+  min-width: 0;
+}
+.admin-insights > header {
+  padding-bottom: 0;
+}
+.admin-insights-filters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  max-width: 780px;
+}
+.admin-insights-filters select {
+  min-height: 42px;
+  border-color: #20222030;
+  box-shadow: 0 1px 2px #1214120a;
+}
+.admin-insights-context,
+.admin-insights-note {
+  color: #5c625e;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.admin-insights-context {
+  margin-top: -7px;
+}
+.admin-insights-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.admin-insights-metrics > div {
+  display: grid;
+  align-content: start;
+  min-width: 0;
+  padding: 14px 16px;
+  background: white;
+  border: 1px solid #20222018;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px #12141208;
+}
+.admin-insights-metrics span {
+  font-size: 12px;
+  font-weight: 600;
+  color: #555c57;
+}
+.admin-insights-metrics strong {
+  margin-top: 3px;
+  font-size: 25px;
+  line-height: 1.15;
+}
+.admin-insights-metrics small {
+  margin-top: 4px;
+  color: #606761;
+  font-size: 11px;
+}
+.admin-insights-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  min-width: 0;
+}
+.admin-insights-grid-wide {
+  grid-template-columns: minmax(0, 1.7fr) minmax(250px, 0.8fr);
+}
+.admin-insights-panel {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  min-width: 0;
+  background: white;
+  border: 1px solid #20222018;
+}
+.admin-insights-heading h2 {
+  font-size: 15px;
+  font-weight: 700;
+}
+.admin-insights-heading p {
+  margin-top: 3px;
+  font-size: 12px;
+  color: #606761;
+}
+.admin-insights-breakdown {
+  display: grid;
+  gap: 11px;
+}
+.admin-insights-bar-row {
+  display: grid;
+  grid-template-columns: minmax(105px, 1.1fr) minmax(50px, 2fr) 28px;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  font-size: 12px;
+}
+.admin-insights-bar-label {
+  text-transform: capitalize;
+}
+.admin-insights-bar-row strong {
+  text-align: right;
+}
+.admin-insights-track {
+  height: 9px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #eceeed;
+}
+.admin-insights-fill {
+  display: block;
+  height: 100%;
+  min-width: 0;
+  border-radius: inherit;
+  background: #2563a6;
+}
+.admin-insights-status-submitted,
+.admin-insights-severity-moderate {
+  background: #2563a6;
+}
+.admin-insights-status-under_review,
+.admin-insights-severity-high {
+  background: #a66a00;
+}
+.admin-insights-status-action_required,
+.admin-insights-severity-critical {
+  background: #b43732;
+}
+.admin-insights-status-resolved,
+.admin-insights-severity-low {
+  background: #267a53;
+}
+.admin-insights-status-closed {
+  background: #737b77;
+}
+.admin-insights-table-wrap {
+  min-width: 0;
+}
+.admin-insights-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.admin-insights-table :is(th, td) {
+  padding: 9px 8px;
+  text-align: left;
+  border-bottom: 1px solid #20222016;
+}
+.admin-insights-table thead th {
+  background: #f6f7f5;
+  color: #555c57;
+  font-weight: 600;
+}
+.admin-insights-table tbody th {
+  font-weight: 600;
+}
+.admin-insights-table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+.admin-insights-table tbody tr:hover {
+  background: #f6f7f5;
+}
+.admin-insights-facts {
+  display: grid;
+  gap: 0;
+}
+.admin-insights-facts > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #20222016;
+  font-size: 13px;
+}
+.admin-insights-facts dt {
+  color: #555c57;
+}
+.admin-insights-facts dd {
+  font-weight: 700;
+  white-space: nowrap;
+}
+.admin-insights-empty {
+  font-size: 13px;
+  color: #555c57;
+}
+@media (max-width: 1090px) {
+  .admin-insights-grid-wide {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 767px) {
+  .admin-insights {
+    gap: 14px;
+  }
+  .admin-insights-filters {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+  .admin-insights-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .admin-insights-metrics > div {
+    padding: 12px;
+  }
+  .admin-insights-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+  .admin-insights-table thead {
+    display: none;
+  }
+  .admin-insights-table,
+  .admin-insights-table tbody,
+  .admin-insights-table tr {
+    display: block;
+    width: 100%;
+  }
+  .admin-insights-table tbody tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 8px;
+    padding: 10px 0;
+    border-bottom: 1px solid #20222016;
+  }
+  .admin-insights-table tbody tr:last-child {
+    border-bottom: 0;
+  }
+  .admin-insights-table tbody :is(th, td) {
+    display: block;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    overflow-wrap: anywhere;
+  }
+  .admin-insights-table tbody th {
+    grid-column: 1 / -1;
+    font-size: 13px;
+  }
+  .admin-insights-table tbody td::before {
+    display: block;
+    font-size: 10px;
+    color: #606761;
+  }
+  .admin-insights-grid-wide
+    .admin-insights-table
+    tbody
+    td:nth-child(2)::before {
+    content: 'Reports';
+  }
+  .admin-insights-grid-wide
+    .admin-insights-table
+    tbody
+    td:nth-child(3)::before {
+    content: 'High / critical';
+  }
+  .admin-insights-grid-wide
+    .admin-insights-table
+    tbody
+    td:nth-child(4)::before {
+    content: 'Action';
+  }
+  .admin-insights-grid-wide
+    .admin-insights-table
+    tbody
+    td:nth-child(5)::before {
+    content: 'Checklists';
+  }
+  .admin-insights-grid-wide
+    .admin-insights-table
+    tbody
+    td:nth-child(6)::before {
+    content: 'Flagged';
+  }
+  .admin-insights-trends .admin-insights-table tbody td:nth-child(2)::before {
+    content: 'Reports';
+  }
+  .admin-insights-trends .admin-insights-table tbody td:nth-child(3)::before {
+    content: 'Require action now';
+  }
+  .admin-insights-trends .admin-insights-table tbody td:nth-child(4)::before {
+    content: 'Resolved / closed now';
+  }
+}

@@ -53,6 +53,17 @@ export const controls = {
   fontWeight: 600,
 } as const;
 
+export const metadata = {
+  height: 20,
+  gap: 6,
+  dotSize: 6,
+  fontSize: 12,
+  typeFontSize: 11,
+  lineHeight: 20,
+  paddingX: 0,
+  radius: 0,
+} as const;
+
 export const tokens = {
   colors,
   spacing,
@@ -61,4 +72,5 @@ export const tokens = {
   layout,
   typeScale,
   controls,
+  metadata,
 } as const;

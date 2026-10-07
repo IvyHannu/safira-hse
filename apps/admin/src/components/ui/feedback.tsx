@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 export type Tone = 'success' | 'warning' | 'critical' | 'information';
 
@@ -9,119 +9,21 @@ const tones: Record<Tone, string> = {
   information: 'border-information text-information',
 };
 
-const severityFills: Record<'low' | 'moderate' | 'high' | 'critical', string> =
-  {
-    low: 'bg-success/10 text-success border-success/30',
-    moderate: 'bg-information/10 text-information border-information/30',
-    high: 'bg-warning/10 text-warning border-warning/30',
-    critical: 'bg-critical/10 text-critical border-critical/30',
-  };
-
-const statusFills: Record<
-  'submitted' | 'under_review' | 'action_required' | 'resolved' | 'closed',
-  string
-> = {
-  submitted: 'bg-information/10 text-information border-information/30',
-  under_review: 'bg-warning/10 text-warning border-warning/30',
-  action_required: 'bg-critical/10 text-critical border-critical/30',
-  resolved: 'bg-success/10 text-success border-success/30',
-  closed: 'bg-graphite/10 text-graphite border-graphite/30',
-};
-
-const typeOutlines: Record<
-  'hazard' | 'near_miss' | 'incident' | 'environmental_concern',
-  string
-> = {
-  hazard: 'border-warning text-warning',
-  near_miss: 'border-information text-information',
-  incident: 'border-critical text-critical',
-  environmental_concern: 'border-success text-success',
-};
-
-export function StatusBadge({ label, tone }: { label: string; tone: Tone }) {
-  return (
-    <span
-      className={`inline-flex rounded-sm border bg-white px-1 text-xs font-semibold ${tones[tone]}`}
-    >
-      {label}
-    </span>
-  );
-}
-
-export function Pill({
-  label,
-  fill,
-  className = '',
-}: {
-  label: string;
-  fill: string;
-  className?: string;
-}) {
-  return (
-    <span
-      className={`inline-flex items-center h-5 rounded-full px-2 text-[11px] font-semibold leading-5 ${fill} ${className}`}
-    >
-      {label}
-    </span>
-  );
-}
-
-export function TypePill({
-  label,
-  className = '',
-}: {
-  label: 'hazard' | 'near_miss' | 'incident' | 'environmental_concern';
-  className?: string;
-}) {
-  const displayLabel = label.replace('_', ' ');
-  return (
-    <Pill
-      label={displayLabel}
-      fill={typeOutlines[label]}
-      className={className}
-    />
-  );
-}
-
-export function SeverityPill({
-  label,
-  className = '',
-}: {
-  label: 'low' | 'moderate' | 'high' | 'critical';
-  className?: string;
-}) {
-  return (
-    <Pill label={label} fill={severityFills[label]} className={className} />
-  );
-}
-
-export function StatusPill({
-  label,
-  className = '',
-}: {
-  label:
-    'submitted' | 'under_review' | 'action_required' | 'resolved' | 'closed';
-  className?: string;
-}) {
-  const displayLabel = label.replace('_', ' ');
-  return (
-    <Pill
-      label={displayLabel}
-      fill={statusFills[label]}
-      className={className}
-    />
-  );
-}
-
 export function Card({
   title,
   children,
+  raised = false,
+  className = '',
 }: {
   title?: string;
   children: ReactNode;
+  raised?: boolean;
+  className?: string;
 }) {
   return (
-    <section className="grid content-start gap-2.5 rounded-lg border border-graphite/20 bg-white p-2.5">
+    <section
+      className={`safira-card-surface grid content-start gap-3 p-4 ${raised ? 'md:p-5' : ''} ${className}`}
+    >
       {title && (
         <h2 className="text-[13px] font-semibold leading-5 text-deepCharcoal">
           {title}
@@ -129,6 +31,24 @@ export function Card({
       )}
       {children}
     </section>
+  );
+}
+
+export function ClickableCard({
+  selected = false,
+  className = '',
+  children,
+  ...props
+}: ButtonHTMLAttributes<HTMLButtonElement> & { selected?: boolean }) {
+  return (
+    <button
+      {...props}
+      type={props.type ?? 'button'}
+      aria-pressed={selected}
+      className={`safira-card-surface safira-card-action safira-clickable-card ${className}`}
+    >
+      {children}
+    </button>
   );
 }
 
@@ -156,13 +76,17 @@ export function InfoCard({
   title,
   children,
   icon,
+  variant = 'information',
 }: {
   title: string;
   children: ReactNode;
   icon?: ReactNode;
+  variant?: 'information' | 'reference';
 }) {
   return (
-    <div className="rounded-md border border-information/25 bg-information/5 p-3 text-graphite">
+    <div
+      className={`rounded-md border p-3 text-graphite ${variant === 'reference' ? 'border-graphite/20 border-l-2 border-l-information bg-white shadow-sm' : 'border-information/25 bg-information/5'}`}
+    >
       <p className="flex items-center gap-2 text-xs font-semibold text-deepCharcoal">
         {icon && (
           <span className="shrink-0 text-information" aria-hidden="true">

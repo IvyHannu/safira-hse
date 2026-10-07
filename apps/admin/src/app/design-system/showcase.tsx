@@ -16,11 +16,11 @@ import {
   Radio,
   Select,
   SidebarShell,
-  StatusBadge,
   TableFoundation,
   Textarea,
   TopbarShell,
 } from '@/components/ui';
+import { MetadataLabel } from '@/components/ui/report-metadata';
 
 interface ExampleRow {
   label: string;
@@ -159,10 +159,18 @@ export function DesignSystemShowcase() {
               Status and feedback
             </h2>
             <div className="flex flex-wrap gap-2">
-              <StatusBadge tone="success" label="Complete" />
-              <StatusBadge tone="warning" label="Needs attention" />
-              <StatusBadge tone="critical" label="Critical" />
-              <StatusBadge tone="information" label="In progress" />
+              <MetadataLabel kind="status" tone="success" label="Complete" />
+              <MetadataLabel
+                kind="status"
+                tone="warning"
+                label="Needs attention"
+              />
+              <MetadataLabel kind="severity" tone="critical" label="Critical" />
+              <MetadataLabel
+                kind="status"
+                tone="information"
+                label="In progress"
+              />
             </div>
             <div className="grid items-start gap-4 md:grid-cols-2">
               <Alert tone="success" title="Success">

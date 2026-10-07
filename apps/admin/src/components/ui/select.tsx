@@ -270,9 +270,9 @@ export function Select({
               aria-selected={option.value === selectedValue}
               disabled={option.disabled}
               onClick={() => choose(option)}
-              className={`flex min-h-12 w-full items-center justify-between gap-3 rounded-md px-3 py-2 text-left text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signalYellow disabled:cursor-not-allowed disabled:opacity-45 ${
+              className={`flex min-h-10 w-full items-center justify-between gap-3 rounded-md border-l-2 border-transparent px-3 py-1.5 text-left text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signalYellow disabled:cursor-not-allowed disabled:opacity-45 ${
                 option.value === selectedValue
-                  ? 'bg-signalYellow font-semibold text-deepCharcoal active:bg-signalYellow/90'
+                  ? 'border-signalYellow bg-signalYellow/10 font-semibold text-deepCharcoal active:bg-signalYellow/15'
                   : 'text-deepCharcoal hover:bg-coolSurface focus:bg-coolSurface active:bg-coolConcrete'
               }`}
             >
