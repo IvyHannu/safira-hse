@@ -2,16 +2,10 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { colors, radius, spacing, typography } from '@safira/design-tokens';
 import type { ReportStatus } from '@safira/types';
-import {
-  FlatList,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
 import {
   EmptyState,
+  FilterTabs,
   PressableCard,
   SectionHeader,
   StatusBadge,
@@ -93,8 +87,6 @@ export default function MyReportsScreen() {
   const router = useRouter();
   const { state } = useReporting();
   const [filter, setFilter] = useState<FilterKey>('all');
-  const [hoveredFilter, setHoveredFilter] = useState<FilterKey | null>(null);
-  const [focusedFilter, setFocusedFilter] = useState<FilterKey | null>(null);
 
   const filtered = state.demoReports.filter((r) => {
     if (filter === 'active') return ACTIVE_STATUSES.includes(r.status);
@@ -116,42 +108,12 @@ export default function MyReportsScreen() {
         description="Reports you have submitted at this site."
       />
 
-      {/* Filter tabs */}
-      <View
-        style={styles.tabs}
-        accessibilityRole="tablist"
+      <FilterTabs
+        items={FILTERS}
+        selectedKey={filter}
+        onSelect={(key: FilterKey) => setFilter(key)}
         accessibilityLabel="Filter reports"
-      >
-        {FILTERS.map((f) => (
-          <Pressable
-            key={f.key}
-            accessibilityRole="tab"
-            accessibilityLabel={f.label}
-            accessibilityState={{ selected: filter === f.key }}
-            onPress={() => setFilter(f.key)}
-            onHoverIn={() => setHoveredFilter(f.key)}
-            onHoverOut={() => setHoveredFilter(null)}
-            onFocus={() => setFocusedFilter(f.key)}
-            onBlur={() => setFocusedFilter(null)}
-            style={({ pressed }) => [
-              styles.tab,
-              hoveredFilter === f.key && filter !== f.key && styles.tabHover,
-              filter === f.key && styles.tabActive,
-              pressed && styles.tabPressed,
-              focusedFilter === f.key && styles.tabFocused,
-            ]}
-          >
-            <Text
-              style={[
-                styles.tabLabel,
-                filter === f.key && styles.tabLabelActive,
-              ]}
-            >
-              {f.label}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
+      />
 
       {sorted.length === 0 ? (
         <EmptyState
@@ -184,37 +146,7 @@ export default function MyReportsScreen() {
 
 const styles = StyleSheet.create({
   content: { gap: spacing[3] },
-  tabs: {
-    flexDirection: 'row',
-    borderWidth: 1,
-    borderColor: colors.coolConcrete,
-    borderRadius: radius.md,
-    overflow: 'hidden',
-    backgroundColor: colors.coolSurface,
-  },
-  tab: {
-    flex: 1,
-    minHeight: 48,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: radius.sm,
-  },
-  tabActive: {
-    backgroundColor: colors.white,
-    borderWidth: 1,
-    borderColor: colors.graphite,
-  },
-  tabHover: { backgroundColor: colors.coolConcrete },
-  tabPressed: { backgroundColor: colors.coolConcrete },
-  tabFocused: { borderWidth: 2, borderColor: colors.deepCharcoal },
-  tabLabel: {
-    fontFamily: typography.fontFamily,
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.graphite,
-  },
-  tabLabelActive: { color: colors.deepCharcoal, fontWeight: '700' },
-  list: { gap: spacing[2] },
+  list: { gap: spacing[2], paddingTop: spacing[1] },
   cardRow: {
     flexDirection: 'row',
     gap: spacing[2],

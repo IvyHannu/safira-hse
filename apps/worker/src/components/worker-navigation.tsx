@@ -47,7 +47,7 @@ export function WorkerNavigation() {
     },
     {
       key: 'report',
-      label: 'Report',
+      label: 'New report',
       icon: (
         <View style={styles.reportIcon}>
           <Plus size={24} weight="bold" color={colors.deepCharcoal} />

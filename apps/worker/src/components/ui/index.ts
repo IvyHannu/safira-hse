@@ -1,5 +1,6 @@
 export * from './actions';
 export * from './feedback';
+export * from './filter-tabs';
 export * from './form-controls';
 export * from './home-cards';
 export * from './illustration-slot';
