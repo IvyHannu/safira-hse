@@ -1,0 +1,82 @@
+/* Shared Admin tab and selected-surface treatment across all workspaces. */
+:is(.hse-admin-shell, .organisation-shell) [role='tablist'] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+:is(.hse-admin-shell, .organisation-shell) [role='tablist'] > [role='tab'] {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid #bbc2b9;
+  border-radius: 6px;
+  background: #fff;
+  color: #555c57;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 18px;
+  text-decoration: none;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+:is(.hse-admin-shell, .organisation-shell)
+  [role='tablist']
+  > [role='tab']:hover {
+  border-color: #899188;
+  background: #f6f7f5;
+  color: #202220;
+}
+
+:is(.hse-admin-shell, .organisation-shell)
+  [role='tablist']
+  > [role='tab']:active {
+  background: #eceeed;
+}
+
+:is(.hse-admin-shell, .organisation-shell)
+  [role='tablist']
+  > [role='tab'][aria-selected='true'] {
+  border-color: #ffd21a;
+  background: #fff;
+  color: #121412;
+}
+
+:is(.hse-admin-shell, .organisation-shell)
+  [role='tablist']
+  > [role='tab']:focus-visible {
+  border-color: #ffd21a;
+  outline: 2px solid #ffd21a;
+  outline-offset: 2px;
+}
+
+:is(.hse-admin-shell, .organisation-shell)
+  :is(
+    .safira-card-action[aria-current='true'],
+    .safira-clickable-card[aria-pressed='true']
+  ) {
+  border-color: #ffd21a;
+  background: #fff;
+  box-shadow: 0 1px 3px #1214120b;
+}
+
+@media (max-width: 767px) {
+  :is(.hse-admin-shell, .organisation-shell) [role='tablist'] > [role='tab'] {
+    min-height: 48px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(.hse-admin-shell, .organisation-shell) [role='tablist'] > [role='tab'] {
+    transition: none;
+  }
+}

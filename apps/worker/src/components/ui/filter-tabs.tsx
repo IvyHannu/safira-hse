@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   tabs: { flexDirection: 'row', gap: spacing[2] },
   tab: {
     flex: 1,
-    minHeight: 44,
+    minHeight: 48,
     paddingHorizontal: spacing[2],
     paddingVertical: spacing[1],
     alignItems: 'center',

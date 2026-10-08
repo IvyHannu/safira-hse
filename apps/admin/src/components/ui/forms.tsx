@@ -42,7 +42,7 @@ function Field({
 }
 
 const controlClass =
-  'h-9 w-full rounded-md border border-graphite bg-white px-2.5 text-sm text-deepCharcoal placeholder:text-graphite/70 disabled:cursor-not-allowed disabled:bg-coolSurface disabled:opacity-60 aria-invalid:border-critical';
+  'h-11 min-h-11 w-full rounded-md border border-graphite bg-white px-3 text-sm text-deepCharcoal placeholder:text-graphite/70 hover:border-deepCharcoal focus:border-signalYellow focus:outline-none disabled:cursor-not-allowed disabled:border-coolConcrete disabled:bg-coolSurface disabled:text-graphite/70 disabled:opacity-100 aria-invalid:border-critical';
 
 type InputProps = FieldProps &
   Omit<InputHTMLAttributes<HTMLInputElement>, 'children'>;
