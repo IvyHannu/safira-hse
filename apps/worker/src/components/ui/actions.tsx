@@ -36,7 +36,11 @@ export function Button({
   const inactive = disabled || loading;
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
-  const foreground = variant === 'destructive' ? colors.white : colors.graphite;
+  const foreground = inactive
+    ? colors.graphite
+    : variant === 'destructive'
+      ? colors.white
+      : colors.graphite;
   return (
     <Pressable
       {...props}
@@ -197,16 +201,17 @@ const styles = StyleSheet.create({
     borderColor: colors.graphite,
   },
   focused: {
-    borderWidth: 2,
-    borderColor: colors.deepCharcoal,
-    shadowColor: colors.deepCharcoal,
-    shadowOpacity: 0.16,
-    shadowRadius: 4,
+    borderWidth: 1,
+    borderColor: colors.signalYellow,
+    outlineWidth: 1,
+    outlineStyle: 'solid',
+    outlineColor: colors.signalYellow,
+    outlineOffset: 2,
   },
   disabled: {
-    opacity: 0.72,
+    opacity: 1,
     backgroundColor: colors.coolConcrete,
-    borderColor: colors.coolConcrete,
+    borderColor: colors.graphite,
   },
   header: {
     minHeight: 48,

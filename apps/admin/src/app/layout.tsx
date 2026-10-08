@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { DemoAuthProvider } from '@/lib/demo-auth';
 import './globals.css';
 import './visual-system-pass2.css';
+import './interaction-pass3.css';
 
 export const metadata: Metadata = {
   title: 'Safira Admin',

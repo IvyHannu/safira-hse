@@ -1,0 +1,10 @@
+/* Keep shared account actions usable by touch in every Admin workspace. */
+@media (max-width: 767px) {
+  :is(.officer-ui, .hse-admin-shell, .organisation-shell) button[class~='h-9'] {
+    min-height: 48px;
+  }
+
+  .safira-sidebar-account-popover :is(a, button) {
+    min-height: 48px;
+  }
+}

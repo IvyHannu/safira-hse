@@ -29,7 +29,7 @@ const variants: Record<ButtonVariant, string> = {
 };
 
 const buttonBase =
-  'inline-flex h-11 min-h-11 items-center justify-center gap-1 whitespace-nowrap rounded-md border px-4 text-sm font-semibold leading-5 transition-[background-color,border-color,color,box-shadow] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signalYellow disabled:pointer-events-none disabled:cursor-not-allowed disabled:border-graphite/30 disabled:bg-coolSurface disabled:text-graphite/70 disabled:opacity-100';
+  'inline-flex h-11 min-h-11 max-md:h-12 max-md:min-h-12 items-center justify-center gap-1 whitespace-nowrap rounded-md border px-4 text-sm font-semibold leading-5 transition-[background-color,border-color,color,box-shadow] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signalYellow disabled:pointer-events-none disabled:cursor-not-allowed disabled:border-graphite/30 disabled:bg-coolSurface disabled:text-graphite/70 disabled:opacity-100';
 
 function ButtonIcon({ icon }: { icon: ReactNode }) {
   const strongIcon = isValidElement(icon)
@@ -102,7 +102,7 @@ export function IconButton({
       {...props}
       type={type}
       aria-label={label}
-      className={`${buttonBase} size-11 shrink-0 px-0 ${variants[variant]} ${className}`}
+      className={`${buttonBase} size-11 max-md:size-12 shrink-0 px-0 ${variants[variant]} ${className}`}
     >
       <ButtonIcon icon={icon} />
     </button>

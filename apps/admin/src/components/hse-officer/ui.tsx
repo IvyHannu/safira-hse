@@ -213,9 +213,14 @@ export function useOfficerLayer(open: boolean, onClose: () => void) {
         }
       }
     }
+    function handleResize() {
+      if (window.matchMedia('(min-width: 768px)').matches) onClose();
+    }
     document.addEventListener('keydown', handleKey);
+    window.addEventListener('resize', handleResize);
     return () => {
       document.removeEventListener('keydown', handleKey);
+      window.removeEventListener('resize', handleResize);
       previous?.focus();
     };
   }, [open, onClose]);

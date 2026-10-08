@@ -400,7 +400,7 @@ const styles = StyleSheet.create({
     borderColor: colors.critical,
     backgroundColor: `${colors.critical}08`,
   },
-  disabled: { opacity: 0.5, backgroundColor: colors.coolSurface },
+  disabled: { opacity: 1, backgroundColor: colors.coolSurface },
   input: {
     minHeight: 46,
     paddingHorizontal: spacing[2],
