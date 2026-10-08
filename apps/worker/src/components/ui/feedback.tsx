@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { colors, radius, spacing, typography } from '@safira/design-tokens';
+import type { IllustrationKey } from '@safira/design-tokens';
 import Info from 'phosphor-react-native/src/icons/Info';
 import Check from 'phosphor-react-native/src/icons/Check';
 import CheckCircle from 'phosphor-react-native/src/icons/CheckCircle';
@@ -12,6 +13,7 @@ import {
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
+import { IllustrationSlot } from './illustration-slot';
 
 export type Tone = 'success' | 'warning' | 'critical' | 'information';
 
@@ -237,11 +239,18 @@ interface EmptyStateProps {
   title: string;
   description: string;
   action?: ReactNode;
+  illustrationKey?: IllustrationKey;
 }
 
-export function EmptyState({ title, description, action }: EmptyStateProps) {
+export function EmptyState({
+  title,
+  description,
+  action,
+  illustrationKey = 'empty',
+}: EmptyStateProps) {
   return (
     <View style={styles.emptyState}>
+      <IllustrationSlot illustrationKey={illustrationKey} decorative compact />
       <Text style={styles.emptyTitle}>{title}</Text>
       <Text style={styles.description}>{description}</Text>
       {action}

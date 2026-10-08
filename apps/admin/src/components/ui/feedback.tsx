@@ -1,4 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import type { IllustrationKey } from '@safira/design-tokens';
+import { IllustrationSlot } from './illustration-slot';
 
 export type Tone = 'success' | 'warning' | 'critical' | 'information';
 
@@ -104,13 +106,16 @@ export function EmptyState({
   title,
   description,
   action,
+  illustrationKey = 'empty',
 }: {
   title: string;
   description: string;
   action?: ReactNode;
+  illustrationKey?: IllustrationKey;
 }) {
   return (
     <div className="grid gap-4 rounded-lg border border-graphite/20 bg-coolSurface p-4 text-center md:text-left">
+      <IllustrationSlot illustrationKey={illustrationKey} decorative />
       <div className="grid gap-1">
         <h2 className="text-[15px] font-semibold leading-6 text-deepCharcoal">
           {title}

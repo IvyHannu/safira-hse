@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
   },
   headerBackHover: { backgroundColor: colors.coolSurface },
   headerBackPressed: { backgroundColor: colors.coolConcrete },
-  headerBackFocused: { borderWidth: 2, borderColor: colors.deepCharcoal },
+  headerBackFocused: { borderWidth: 1, borderColor: colors.signalYellow },
   headerContext: {
     color: colors.graphite,
     fontFamily: typography.fontFamily,

@@ -65,7 +65,7 @@
   text-align: left;
 }
 .admin-site-tabs button:focus-visible {
-  outline: 2px solid #2563a6;
+  outline: 2px solid #ffd21a;
   outline-offset: -2px;
 }
 .admin-site-list-icon {

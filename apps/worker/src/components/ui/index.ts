@@ -2,6 +2,7 @@ export * from './actions';
 export * from './feedback';
 export * from './form-controls';
 export * from './home-cards';
+export * from './illustration-slot';
 export * from './profile-avatar';
 export * from './profile-photo-editor';
 export * from './selection-sheet';

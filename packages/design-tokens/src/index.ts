@@ -74,3 +74,5 @@ export const tokens = {
   controls,
   metadata,
 } as const;
+
+export { illustrationSlots, type IllustrationKey } from './illustrations';
