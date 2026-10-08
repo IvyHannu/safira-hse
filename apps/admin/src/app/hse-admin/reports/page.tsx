@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { Funnel, X } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
+import { IllustrationSlot } from '@/components/ui/illustration-slot';
 import { SearchInput, Select } from '@/components/ui/forms';
 import {
   ReportSeverityLabel,
@@ -279,6 +280,7 @@ export default function ReportsPage() {
           </>
         ) : (
           <div className="admin-report-empty">
+            <IllustrationSlot illustrationKey="empty" decorative />
             <h2>No matching reports</h2>
             <p>Try another search or clear your filters.</p>
             <Button variant="secondary" onClick={clear}>

@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { Funnel, Plus, Trash, X } from '@phosphor-icons/react';
 import { Button, IconButton } from '@/components/ui/button';
 import { ClickableCard } from '@/components/ui/feedback';
+import { IllustrationSlot } from '@/components/ui/illustration-slot';
 import { Input, SearchInput, Select, Textarea } from '@/components/ui/forms';
 import { MetadataLabel } from '@/components/ui/report-metadata';
 import {
@@ -716,7 +717,10 @@ export function ChecklistManagement() {
                 </ClickableCard>
               ))
             ) : (
-              <p className="admin-checklist-empty">No matching templates.</p>
+              <div className="admin-checklist-empty grid gap-3 text-center">
+                <IllustrationSlot illustrationKey="empty" decorative />
+                <p>No matching templates.</p>
+              </div>
             )}
           </div>
           {activeTemplate && (
@@ -820,7 +824,10 @@ export function ChecklistManagement() {
               </div>
             </>
           ) : (
-            <p className="admin-checklist-empty">No matching submissions.</p>
+            <div className="admin-checklist-empty grid gap-3 text-center">
+              <IllustrationSlot illustrationKey="empty" decorative />
+              <p>No matching submissions.</p>
+            </div>
           )}
           {activeSubmission && (
             <div className="admin-checklist-workspace">

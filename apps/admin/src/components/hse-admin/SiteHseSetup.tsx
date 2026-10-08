@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { MapPin, X } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
+import { IllustrationSlot } from '@/components/ui/illustration-slot';
 import { Input, SearchInput, Select } from '@/components/ui/forms';
 import { MetadataLabel } from '@/components/ui/report-metadata';
 import { checklistSubmissions } from '@/data/checklists';
@@ -521,7 +522,10 @@ export function SiteHseSetup() {
                 </button>
               ))
             ) : (
-              <p className="admin-site-empty">No matching sites.</p>
+              <div className="admin-site-empty grid gap-3 text-center">
+                <IllustrationSlot illustrationKey="empty" decorative />
+                <p>No matching sites.</p>
+              </div>
             )}
           </div>
         </div>

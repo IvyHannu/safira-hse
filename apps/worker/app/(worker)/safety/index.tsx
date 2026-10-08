@@ -116,6 +116,7 @@ export default function SafetyScreen() {
         <EmptyState
           title="No checklists assigned"
           description="There are currently no active safety checks for your shift."
+          illustrationKey="checklist"
         />
       ) : (
         <FlatList

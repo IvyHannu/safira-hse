@@ -9,6 +9,7 @@ import {
   MagnifyingGlass,
 } from '@phosphor-icons/react';
 import { ReportListCard } from '@/components/hse-officer/report-list-card';
+import { EmptyState } from '@/components/ui/feedback';
 import { Select, Input, useOfficerLayer } from '@/components/hse-officer/ui';
 import {
   reportList,
@@ -557,24 +558,22 @@ export default function ReportsPage() {
         {/* Reports List */}
         <div className="grid gap-2" role="list" aria-label="Filtered reports">
           {filteredReports.length === 0 ? (
-            <div className="rounded-lg border border-graphite/20 bg-white p-6 text-center">
-              <p className="text-sm font-semibold text-deepCharcoal">
-                No reports found
-              </p>
-              <p className="mt-1 text-sm text-graphite">
-                Try adjusting your search or filters.
-              </p>
-              {hasActiveFilters && (
-                <button
-                  type="button"
-                  onClick={clearFilters}
-                  className="mt-3 inline-flex items-center gap-1 text-sm font-medium officer-link"
-                >
-                  <X size={14} aria-hidden="true" />
-                  Clear Filters
-                </button>
-              )}
-            </div>
+            <EmptyState
+              title="No reports found"
+              description="Try adjusting your search or filters."
+              action={
+                hasActiveFilters ? (
+                  <button
+                    type="button"
+                    onClick={clearFilters}
+                    className="mt-3 inline-flex items-center gap-1 text-sm font-medium officer-link"
+                  >
+                    <X size={14} aria-hidden="true" />
+                    Clear Filters
+                  </button>
+                ) : undefined
+              }
+            />
           ) : (
             filteredReports.map((report) => (
               <div key={report.id} role="listitem">
