@@ -1,0 +1,330 @@
+.organisation-access {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.organisation-access > * {
+  min-width: 0;
+}
+.organisation-access-panel {
+  min-width: 0;
+}
+.organisation-access-heading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #20222018;
+}
+.organisation-access-heading h2 {
+  font-size: 15px;
+  font-weight: 700;
+}
+.organisation-access-heading h2 span {
+  display: inline-grid;
+  min-width: 21px;
+  height: 21px;
+  place-items: center;
+  border-radius: 50%;
+  background: #ffd21a;
+  color: #121412;
+  font-size: 11px;
+}
+.organisation-access-heading p {
+  color: #606761;
+  font-size: 12px;
+}
+.organisation-access-role-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.organisation-access-role-list > div {
+  display: grid;
+  align-content: start;
+  gap: 5px;
+  padding: 10px 16px;
+  border-right: 1px solid #20222018;
+}
+.organisation-access-role-list > div:last-child {
+  border-right: 0;
+}
+.organisation-access-role-list strong {
+  font-size: 13px;
+}
+.organisation-access-role-list span {
+  font-size: 12px;
+  line-height: 1.45;
+}
+.organisation-access-role-list small {
+  color: #606761;
+  font-size: 11px;
+}
+.organisation-access-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 180px;
+  gap: 12px;
+  padding: 12px 16px;
+}
+.organisation-access-table-wrap {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+}
+.organisation-access-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.organisation-access-table th {
+  background: #f6f7f5;
+  color: #505751;
+  font-weight: 700;
+}
+.organisation-access-table :is(th, td) {
+  padding: 8px 12px;
+  border-top: 1px solid #20222016;
+  text-align: left;
+  vertical-align: middle;
+}
+.organisation-access-table td:first-child {
+  min-width: 175px;
+}
+.organisation-access-table td:nth-child(3) {
+  min-width: 220px;
+  max-width: 360px;
+  line-height: 1.4;
+  overflow-wrap: normal;
+}
+.organisation-access-table td strong,
+.organisation-access-table td small {
+  display: block;
+}
+.organisation-access-table td small {
+  margin-top: 2px;
+  color: #606761;
+}
+.organisation-access-cards {
+  display: none;
+}
+.organisation-access-bottom {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  min-width: 0;
+}
+.organisation-access-pending {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #20222015;
+}
+.organisation-access-pending > div:first-child {
+  min-width: 0;
+}
+.organisation-access-pending strong,
+.organisation-access-pending small {
+  display: block;
+  overflow-wrap: anywhere;
+}
+.organisation-access-pending strong {
+  font-size: 12px;
+}
+.organisation-access-pending small {
+  margin-top: 2px;
+  color: #606761;
+  font-size: 11px;
+}
+.organisation-access-empty {
+  padding: 14px 16px;
+  color: #606761;
+  font-size: 12px;
+}
+.organisation-access-link {
+  display: inline-block;
+  margin: 12px 16px;
+  color: #2563a6;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: underline;
+}
+.organisation-access-message {
+  padding: 10px 12px;
+  border: 1px solid #2563a6;
+  border-radius: 8px;
+  background: #2563a615;
+  font-size: 12px;
+}
+.organisation-access-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: #121412aa;
+}
+.organisation-access-sheet,
+.organisation-access-confirm {
+  width: min(100%, 480px);
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 18px 50px #12141240;
+}
+.organisation-access-sheet header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px;
+  border-bottom: 1px solid #20222020;
+}
+.organisation-access-sheet header h2,
+.organisation-access-confirm h2 {
+  font-size: 17px;
+  font-weight: 700;
+}
+.organisation-access-sheet header p {
+  margin-top: 3px;
+  color: #606761;
+  font-size: 12px;
+}
+.organisation-access-sheet header button {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+.organisation-access-sheet-body {
+  padding: 8px 20px;
+}
+.organisation-access-sheet-body label {
+  display: flex;
+  min-height: 52px;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #20222015;
+  cursor: pointer;
+}
+.organisation-access-sheet-body label:last-child {
+  border-bottom: 0;
+}
+.organisation-access-sheet-body input {
+  width: 18px;
+  height: 18px;
+  accent-color: #202220;
+}
+.organisation-access-sheet-body span {
+  display: grid;
+  gap: 2px;
+}
+.organisation-access-sheet-body strong {
+  font-size: 13px;
+}
+.organisation-access-sheet-body small {
+  color: #606761;
+  font-size: 11px;
+}
+.organisation-access-sheet-error {
+  padding: 0 20px;
+  color: #b43732;
+  font-size: 12px;
+}
+.organisation-access-sheet footer,
+.organisation-access-confirm footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 14px 20px;
+  border-top: 1px solid #20222020;
+}
+.organisation-access-sheet footer button,
+.organisation-access-confirm footer button {
+  min-height: 40px;
+}
+.organisation-access-confirm {
+  padding-top: 20px;
+}
+.organisation-access-confirm > svg {
+  margin: 0 20px 8px;
+  color: #202220;
+}
+.organisation-access-confirm h2,
+.organisation-access-confirm p {
+  margin-inline: 20px;
+}
+.organisation-access-confirm p {
+  margin-block: 8px 20px;
+  color: #505751;
+  font-size: 13px;
+  line-height: 1.5;
+}
+@media (max-width: 1100px) {
+  .organisation-access-role-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .organisation-access-role-list > div:nth-child(2) {
+    border-right: 0;
+  }
+  .organisation-access-role-list > div:nth-child(-n + 2) {
+    border-bottom: 1px solid #20222018;
+  }
+}
+@media (max-width: 767px) {
+  .organisation-access-role-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .organisation-access-role-list > div {
+    border-right: 0;
+    border-bottom: 1px solid #20222018;
+  }
+  .organisation-access-role-list > div:last-child {
+    border-bottom: 0;
+  }
+  .organisation-access-filters {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .organisation-access-table-wrap {
+    display: none;
+  }
+  .organisation-access-cards {
+    display: grid;
+    gap: 8px;
+    padding: 0 12px 12px;
+  }
+  .organisation-access-cards article {
+    display: grid;
+    gap: 6px;
+    padding: 12px;
+  }
+  .organisation-access-cards article > div:first-child {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .organisation-access-cards strong {
+    font-size: 13px;
+  }
+  .organisation-access-cards small,
+  .organisation-access-cards p {
+    color: #606761;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+  }
+  .organisation-access-bottom {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .organisation-access-pending {
+    align-items: start;
+    flex-wrap: wrap;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .organisation-access * {
+    scroll-behavior: auto;
+  }
+}

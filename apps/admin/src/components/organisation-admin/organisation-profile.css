@@ -1,0 +1,255 @@
+.organisation-profile {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.organisation-profile > * {
+  min-width: 0;
+}
+.organisation-profile > header {
+  padding-bottom: 0;
+}
+.organisation-profile-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  min-width: 0;
+  border: 1px solid #20222018;
+  border-radius: 8px;
+  background: white;
+}
+.organisation-profile-tabs button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  border-bottom: 2px solid transparent;
+  color: #555c57;
+  font-size: 12px;
+  font-weight: 600;
+}
+.organisation-profile-tabs button:hover {
+  background: #f6f7f5;
+  color: #202220;
+}
+.organisation-profile-tabs button[aria-selected='true'] {
+  border-bottom-color: #ffd21a;
+  color: #202220;
+  background: white;
+}
+.organisation-profile-layout {
+  display: grid;
+  grid-template-columns: minmax(225px, 280px) minmax(0, 1fr);
+  align-items: start;
+  gap: 16px;
+  min-width: 0;
+}
+.organisation-profile-identity,
+.organisation-profile-panel {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid #20222018;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 1px 2px #12141208;
+}
+.organisation-profile-identity {
+  display: grid;
+  justify-items: start;
+}
+.organisation-profile-avatar {
+  display: grid;
+  width: 64px;
+  height: 64px;
+  place-items: center;
+  border-radius: 50%;
+  background: #eceeed;
+  color: #202220;
+  font-size: 20px;
+  font-weight: 700;
+}
+.organisation-profile-identity h2 {
+  margin-top: 9px;
+  font-size: 18px;
+  font-weight: 700;
+}
+.organisation-profile-identity > p {
+  margin-top: 2px;
+  font-size: 13px;
+  color: #555c57;
+}
+.organisation-profile-identity dl {
+  width: 100%;
+  margin: 12px 0 0;
+  border-top: 1px solid #20222018;
+}
+.organisation-profile-identity dl div {
+  padding: 9px 0;
+  border-bottom: 1px solid #20222018;
+}
+.organisation-profile-identity dt,
+.organisation-profile-details dt {
+  color: #606761;
+  font-size: 12px;
+}
+.organisation-profile-identity dd,
+.organisation-profile-details dd {
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  font-weight: 600;
+}
+.organisation-profile-panel {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+.organisation-profile-heading {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #20222018;
+}
+.organisation-profile-heading h2 {
+  font-size: 16px;
+  font-weight: 700;
+}
+.organisation-profile-heading p {
+  margin-top: 3px;
+  color: #606761;
+  font-size: 12px;
+}
+.organisation-profile-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.organisation-profile-details > div {
+  min-width: 0;
+}
+.organisation-profile-note,
+.organisation-profile-message {
+  color: #606761;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.organisation-profile-message:empty {
+  display: none;
+}
+.organisation-profile-scope {
+  font-size: 14px;
+  font-weight: 600;
+}
+.organisation-profile-sites {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 16px;
+}
+.organisation-profile-sites li {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  border-bottom: 1px solid #20222018;
+  font-size: 13px;
+}
+.organisation-profile-sites svg {
+  flex-shrink: 0;
+}
+.organisation-profile-toggle {
+  display: flex;
+  min-height: 58px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid #20222018;
+  cursor: pointer;
+}
+.organisation-profile-toggle span {
+  min-width: 0;
+}
+.organisation-profile-toggle strong,
+.organisation-profile-toggle small {
+  display: block;
+}
+.organisation-profile-toggle strong {
+  font-size: 13px;
+}
+.organisation-profile-toggle small {
+  margin-top: 3px;
+  color: #606761;
+  font-size: 12px;
+}
+.organisation-profile-toggle input {
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+  accent-color: #202220;
+}
+.organisation-profile-panel select {
+  max-width: 360px;
+  min-height: 42px;
+  border-color: #20222030;
+}
+.organisation-profile-panel details {
+  border-bottom: 1px solid #20222018;
+}
+.organisation-profile-panel summary {
+  min-height: 48px;
+  padding: 14px 0;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+.organisation-profile-panel details p {
+  padding-bottom: 14px;
+  color: #555c57;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.organisation-profile[data-text-size='large']
+  :is(p, dd, li, label, summary, select) {
+  font-size: 1rem;
+}
+.organisation-profile[data-reduce-motion='true'] * {
+  animation: none !important;
+  transition: none !important;
+}
+@media (max-width: 850px) {
+  .organisation-profile-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .organisation-profile-identity {
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 14px;
+    align-items: center;
+  }
+  .organisation-profile-avatar {
+    grid-row: span 2;
+  }
+  .organisation-profile-identity h2 {
+    margin-top: 0;
+  }
+  .organisation-profile-identity dl {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 767px) {
+  .organisation-profile-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  .organisation-profile-tabs button {
+    flex: 0 0 auto;
+    min-height: 44px;
+  }
+  .organisation-profile-identity,
+  .organisation-profile-panel {
+    padding: 14px;
+  }
+  .organisation-profile-details,
+  .organisation-profile-sites {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

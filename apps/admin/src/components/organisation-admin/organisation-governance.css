@@ -1,0 +1,202 @@
+.organisation-governance {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+  max-width: 1040px;
+}
+.organisation-governance form {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+.organisation-governance[data-mode='organisation'] form {
+  gap: 10px;
+}
+.organisation-governance[data-mode='settings'] form {
+  gap: 10px;
+}
+.organisation-governance-section {
+  min-width: 0;
+  padding: 18px 20px;
+  border: 1px solid #2022201c;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 1px 2px #12141208;
+}
+.organisation-governance[data-mode='organisation']
+  .organisation-governance-section {
+  padding: 12px 16px;
+  border-color: #dfe3dc;
+  box-shadow: 0 1px 3px #1214120b;
+}
+.organisation-governance[data-mode='settings']
+  .organisation-governance-section {
+  padding: 14px 16px;
+}
+.organisation-governance-heading {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #20222018;
+}
+.organisation-governance[data-mode='organisation']
+  .organisation-governance-heading {
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+}
+.organisation-governance[data-mode='settings']
+  .organisation-governance-heading {
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+}
+.organisation-governance-heading h2 {
+  font-size: 15px;
+  font-weight: 700;
+}
+.organisation-governance-heading p {
+  margin-top: 3px;
+  color: #606761;
+  font-size: 12px;
+}
+.organisation-governance-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.organisation-governance[data-mode='organisation']
+  .organisation-governance-fields {
+  gap: 12px;
+}
+.organisation-governance[data-mode='settings'] .organisation-governance-fields {
+  gap: 12px;
+}
+.organisation-governance-fields > * {
+  min-width: 0;
+}
+.organisation-governance-fields :is(input, select, textarea) {
+  min-height: 44px;
+  border-color: #20222040;
+  padding-inline: 12px;
+}
+.organisation-governance-fields textarea {
+  padding-block: 10px;
+}
+.organisation-governance-status {
+  display: grid;
+  align-content: start;
+  gap: 5px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.organisation-governance-status small {
+  color: #606761;
+  font-size: 12px;
+  font-weight: 400;
+}
+.organisation-logo-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.organisation-logo-preview {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  overflow: hidden;
+  place-items: center;
+  border: 1px solid #20222025;
+  border-radius: 8px;
+  background: #f6f7f5;
+  color: #202220;
+}
+.organisation-logo-preview span {
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.organisation-logo-actions {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+.organisation-logo-actions strong {
+  font-size: 13px;
+}
+.organisation-logo-actions small {
+  color: #606761;
+  font-size: 11px;
+}
+.organisation-logo-actions > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 3px;
+}
+.organisation-logo-actions button {
+  min-height: 36px;
+}
+.organisation-logo-actions .organisation-governance-error {
+  color: #b43732;
+}
+.organisation-setting-toggle {
+  display: flex;
+  min-height: 56px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 10px 0;
+  border-bottom: 1px solid #20222015;
+  cursor: pointer;
+}
+.organisation-setting-toggle:last-child {
+  border-bottom: 0;
+}
+.organisation-setting-toggle span {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+.organisation-setting-toggle strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+.organisation-setting-toggle small {
+  color: #606761;
+  font-size: 12px;
+}
+.organisation-setting-toggle input {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  accent-color: #202220;
+}
+.organisation-governance-save {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.organisation-governance-save span {
+  color: #267a53;
+  font-size: 12px;
+}
+@media (max-width: 680px) {
+  .organisation-governance-section {
+    padding: 16px;
+  }
+  .organisation-governance-fields {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+  .organisation-logo-row {
+    align-items: flex-start;
+  }
+  .organisation-governance-save {
+    flex-wrap: wrap;
+  }
+}

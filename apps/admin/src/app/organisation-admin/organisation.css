@@ -1,0 +1,330 @@
+.organisation-shell {
+  display: flex;
+  width: 100%;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  background: #f6f7f5;
+  color: #202220;
+}
+.organisation-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  height: 100dvh;
+  background: #121412;
+  color: white;
+  border-right: 1px solid #202220;
+}
+.organisation-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 144px;
+  flex-shrink: 0;
+  padding: 0 20px;
+  border-bottom: 1px solid #ffffff15;
+  font-size: 20px;
+  font-weight: 700;
+}
+.organisation-workspace {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 240px);
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin-left: 240px;
+}
+.organisation-topbar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  background: white;
+  border-bottom: 1px solid #20222020;
+}
+.organisation-topbar > header {
+  flex: 1;
+  min-width: 0;
+  height: 64px;
+  padding: 0 24px;
+  border: 0;
+}
+.organisation-topbar-identity {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.organisation-topbar-identity span {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 50%;
+  background: #121412;
+  color: white;
+  font-size: 11px;
+}
+.organisation-topbar-identity strong {
+  font-size: 12px;
+}
+.organisation-content {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.organisation-page {
+  width: 100%;
+  min-width: 0;
+  padding: 24px;
+}
+.organisation-menu,
+.organisation-close {
+  display: none;
+}
+.organisation-shell button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.organisation-overview {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.organisation-overview > * {
+  min-width: 0;
+}
+.organisation-overview > header {
+  padding-bottom: 12px;
+}
+.organisation-overview section {
+  min-width: 0;
+}
+.organisation-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 14px;
+}
+.organisation-status-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.organisation-status-heading > svg {
+  color: #202220;
+  flex-shrink: 0;
+}
+.organisation-status-heading span {
+  display: block;
+  color: #606761;
+  font-size: 11px;
+}
+.organisation-status-heading h2 {
+  font-size: 16px;
+  font-weight: 700;
+}
+.organisation-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  min-width: 0;
+}
+.organisation-metrics section {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  padding: 13px 14px;
+}
+.organisation-metrics section > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: start;
+}
+.organisation-metrics span {
+  color: #555c57;
+  font-size: 12px;
+  font-weight: 600;
+}
+.organisation-metrics svg {
+  color: #2563a6;
+  flex-shrink: 0;
+}
+.organisation-metrics section:nth-child(3) svg {
+  color: #a66a00;
+}
+.organisation-metrics section:nth-child(4) svg {
+  color: #b43732;
+}
+.organisation-metrics strong {
+  font-size: 25px;
+  line-height: 1.2;
+}
+.organisation-metrics small {
+  color: #606761;
+  font-size: 11px;
+}
+.organisation-overview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  gap: 16px;
+  align-items: start;
+}
+.organisation-panel {
+  padding: 16px;
+}
+.organisation-panel-heading {
+  padding-bottom: 12px;
+  border-bottom: 1px solid #20222018;
+}
+.organisation-panel-heading h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.organisation-panel-heading h2 span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 21px;
+  height: 21px;
+  padding: 0 5px;
+  border-radius: 11px;
+  background: #b4373215;
+  color: #b43732;
+  font-size: 11px;
+}
+.organisation-panel-heading p {
+  margin-top: 3px;
+  color: #606761;
+  font-size: 12px;
+}
+.organisation-attention li,
+.organisation-activity li {
+  display: flex;
+  align-items: start;
+  gap: 10px;
+  min-width: 0;
+  padding: 12px 0;
+  border-bottom: 1px solid #20222015;
+}
+.organisation-attention li:last-child,
+.organisation-activity li:last-child {
+  border-bottom: 0;
+}
+.organisation-attention li > div,
+.organisation-activity li > div {
+  flex: 1;
+  min-width: 0;
+}
+.organisation-attention strong,
+.organisation-activity strong {
+  display: block;
+  font-size: 13px;
+}
+.organisation-attention small,
+.organisation-activity small {
+  display: block;
+  margin-top: 3px;
+  color: #606761;
+  font-size: 11px;
+}
+.organisation-attention-icon,
+.organisation-activity-icon {
+  display: grid;
+  width: 25px;
+  height: 25px;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 5px;
+}
+.organisation-attention-icon.tone-critical {
+  background: #b4373215;
+  color: #b43732;
+}
+.organisation-attention-icon.tone-warning {
+  background: #a66a0015;
+  color: #a66a00;
+}
+.organisation-attention-icon.tone-information,
+.organisation-activity-icon {
+  background: #2563a615;
+  color: #2563a6;
+}
+.organisation-activity time {
+  flex-shrink: 0;
+  color: #606761;
+  font-size: 11px;
+}
+@media (max-width: 1000px) {
+  .organisation-overview-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 767px) {
+  .organisation-workspace {
+    width: 100%;
+    margin-left: 0;
+  }
+  .organisation-page {
+    padding: 16px;
+  }
+  .organisation-topbar > header {
+    height: 56px;
+    padding: 0 14px 0 0;
+  }
+  .organisation-menu {
+    display: grid;
+    width: 54px;
+    min-height: 56px;
+    place-items: center;
+  }
+  .organisation-sidebar {
+    width: min(280px, 86vw);
+    transform: translateX(-100%);
+    transition: transform 180ms ease;
+  }
+  .organisation-sidebar.is-open {
+    transform: translateX(0);
+  }
+  .organisation-close {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    margin-left: auto;
+  }
+  .organisation-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: #121412aa;
+  }
+  .organisation-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .organisation-metrics section {
+    padding: 12px;
+  }
+  .organisation-activity time {
+    white-space: nowrap;
+  }
+  .organisation-topbar-identity strong {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .organisation-sidebar {
+    transition: none;
+  }
+}
