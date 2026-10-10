@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
+import Image from 'next/image';
 import { List } from '@phosphor-icons/react/dist/ssr';
+import safiraLogo from '../../../../../docs/references/brand/Safira Logo Full.png';
 
 export function PageContainer({
   children,
@@ -73,7 +75,7 @@ export function SidebarShell({
             key={item.href}
             href={item.href}
             aria-current={item.active ? 'page' : undefined}
-            className={`inline-flex h-9 items-center gap-2 rounded-md border-l-4 px-2.5 text-sm font-medium text-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information ${item.active ? 'border-signalYellow bg-coolSurface font-semibold' : 'border-transparent hover:bg-coolSurface'}`}
+            className={`inline-flex h-9 items-center gap-2 rounded-md border px-2.5 text-sm font-medium text-graphite focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signalYellow ${item.active ? 'border-signalYellow bg-white font-semibold' : 'border-transparent hover:bg-coolSurface'}`}
           >
             {item.icon}
             {item.label}
@@ -121,8 +123,18 @@ export function MobileHeader({
         </button>
         <div className="flex items-center gap-1">{actions}</div>
       </div>
-      <h1 className="pointer-events-none absolute inset-x-12 top-0 flex h-full items-center justify-center truncate text-center text-sm font-semibold text-deepCharcoal">
-        {title}
+      <h1 className="pointer-events-none absolute inset-x-12 top-0 flex h-full items-center justify-center">
+        {title === 'Safira' ? (
+          <Image
+            src={safiraLogo}
+            alt="Safira"
+            width={44}
+            height={44}
+            priority
+          />
+        ) : (
+          title
+        )}
       </h1>
     </header>
   );

@@ -10,19 +10,28 @@ import {
 
 export interface EvidenceItem {
   type: 'photo' | 'document';
-  url: string;
+  url: string | null;
   caption: string;
 }
 
-export function EvidenceCard({ item }: { item: EvidenceItem }) {
+export function EvidenceCard({
+  item,
+  compactUnavailable = false,
+}: {
+  item: EvidenceItem;
+  compactUnavailable?: boolean;
+}) {
   const [unavailable, setUnavailable] = useState(false);
+  const imageUrl = item.type === 'photo' && !unavailable ? item.url : null;
+  const showPreview = Boolean(imageUrl);
+  const compact = compactUnavailable && !showPreview;
 
   return (
     <figure className="flex h-full min-w-0 flex-col overflow-hidden rounded-md border border-graphite/15 bg-white">
-      <div className="relative flex aspect-[4/3] min-h-36 items-center justify-center bg-coolSurface">
-        {item.type === 'photo' && !unavailable ? (
+      <div className={`relative flex items-center justify-center bg-coolSurface ${compact ? 'h-24' : 'aspect-[4/3] min-h-36'}`}>
+        {imageUrl ? (
           <Image
-            src={item.url}
+            src={imageUrl}
             alt={item.caption}
             fill
             sizes="(max-width: 767px) 100vw, 360px"
@@ -43,10 +52,10 @@ export function EvidenceCard({ item }: { item: EvidenceItem }) {
           </div>
         )}
       </div>
-      <figcaption className="min-h-14 border-t border-graphite/10 px-3 py-2.5 text-sm font-medium text-deepCharcoal">
+      <figcaption className={`border-t border-graphite/10 px-3 text-sm font-medium text-deepCharcoal ${compact ? 'py-2' : 'min-h-14 py-2.5'}`}>
         {item.caption}
       </figcaption>
-      {!unavailable && (
+      {item.url && !unavailable && (
         <a
           href={item.url}
           target="_blank"

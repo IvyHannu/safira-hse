@@ -270,9 +270,9 @@ export function Select({
               aria-selected={option.value === selectedValue}
               disabled={option.disabled}
               onClick={() => choose(option)}
-              className={`flex min-h-10 w-full items-center justify-between gap-3 rounded-md border-l-2 border-transparent px-3 py-1.5 text-left text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signalYellow disabled:cursor-not-allowed disabled:opacity-45 ${
+              className={`flex min-h-10 w-full items-center justify-between gap-3 rounded-md border border-transparent px-3 py-1.5 text-left text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signalYellow disabled:cursor-not-allowed disabled:opacity-45 ${
                 option.value === selectedValue
-                  ? 'border-signalYellow bg-signalYellow/10 font-semibold text-deepCharcoal active:bg-signalYellow/15'
+                  ? 'border-signalYellow bg-white font-semibold text-deepCharcoal active:bg-coolSurface'
                   : 'text-deepCharcoal hover:bg-coolSurface focus:bg-coolSurface active:bg-coolConcrete'
               }`}
             >
@@ -338,7 +338,7 @@ export function Select({
             closeMenu();
           }
         }}
-        className={`flex h-12 min-h-12 w-full items-center justify-between gap-2 rounded-md border border-graphite/30 bg-white px-3 text-left text-sm text-deepCharcoal shadow-sm transition-[border-color,background-color] hover:border-deepCharcoal/45 active:bg-coolSurface focus-visible:border-signalYellow focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-coolSurface disabled:text-graphite/60 ${open ? 'border-signalYellow' : ''} ${error ? 'border-critical' : ''} ${className}`}
+        className={`safira-select-trigger flex w-full items-center justify-between gap-2 rounded-md border bg-white px-3 text-left text-sm text-deepCharcoal transition-[border-color,background-color] active:bg-coolSurface disabled:cursor-not-allowed disabled:bg-coolSurface disabled:text-graphite/60 ${error ? 'border-critical' : ''} ${className}`}
       >
         <span className="min-w-0 truncate">
           {selected?.label ?? options[0]?.label ?? ''}

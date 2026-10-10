@@ -1,0 +1,131 @@
+.safira-sidebar-account {
+  position: relative;
+  flex-shrink: 0;
+  padding: 12px;
+  border-top: 1px solid #ffffff26;
+}
+.safira-sidebar-account-trigger {
+  display: flex;
+  width: 100%;
+  min-height: 52px;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border: 1px solid #ffffff26;
+  border-radius: 8px;
+  background: #202220;
+  color: #fff;
+  text-align: left;
+  transition:
+    background-color 150ms,
+    border-color 150ms;
+}
+.safira-sidebar-account-trigger:hover,
+.safira-sidebar-account-trigger[aria-expanded='true'] {
+  border-color: #ffd21a;
+  background: #2c2e2b;
+}
+.safira-sidebar-account-trigger:active {
+  background: #363934;
+}
+.safira-sidebar-account-trigger:focus-visible,
+.safira-sidebar-account-popover :is(a, button):focus-visible {
+  outline: 2px solid #ffd21a;
+  outline-offset: 2px;
+}
+.safira-sidebar-account-avatar {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  border-radius: 50%;
+  background: #ffd21a;
+  color: #121412;
+  font-size: 12px;
+  font-weight: 800;
+}
+.safira-sidebar-account-copy {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 2px;
+}
+.safira-sidebar-account-copy strong {
+  overflow: hidden;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.safira-sidebar-account-copy small {
+  overflow: hidden;
+  color: #c8ccc5;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.safira-sidebar-account-trigger > svg {
+  flex-shrink: 0;
+  color: #ffd21a;
+  transition: transform 150ms;
+}
+.safira-sidebar-account-trigger[aria-expanded='true'] > svg {
+  transform: rotate(180deg);
+}
+.safira-sidebar-account-popover {
+  position: absolute;
+  right: 12px;
+  bottom: calc(100% + 8px);
+  left: 12px;
+  z-index: 60;
+  display: grid;
+  gap: 2px;
+  padding: 6px;
+  border: 1px solid #ffffff3d;
+  border-radius: 8px;
+  background: #202220;
+  box-shadow: 0 10px 24px #0006;
+}
+.safira-sidebar-account-popover :is(a, button) {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  margin: 0;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  text-decoration: none;
+}
+.safira-sidebar-account-popover :is(a, button):hover {
+  background: #363934;
+}
+.safira-sidebar-account-popover :is(a, button):active {
+  background: #41443f;
+}
+.safira-sidebar-account-popover :is(a, button):disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.safira-sidebar-account-popover svg {
+  flex-shrink: 0;
+  color: #ffd21a;
+}
+.safira-sidebar-account-popover p {
+  padding: 6px 10px;
+  color: #fff;
+  font-size: 12px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .safira-sidebar-account :is(button, svg) {
+    transition: none;
+  }
+}

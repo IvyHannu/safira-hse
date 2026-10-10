@@ -1,19 +1,21 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import type { ColumnDef } from '@tanstack/react-table';
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { MagnifyingGlass } from '@phosphor-icons/react';
-import { Input } from './forms';
+import { SearchInput } from './forms';
 
 interface TableFoundationProps<TData> {
   caption: string;
   columns: ColumnDef<TData, unknown>[];
   data: TData[];
   emptyMessage?: string;
+  getRowHref?: (row: TData) => string;
+  getRowLabel?: (row: TData) => string;
 }
 
 export function TableFoundation<TData>({
@@ -21,7 +23,10 @@ export function TableFoundation<TData>({
   columns,
   data,
   emptyMessage = 'No records to show.',
+  getRowHref,
+  getRowLabel,
 }: TableFoundationProps<TData>) {
+  const router = useRouter();
   // TanStack Table exposes unstable functions; React Compiler skips this hook.
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
@@ -64,7 +69,25 @@ export function TableFoundation<TData>({
             table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
-                className="border-b border-graphite/20 last:border-0"
+                className={`border-b border-graphite/20 last:border-0 ${getRowHref ? 'cursor-pointer transition-colors hover:bg-coolSurface active:bg-graphite/10 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-signalYellow' : ''}`}
+                role={getRowHref ? 'link' : undefined}
+                tabIndex={getRowHref ? 0 : undefined}
+                aria-label={getRowLabel?.(row.original)}
+                onClick={
+                  getRowHref
+                    ? () => router.push(getRowHref(row.original))
+                    : undefined
+                }
+                onKeyDown={
+                  getRowHref
+                    ? (event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault();
+                          router.push(getRowHref(row.original));
+                        }
+                      }
+                    : undefined
+                }
               >
                 {row.getVisibleCells().map((cell) => (
                   <td
@@ -93,18 +116,11 @@ export function FilterControl({
   label?: string;
 }) {
   return (
-    <div className="relative max-w-sm">
-      <Input
+    <div className="max-w-sm">
+      <SearchInput
         label={label}
-        type="search"
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="pl-4"
-      />
-      <MagnifyingGlass
-        aria-hidden="true"
-        size={16}
-        className="pointer-events-none absolute bottom-3 left-1 text-graphite"
       />
     </div>
   );

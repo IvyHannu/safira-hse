@@ -1,15 +1,10 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
-import {
-  Funnel,
-  X,
-  Calendar,
-  CaretDown,
-  MagnifyingGlass,
-} from '@phosphor-icons/react';
-import { ReportListCard } from '@/components/hse-officer/report-list-card';
+import { Funnel, X, Calendar, CaretDown } from '@phosphor-icons/react';
+import { SearchInput } from '@/components/ui/forms';
 import { EmptyState } from '@/components/ui/feedback';
+import { ReportListCard } from '@/components/hse-officer/report-list-card';
 import { Select, Input, useOfficerLayer } from '@/components/hse-officer/ui';
 import {
   reportList,
@@ -66,22 +61,14 @@ function FilterToolbar({
   return (
     <div className="officer-toolbar" role="search" aria-label="Report filters">
       {/* Search - dominant control */}
-      <div className="relative flex-1 min-w-0">
-        <label htmlFor="report-search" className="sr-only">
-          Search reports
-        </label>
-        <input
+      <div className="min-w-0 flex-1">
+        <SearchInput
           id="report-search"
-          type="search"
+          label="Search reports"
+          labelHidden
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by ID, title, location…"
-          className="officer-control h-9 w-full pl-10 pr-4 rounded-md border border-graphite/20 bg-white text-sm text-deepCharcoal placeholder:text-graphite/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow"
-        />
-        <MagnifyingGlass
-          size={16}
-          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-graphite/70"
-          aria-hidden="true"
         />
       </div>
 
@@ -280,27 +267,13 @@ function MobileFilterSheet({
         </div>
         <div className="flex-1 overflow-y-auto p-4 grid content-start gap-4">
           <div>
-            <label
-              htmlFor="mobile-search"
-              className="text-xs font-semibold uppercase tracking-wide text-graphite/70"
-            >
-              Search
-            </label>
-            <div className="relative mt-1.5">
-              <input
-                id="mobile-search"
-                type="search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search by ID, title, location…"
-                className="officer-control h-9 w-full pl-10 pr-4 rounded-md border border-graphite/20 bg-white text-sm text-deepCharcoal placeholder:text-graphite/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow"
-              />
-              <MagnifyingGlass
-                size={16}
-                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-graphite/70"
-                aria-hidden="true"
-              />
-            </div>
+            <SearchInput
+              id="mobile-search"
+              label="Search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by ID, title, location…"
+            />
           </div>
           <div className="grid gap-3">
             <Select
@@ -521,22 +494,14 @@ export default function ReportsPage() {
         {/* Mobile: Search + Filters Button */}
         <div className="md:hidden mb-3">
           <div className="flex gap-2">
-            <div className="relative flex-1 min-w-0">
-              <label htmlFor="mobile-search-top" className="sr-only">
-                Search reports
-              </label>
-              <input
+            <div className="min-w-0 flex-1">
+              <SearchInput
                 id="mobile-search-top"
-                type="search"
+                label="Search reports"
+                labelHidden
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search reports…"
-                className="officer-control h-9 w-full pl-10 pr-4 rounded-md border border-graphite/20 bg-white text-sm text-deepCharcoal placeholder:text-graphite/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow"
-              />
-              <MagnifyingGlass
-                size={16}
-                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-graphite/70"
-                aria-hidden="true"
               />
             </div>
             <button

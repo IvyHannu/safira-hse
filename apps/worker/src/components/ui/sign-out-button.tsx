@@ -47,11 +47,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.deepCharcoal,
   },
   hovered: {
-    borderColor: colors.signalYellow,
-    backgroundColor: colors.graphite,
+    backgroundColor: colors.deepCharcoal,
   },
   pressed: {
-    borderColor: colors.signalYellow,
     backgroundColor: colors.deepCharcoal,
     transform: [{ scale: 0.98 }],
   },

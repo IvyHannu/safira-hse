@@ -8,7 +8,7 @@ import {
   FilterTabs,
   PressableCard,
   SectionHeader,
-  StatusBadge,
+  MetadataLabel,
   type Tone,
 } from '@/components/ui';
 import type { DemoReport } from '@/reporting/model';
@@ -67,8 +67,8 @@ function ReportCard({ report, onPress }: ReportCardProps) {
             {locationParts.join(' · ')}
           </Text>
           <Text style={styles.cardMeta}>{formatDate(report.submittedAt)}</Text>
-          <View style={styles.cardBadge}>
-            <StatusBadge label={label} tone={tone} />
+          <View style={styles.cardStatus}>
+            <MetadataLabel label={label} tone={tone} />
           </View>
         </View>
         {report.evidenceUri ? (
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 18,
   },
-  cardBadge: { marginTop: spacing[1] },
+  cardStatus: { marginTop: spacing[1] },
   thumbnail: {
     width: 72,
     height: 72,

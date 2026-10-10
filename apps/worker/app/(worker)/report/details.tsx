@@ -7,10 +7,10 @@ import MapPin from 'phosphor-react-native/src/icons/MapPin';
 import { StyleSheet, Text, View } from 'react-native';
 import {
   Button,
-  ChoiceCard,
   DateTimeField,
   SelectField,
   SelectionSheet,
+  SelectionOption,
   TextArea,
   WorkerHeader,
 } from '@/components/ui';
@@ -132,6 +132,13 @@ export default function EvidenceDetailsScreen() {
 
         <View style={styles.footer}>
           <View style={styles.footerAction}>
+            <Button
+              label="Back"
+              variant="tertiary"
+              onPress={() => router.replace('/report')}
+            />
+          </View>
+          <View style={styles.footerAction}>
             <Button label="Next" onPress={continueToEvidence} />
           </View>
         </View>
@@ -142,10 +149,9 @@ export default function EvidenceDetailsScreen() {
         onClose={closeWorkAreaPicker}
       >
         {workerHomeDemo.workAreas.map((area) => (
-          <ChoiceCard
+          <SelectionOption
             key={area.id}
-            accessibilityLabel={area.name}
-            title={area.name}
+            label={area.name}
             selected={draft.workAreaId === area.id}
             onPress={() => {
               updateDraft({ workAreaId: area.id });

@@ -27,7 +27,7 @@ function getCompletionText(checklist: SafetyChecklist): string {
   return `${answered} of ${total} answered`;
 }
 
-function getBadgeConfig(checklist: SafetyChecklist): {
+function getStatusConfig(checklist: SafetyChecklist): {
   label: string;
   tone: Tone;
 } {
@@ -44,7 +44,7 @@ function getBadgeConfig(checklist: SafetyChecklist): {
 }
 
 function ChecklistCard({ checklist, onPress }: ChecklistCardProps) {
-  const badge = getBadgeConfig(checklist);
+  const status = getStatusConfig(checklist);
   const completionText = getCompletionText(checklist);
   const answeredCount = Object.values(checklist.responses).filter(
     (response) => response.answer !== null,
@@ -55,17 +55,17 @@ function ChecklistCard({ checklist, onPress }: ChecklistCardProps) {
 
   return (
     <PressableCard
-      label={`${checklist.title}, ${badge.label}${completionText === badge.label ? '' : `, ${completionText}`}`}
+      label={`${checklist.title}, ${status.label}${completionText === status.label ? '' : `, ${completionText}`}`}
       onPress={onPress}
     >
       <View style={styles.cardHeader}>
         <Text style={styles.cardTitle}>{checklist.title}</Text>
-        <StatusLabel label={badge.label} tone={badge.tone} />
+        <StatusLabel label={status.label} tone={status.tone} />
       </View>
       <Text style={styles.cardMeta}>{location}</Text>
       <View style={styles.metaRow}>
         <Text style={styles.cardMeta}>{checklist.items.length} items</Text>
-        {checklist.dueLabel !== badge.label && (
+        {checklist.dueLabel !== status.label && (
           <>
             <Text style={styles.cardMeta}>·</Text>
             <Text style={styles.cardMeta}>{checklist.dueLabel}</Text>

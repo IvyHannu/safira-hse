@@ -1,6 +1,7 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { colors, radius, spacing, typography } from '@safira/design-tokens';
 import X from 'phosphor-react-native/src/icons/X';
+import Check from 'phosphor-react-native/src/icons/Check';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 interface SelectionSheetProps {
@@ -51,6 +52,44 @@ export function SelectionSheet({
   );
 }
 
+interface SelectionOptionProps {
+  label: string;
+  selected: boolean;
+  onPress(): void;
+}
+
+export function SelectionOption({
+  label,
+  selected,
+  onPress,
+}: SelectionOptionProps) {
+  const [focused, setFocused] = useState(false);
+  return (
+    <Pressable
+      accessibilityRole="radio"
+      accessibilityState={{ selected }}
+      accessibilityLabel={label}
+      onPress={onPress}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      style={({ pressed, hovered }) => [
+        styles.option,
+        selected && styles.optionSelected,
+        hovered && !selected && styles.optionHovered,
+        pressed && styles.optionPressed,
+        focused && styles.optionFocused,
+      ]}
+    >
+      <Text style={[styles.optionText, selected && styles.optionTextSelected]}>
+        {label}
+      </Text>
+      {selected && (
+        <Check size={18} weight="bold" color={colors.deepCharcoal} />
+      )}
+    </Pressable>
+  );
+}
+
 const styles = StyleSheet.create({
   backdrop: { flex: 1, justifyContent: 'flex-end' },
   scrim: {
@@ -91,4 +130,31 @@ const styles = StyleSheet.create({
   },
   closePressed: { backgroundColor: colors.coolConcrete },
   options: { gap: 4 },
+  option: {
+    minHeight: 48,
+    borderWidth: 1,
+    borderColor: colors.coolConcrete,
+    borderRadius: radius.md,
+    backgroundColor: colors.white,
+    paddingHorizontal: spacing[2],
+    paddingVertical: spacing[1],
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: spacing[1],
+  },
+  optionSelected: {
+    borderColor: colors.signalYellow,
+    backgroundColor: colors.white,
+  },
+  optionHovered: { backgroundColor: colors.coolSurface },
+  optionPressed: { backgroundColor: colors.coolConcrete },
+  optionFocused: { borderColor: colors.signalYellow },
+  optionText: {
+    color: colors.deepCharcoal,
+    fontFamily: typography.fontFamily,
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  optionTextSelected: { fontWeight: '700' },
 });

@@ -7,7 +7,7 @@ import {
   Button,
   EmptyState,
   SectionHeader,
-  StatusBadge,
+  MetadataLabel,
   WorkerHeader,
   type Tone,
 } from '@/components/ui';
@@ -64,7 +64,7 @@ function ReportDetailContent({ report }: { report: DemoReport }) {
         <Text style={styles.reference}>{report.reference}</Text>
         <Text style={styles.reportTitle}>{report.categoryLabel}</Text>
         <Text style={styles.headerMeta}>{locationParts.join(' · ')}</Text>
-        <StatusBadge label={label} tone={tone} />
+        <MetadataLabel label={label} tone={tone} />
         <Text style={styles.headerMeta}>
           Submitted {formatDate(report.submittedAt)}
         </Text>

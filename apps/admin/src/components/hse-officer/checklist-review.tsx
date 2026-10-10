@@ -1,6 +1,6 @@
 'use client';
 import { useSyncExternalStore } from 'react';
-import { ChecklistBadge } from './ui';
+import { StatusLabel } from '@/components/ui/status-label';
 import { type ChecklistStatus } from '@/data/checklists';
 const key = 'safira.officer.checklist-reviews.v1';
 const event = 'safira-checklist-review';
@@ -43,6 +43,11 @@ export function useChecklistReview() {
   }
   return { reviews, markReviewed };
 }
-export function ChecklistStatusBadge({ status }: { status: ChecklistStatus }) {
-  return <ChecklistBadge status={status} />;
+export function ChecklistStatusLabel({ status }: { status: ChecklistStatus }) {
+  return (
+    <StatusLabel
+      label={status === 'reviewed' ? 'Reviewed' : 'Needs review'}
+      tone={status === 'reviewed' ? 'success' : 'warning'}
+    />
+  );
 }

@@ -7,8 +7,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import {
   House,
   FileText,
@@ -16,14 +15,15 @@ import {
   MapPin,
   Gear,
   ChartBar,
-  UserCircle,
   List,
   X,
 } from '@phosphor-icons/react';
-import { SignOutButton } from '@/components/ui/sign-out-button';
+import { SidebarAccount } from '@/components/ui/sidebar-account';
+import { AdminSidebarNav } from '@/components/ui/admin-sidebar-nav';
 import { SafiraSidebarLockup } from '@/components/ui/safira-sidebar-lockup';
 import { TopbarShell } from '@/components/ui/shell';
 import { useAuth } from '@/lib/demo-auth';
+import { adminProfile } from '@/data/admin-profile';
 
 const navigation = [
   { label: 'Overview', icon: House, href: '/hse-admin/overview' },
@@ -32,7 +32,6 @@ const navigation = [
   { label: 'Sites', icon: MapPin, href: '/hse-admin/sites' },
   { label: 'Configuration', icon: Gear, href: '/hse-admin/configuration' },
   { label: 'Reports & Insights', icon: ChartBar, href: '/hse-admin/insights' },
-  { label: 'Profile', icon: UserCircle, href: '/hse-admin/profile' },
 ];
 
 export function AdminShell({ children }: { children: ReactNode }) {
@@ -40,7 +39,6 @@ export function AdminShell({ children }: { children: ReactNode }) {
   const [signingOut, setSigningOut] = useState(false);
   const { session, loading, signOut, error } = useAuth();
   const router = useRouter();
-  const pathname = usePathname();
   const sidebar = useRef<HTMLElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
   const close = useCallback(() => setOpen(false), []);
@@ -112,7 +110,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
         aria-label="HSE Admin navigation"
       >
         <div className="admin-brand">
-          <SafiraSidebarLockup />
+          <SafiraSidebarLockup context="HSE ADMIN" />
           <button
             className="admin-close"
             aria-label="Close navigation menu"
@@ -121,53 +119,27 @@ export function AdminShell({ children }: { children: ReactNode }) {
             <X size={20} />
           </button>
         </div>
-        <nav aria-label="HSE Admin main navigation">
-          <ul>
-            {navigation.map(({ label, icon: Icon, ...item }) => (
-              <li key={label}>
-                {'href' in item && item.href ? (
-                  <Link
-                    href={item.href}
-                    aria-current={
-                      pathname === item.href ||
-                      pathname.startsWith(`${item.href}/`)
-                        ? 'page'
-                        : undefined
-                    }
-                    onClick={close}
-                  >
-                    <Icon size={20} aria-hidden="true" />
-                    {label}
-                  </Link>
-                ) : (
-                  <button disabled title={`${label} is not available yet`}>
-                    <Icon size={20} aria-hidden="true" />
-                    {label}
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
-        </nav>
-        <div className="admin-sidebar-footer">
-          <p className="text-sm font-semibold">HSE Admin</p>
-          <p className="text-xs text-white/60">HSE administration</p>
-          <SignOutButton
-            surface="dark"
-            className="admin-signout w-full"
-            disabled={signingOut && !error}
-            onClick={() => {
-              setSigningOut(true);
-              void signOut();
-            }}
-            busy={signingOut && !error}
-          />
-          {error && (
-            <p role="alert" className="text-xs">
-              {error}
-            </p>
-          )}
-        </div>
+        <AdminSidebarNav
+          label="HSE Admin main navigation"
+          items={navigation.map(({ icon: Icon, ...item }) => ({
+            ...item,
+            icon: <Icon size={20} aria-hidden="true" />,
+          }))}
+          onNavigate={close}
+        />
+        <SidebarAccount
+          name={adminProfile.name}
+          role="HSE Admin"
+          workspace="HSE administration"
+          profileHref="/hse-admin/profile"
+          onNavigate={close}
+          busy={signingOut && !error}
+          error={error}
+          onSignOut={() => {
+            setSigningOut(true);
+            void signOut();
+          }}
+        />
       </aside>
       <div className="admin-workspace">
         <div className="admin-topbar">

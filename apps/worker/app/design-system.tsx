@@ -14,7 +14,7 @@ import {
   ScreenContainer,
   SectionHeader,
   SelectableCard,
-  StatusBadge,
+  MetadataLabel,
   TextInput,
 } from '@/components/ui';
 
@@ -122,10 +122,10 @@ function DesignSystemShowcase() {
       <View style={styles.section}>
         <SectionHeader title="Status and feedback" />
         <View style={styles.badges}>
-          <StatusBadge tone="success" label="Complete" />
-          <StatusBadge tone="warning" label="Needs attention" />
-          <StatusBadge tone="critical" label="Critical" />
-          <StatusBadge tone="information" label="In progress" />
+          <MetadataLabel tone="success" label="Complete" />
+          <MetadataLabel tone="warning" label="Needs attention" />
+          <MetadataLabel kind="severity" tone="critical" label="Critical" />
+          <MetadataLabel tone="information" label="In progress" />
         </View>
         <InlineAlert
           tone="success"

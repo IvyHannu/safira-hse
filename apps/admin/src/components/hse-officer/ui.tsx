@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, type ComponentProps, type ReactNode } from 'react';
-import { Circle } from '@phosphor-icons/react';
 import { Button as BaseButton } from '@/components/ui/button';
 import {
   Input as BaseInput,
@@ -9,6 +8,7 @@ import {
   Textarea as BaseTextarea,
 } from '@/components/ui/forms';
 export { Card, EmptyState } from '@/components/ui/feedback';
+export { ReportMetadata } from '@/components/ui/report-metadata';
 
 export function OfficerPanel({
   children,
@@ -18,7 +18,9 @@ export function OfficerPanel({
   className?: string;
 }) {
   return (
-    <section className={`officer-detail-panel ${className}`}>
+    <section
+      className={`officer-detail-panel safira-card-surface ${className}`}
+    >
       {children}
     </section>
   );
@@ -77,108 +79,6 @@ export function Textarea({
   ...props
 }: ComponentProps<typeof BaseTextarea>) {
   return <BaseTextarea {...props} className={`officer-control ${className}`} />;
-}
-
-const labels: Record<string, string> = {
-  environmental_concern: 'Environmental concern',
-  near_miss: 'Near miss',
-  under_review: 'Under review',
-  action_required: 'Action required',
-  needs_review: 'Needs review',
-};
-
-export function ReportMetadata({
-  type,
-  severity,
-  status,
-}: {
-  type: 'hazard' | 'near_miss' | 'incident' | 'environmental_concern';
-  severity: 'low' | 'moderate' | 'high' | 'critical';
-  status:
-    'submitted' | 'under_review' | 'action_required' | 'resolved' | 'closed';
-}) {
-  return (
-    <div className="flex flex-wrap items-center gap-2 text-[11px]">
-      <span className="uppercase tracking-wider text-graphite/70 font-medium">
-        {type.replace(/_/g, ' ').toUpperCase()}
-      </span>
-      <span className="flex items-center gap-1.5">
-        <Circle
-          size={6}
-          weight="fill"
-          className={`severity-dot ${severity}`}
-          aria-hidden="true"
-        />
-        <span className={`font-semibold capitalize severity-text ${severity}`}>
-          {severity.charAt(0).toUpperCase() + severity.slice(1)}
-        </span>
-      </span>
-      <span className={`font-medium capitalize status-text ${status}`}>
-        {status.replace(/_/g, ' ')}
-      </span>
-    </div>
-  );
-}
-
-export function TypePill({
-  label,
-}: {
-  label: 'hazard' | 'near_miss' | 'incident' | 'environmental_concern';
-  className?: string;
-}) {
-  return (
-    <span className={`officer-badge officer-type officer-${label}`}>
-      {labels[label] ||
-        label
-          .replaceAll('_', ' ')
-          .replace(/^./, (letter) => letter.toUpperCase())}
-    </span>
-  );
-}
-export function SeverityPill({
-  label,
-}: {
-  label: 'low' | 'moderate' | 'high' | 'critical';
-  className?: string;
-}) {
-  return (
-    <span className={`officer-badge officer-severity officer-${label}`}>
-      {labels[label] ||
-        label
-          .replaceAll('_', ' ')
-          .replace(/^./, (letter) => letter.toUpperCase())}
-    </span>
-  );
-}
-export function StatusPill({
-  label,
-}: {
-  label:
-    'submitted' | 'under_review' | 'action_required' | 'resolved' | 'closed';
-  className?: string;
-}) {
-  return (
-    <span className={`officer-badge officer-status officer-${label}`}>
-      {labels[label] ||
-        label
-          .replaceAll('_', ' ')
-          .replace(/^./, (letter) => letter.toUpperCase())}
-    </span>
-  );
-}
-export function ChecklistBadge({
-  status,
-}: {
-  status: 'needs_review' | 'reviewed';
-}) {
-  return (
-    <span className={`officer-badge officer-status officer-${status}`}>
-      {labels[status] ||
-        status
-          .replaceAll('_', ' ')
-          .replace(/^./, (letter) => letter.toUpperCase())}
-    </span>
-  );
 }
 
 /** Keyboard dismissal and focus containment for Officer drawers only. */

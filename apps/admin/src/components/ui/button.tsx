@@ -9,10 +9,17 @@ import {
 } from 'react';
 
 export type ButtonVariant =
-  'primary' | 'secondary' | 'tertiary' | 'destructive';
+  | 'primary'
+  | 'secondary'
+  | 'positive-outline'
+  | 'tertiary'
+  | 'destructive'
+  | 'destructive-outline'
+  | 'destructive-tertiary';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
+  size?: 'default' | 'compact';
   loading?: boolean;
   icon?: ReactNode;
 }
@@ -21,11 +28,17 @@ const variants: Record<ButtonVariant, string> = {
   primary:
     'border-signalYellow bg-signalYellow text-deepCharcoal hover:bg-signalYellow/90 active:bg-signalYellow/80',
   secondary:
-    'border-deepCharcoal/35 bg-white text-deepCharcoal hover:bg-coolSurface active:bg-graphite/10',
+    'border-deepCharcoal/55 bg-white text-deepCharcoal hover:border-deepCharcoal hover:bg-coolSurface active:bg-graphite/10',
+  'positive-outline':
+    'border-success bg-success/10 text-success hover:bg-success/15 active:bg-success/20',
   tertiary:
     'border-transparent bg-transparent text-deepCharcoal hover:bg-coolSurface active:bg-graphite/10',
   destructive:
     'border-critical bg-critical text-white hover:bg-critical/90 active:bg-critical/80',
+  'destructive-outline':
+    'border-critical bg-critical/5 text-critical hover:bg-critical/10 active:bg-critical/15',
+  'destructive-tertiary':
+    'border-critical/80 bg-critical/5 text-critical hover:border-critical hover:bg-critical/10 active:bg-critical/15',
 };
 
 const buttonBase =
@@ -51,6 +64,7 @@ function ButtonIcon({ icon }: { icon: ReactNode }) {
 
 export function Button({
   variant = 'primary',
+  size = 'default',
   loading = false,
   disabled = false,
   icon,
@@ -65,7 +79,7 @@ export function Button({
       type={type}
       disabled={disabled || loading}
       aria-busy={loading}
-      className={`${buttonBase} ${variants[variant]} ${className}`}
+      className={`${buttonBase} ${variants[variant]} ${size === 'compact' ? 'h-9 min-h-9 !px-[12px] text-xs max-md:h-11 max-md:min-h-11' : ''} ${className}`}
     >
       {loading ? (
         <span
@@ -107,4 +121,14 @@ export function IconButton({
       <ButtonIcon icon={icon} />
     </button>
   );
+}
+
+export function ActionGroup({
+  children,
+  className = '',
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return <div className={`safira-action-group ${className}`}>{children}</div>;
 }

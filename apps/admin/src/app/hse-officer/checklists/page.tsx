@@ -1,17 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { PageHeader } from '@/components/ui/shell';
-import { Input, Select } from '@/components/hse-officer/ui';
+import { Select } from '@/components/hse-officer/ui';
+import { SearchInput } from '@/components/ui/forms';
 import { EmptyState } from '@/components/ui/feedback';
-import {
-  ChecklistStatusBadge,
-  useChecklistReview,
-} from '@/components/hse-officer/checklist-review';
+import { ChecklistSubmissionCard } from '@/components/hse-officer/checklist-submission-card';
+import { useChecklistReview } from '@/components/hse-officer/checklist-review';
 import {
   checklistSubmissions,
-  checklistDate,
   flaggedCount,
   type ChecklistSubmission,
 } from '@/data/checklists';
@@ -43,14 +40,15 @@ export default function ChecklistsPage() {
         flaggedCount(b) - flaggedCount(a) ||
         b.submittedAt.localeCompare(a.submittedAt),
     );
+
   return (
     <div className="grid min-w-0 gap-4">
       <PageHeader
         title="Checklist submissions"
         description="Review checklist submissions for your permitted sites."
       />
-      <div className="officer-checklist-filters grid grid-cols-2 gap-3 xl:grid-cols-[2fr_1fr_1fr_1fr]">
-        <Input
+      <div className="officer-checklist-filters grid min-w-0 gap-2.5 sm:grid-cols-2 xl:grid-cols-[minmax(220px,2fr)_repeat(3,minmax(150px,1fr))] xl:items-end">
+        <SearchInput
           label="Search checklists"
           placeholder="Checklist, site or submitter…"
           value={search}
@@ -88,7 +86,8 @@ export default function ChecklistsPage() {
         </Select>
       </div>
       <p className="text-xs text-graphite" role="status">
-        {items.length} submissions · Needs review and flagged issues first
+        {items.length} {items.length === 1 ? 'submission' : 'submissions'} ·
+        Needs review and flagged issues first
       </p>
       {!items.length ? (
         <EmptyState
@@ -96,106 +95,15 @@ export default function ChecklistsPage() {
           description="Try another search or change your filters."
         />
       ) : (
-        <>
-          <div className="hidden rounded-lg border border-graphite/20 bg-white xl:block">
-            <table className="w-full table-fixed text-left text-xs">
-              <caption className="sr-only">
-                Checklist submissions for permitted sites
-              </caption>
-              <thead className="bg-coolSurface">
-                <tr>
-                  {[
-                    'Checklist',
-                    'Site',
-                    'Submitted by',
-                    'Date / time',
-                    'Status',
-                    'Flagged issues',
-                  ].map((heading) => (
-                    <th
-                      key={heading}
-                      scope="col"
-                      className="px-3 py-2 font-semibold text-deepCharcoal"
-                    >
-                      {heading}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((item) => (
-                  <tr
-                    key={item.id}
-                    className="border-t border-graphite/10 hover:bg-coolSurface/50"
-                  >
-                    <td className="break-words px-3 py-3">
-                      <Link
-                        className="font-semibold underline decoration-graphite/20 underline-offset-4 focus-visible:outline-2 focus-visible:outline-information"
-                        href={`/hse-officer/checklists/${item.id}`}
-                      >
-                        {item.name}
-                      </Link>
-                      <p className="mt-1 text-graphite/60">{item.id}</p>
-                    </td>
-                    <td className="break-words px-3 py-3">{item.site}</td>
-                    <td className="break-words px-3 py-3">
-                      {item.submittedBy}
-                    </td>
-                    <td className="px-3 py-3">
-                      <time dateTime={item.submittedAt}>
-                        {checklistDate(item.submittedAt)}
-                      </time>
-                    </td>
-                    <td className="px-3 py-3">
-                      <ChecklistStatusBadge status={statusOf(item)} />
-                    </td>
-                    <td className="px-3 py-3">
-                      <span
-                        className={
-                          flaggedCount(item)
-                            ? 'font-semibold text-critical'
-                            : 'text-graphite'
-                        }
-                      >
-                        {flaggedCount(item)} flagged
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="grid gap-2 xl:hidden">
-            {items.map((item) => (
-              <Link
-                key={item.id}
-                href={`/hse-officer/checklists/${item.id}`}
-                className="grid min-w-0 gap-2 rounded-lg border border-graphite/20 bg-white p-3 hover:border-graphite/40 focus-visible:outline-2 focus-visible:outline-information"
-              >
-                <div className="flex flex-wrap items-start justify-between gap-2">
-                  <h2 className="text-sm font-semibold">{item.name}</h2>
-                  <ChecklistStatusBadge status={statusOf(item)} />
-                </div>
-                <p className="break-words text-xs text-graphite">
-                  {item.id} · {item.site}
-                </p>
-                <p className="text-xs">Submitted by {item.submittedBy}</p>
-                <div className="flex flex-wrap justify-between gap-2 text-xs">
-                  <time dateTime={item.submittedAt}>
-                    {checklistDate(item.submittedAt)}
-                  </time>
-                  <span
-                    className={
-                      flaggedCount(item) ? 'font-semibold text-critical' : ''
-                    }
-                  >
-                    {flaggedCount(item)} flagged issues
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </>
+        <div className="grid min-w-0 gap-2.5">
+          {items.map((item) => (
+            <ChecklistSubmissionCard
+              key={item.id}
+              submission={item}
+              status={statusOf(item)}
+            />
+          ))}
+        </div>
       )}
     </div>
   );

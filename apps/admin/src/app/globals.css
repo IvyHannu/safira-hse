@@ -55,15 +55,22 @@ select option:hover {
     transform 150ms ease;
 }
 
-.safira-card-action:hover {
+.safira-card-action:hover:not(:disabled) {
   border-color: #aeb6ac;
   background: #fafbf9;
   box-shadow: 0 3px 8px #12141212;
 }
 
-.safira-card-action:active {
+.safira-card-action:active:not(:disabled) {
   background: #f0f2ee;
   transform: translateY(1px);
+}
+
+.safira-card-action:disabled {
+  cursor: not-allowed;
+  color: #606761;
+  background: #f6f7f5;
+  transform: none;
 }
 
 .safira-card-action:focus-visible {
@@ -73,10 +80,8 @@ select option:hover {
 
 .safira-card-action[aria-current='true'] {
   border-color: #d8a617;
-  background: #fffaf0;
-  box-shadow:
-    inset 3px 0 #ffd21a,
-    0 1px 3px #1214120b;
+  background: #fff;
+  box-shadow: 0 1px 3px #1214120b;
 }
 
 .safira-clickable-card {
@@ -91,9 +96,109 @@ select option:hover {
 .safira-clickable-card[aria-pressed='true'] {
   border-color: #d8a617;
   background: #fff;
-  box-shadow:
-    inset 3px 0 #ffd21a,
-    0 1px 3px #1214120b;
+  box-shadow: 0 1px 3px #1214120b;
+}
+
+.safira-interactive-row {
+  display: flex;
+  width: 100%;
+  min-height: 56px;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.safira-interactive-row-icon {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 6px;
+  background: #eceeed;
+}
+
+.safira-interactive-row-copy {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 2px;
+}
+
+.safira-interactive-row-copy small {
+  color: #606761;
+}
+
+.safira-interactive-row-status {
+  flex-shrink: 0;
+}
+
+.safira-preview-surface {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid #dfe3dc;
+  border-radius: 8px;
+  background: #f6f7f5;
+}
+
+.safira-action-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Shared Admin search field: reserve a fixed icon slot for every role. */
+.safira-search-input {
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 0 12px 0 44px !important;
+  border: 1px solid #bbc2b9 !important;
+  border-radius: 6px !important;
+  background: #fff;
+}
+
+.safira-search-input:hover:not(:disabled) {
+  border-color: #899188 !important;
+}
+
+.safira-search-input:focus,
+.safira-search-input:focus-visible {
+  border-color: #ffd21a !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.safira-select-trigger {
+  height: 44px !important;
+  min-height: 44px !important;
+  padding-inline: 12px !important;
+  border: 1px solid #bbc2b9 !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+
+.safira-select-trigger:hover:not(:disabled) {
+  border-color: #899188 !important;
+}
+
+.safira-select-trigger:focus-visible,
+.safira-select-trigger[aria-expanded='true'] {
+  border-color: #ffd21a !important;
+  outline: none !important;
+}
+
+.safira-select-trigger[aria-invalid='true']:not(:focus-visible) {
+  border-color: #b43732 !important;
+}
+
+@media (max-width: 767px) {
+  .safira-search-input,
+  .safira-select-trigger {
+    height: 48px !important;
+    min-height: 48px !important;
+  }
 }
 
 /* One compact form size for Admin builder controls. */
@@ -121,10 +226,23 @@ select option:hover {
 }
 
 /* Shared compact form size for dense desktop toolbars. */
+.safira-control-compact {
+  border-color: #bbc2b9 !important;
+  border-radius: 6px;
+  padding-inline: 12px;
+}
+
+.safira-control-compact:focus,
+.safira-control-compact:focus-visible {
+  border-color: #ffd21a !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 @media (min-width: 768px) {
   .safira-control-compact {
-    height: 40px !important;
-    min-height: 40px !important;
+    height: 44px !important;
+    min-height: 44px !important;
   }
 }
 

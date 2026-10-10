@@ -265,7 +265,6 @@ export function ChoiceCard({
         selected &&
           selectionColor && {
             borderColor: selectionColor,
-            backgroundColor: `${selectionColor}12`,
           },
         hovered && !disabled && styles.hovered,
         pressed && !disabled && styles.pressed,
@@ -455,9 +454,9 @@ const styles = StyleSheet.create({
     paddingVertical: spacing[1],
   },
   choiceSelected: {
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: colors.signalYellow,
-    backgroundColor: colors.coolSurface,
+    backgroundColor: colors.white,
   },
   choiceCopy: { flex: 1, gap: 2 },
   choiceTitle: {

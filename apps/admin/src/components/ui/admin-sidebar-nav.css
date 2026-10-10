@@ -1,0 +1,62 @@
+.safira-admin-sidebar-nav {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px 12px;
+}
+.safira-admin-sidebar-nav ul {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.safira-admin-sidebar-nav a {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  color: #e9ebe7;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  text-decoration: none;
+  transition:
+    background-color 150ms,
+    color 150ms;
+}
+.safira-admin-sidebar-nav a:hover {
+  background: #202220;
+  color: #fff;
+}
+.safira-admin-sidebar-nav a:active {
+  background: #333632;
+}
+.safira-admin-sidebar-nav a:focus-visible {
+  outline: 2px solid #ffd21a;
+  outline-offset: 2px;
+}
+.safira-admin-sidebar-nav a[aria-current='page'],
+.safira-admin-sidebar-nav a[aria-current='page']:hover {
+  background: #ffd21a;
+  color: #121412;
+  font-weight: 700;
+}
+.safira-admin-sidebar-nav-icon {
+  display: grid;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  place-items: center;
+}
+.safira-admin-sidebar-nav-icon svg {
+  width: 20px;
+  height: 20px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .safira-admin-sidebar-nav a {
+    transition: none;
+  }
+}

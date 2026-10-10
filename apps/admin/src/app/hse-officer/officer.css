@@ -49,9 +49,6 @@
 .officer-ui .officer-control {
   padding: 9px 12px;
 }
-.officer-ui input[type='search'].officer-control {
-  padding-left: 40px;
-}
 .officer-ui textarea.officer-control {
   min-height: 100px;
 }
@@ -59,137 +56,6 @@
   line-height: 20px;
   font-size: 13px;
 }
-/* ── Shared badge base ────────────────────────────────────────── */
-.officer-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 10px;
-  font-weight: 600;
-  line-height: 16px;
-  white-space: nowrap;
-  max-width: 100%;
-  letter-spacing: 0.02em;
-  height: 20px;
-}
-
-/* ── Severity — strongest: filled background + bold left accent ─ */
-.officer-severity {
-  padding: 2px 8px 2px 6px;
-  border-left: 3px solid currentColor;
-  font-weight: 700;
-  font-size: 10px;
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
-  height: 20px;
-}
-
-/* ── Status — secondary: filled, lighter weight ─────────────── */
-.officer-status {
-  font-weight: 600;
-  font-size: 10px;
-  letter-spacing: 0.01em;
-  text-transform: capitalize;
-  height: 20px;
-}
-
-/* ── Type — quietest: ghost/outline, muted colour ───────────── */
-.officer-type {
-  color: color-mix(in srgb, var(--officer-graphite) 55%, white);
-  background: transparent;
-  border: 1px solid color-mix(in srgb, var(--officer-graphite) 18%, white);
-  font-weight: 500;
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  height: 20px;
-}
-
-/* ── Shared semantic colours (used by severity + status) ─────── */
-.officer-low,
-.officer-reviewed,
-.officer-resolved {
-  color: var(--officer-success);
-  background: color-mix(in srgb, var(--officer-success) 12%, white);
-}
-.officer-moderate,
-.officer-submitted {
-  color: var(--officer-information);
-  background: color-mix(in srgb, var(--officer-information) 12%, white);
-}
-.officer-high,
-.officer-needs_review,
-.officer-under_review {
-  color: var(--officer-warning);
-  background: color-mix(in srgb, var(--officer-warning) 16%, white);
-}
-.officer-critical,
-.officer-action_required {
-  color: var(--officer-critical);
-  background: color-mix(in srgb, var(--officer-critical) 14%, white);
-}
-.officer-closed {
-  color: color-mix(in srgb, var(--officer-graphite) 55%, white);
-  background: var(--officer-surface);
-}
-
-/* ── Report metadata: Type • Severity   Status (text-only, no pills) ── */
-.officer-ui .severity-dot {
-  flex-shrink: 0;
-}
-.officer-ui .severity-dot.low {
-  color: var(--officer-success);
-}
-.officer-ui .severity-dot.moderate {
-  color: var(--officer-information);
-}
-.officer-ui .severity-dot.high {
-  color: var(--officer-warning);
-}
-.officer-ui .severity-dot.critical {
-  color: var(--officer-critical);
-}
-.officer-ui .severity-text {
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: capitalize;
-}
-.officer-ui .severity-text.low {
-  color: var(--officer-success);
-}
-.officer-ui .severity-text.moderate {
-  color: var(--officer-information);
-}
-.officer-ui .severity-text.high {
-  color: var(--officer-warning);
-}
-.officer-ui .severity-text.critical {
-  color: var(--officer-critical);
-  font-weight: 700;
-}
-.officer-ui .status-text {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: capitalize;
-}
-.officer-ui .status-text.submitted {
-  color: var(--officer-information);
-}
-.officer-ui .status-text.under_review {
-  color: var(--officer-warning);
-}
-.officer-ui .status-text.action_required {
-  color: var(--officer-critical);
-}
-.officer-ui .status-text.resolved {
-  color: var(--officer-success);
-}
-.officer-ui .status-text.closed {
-  color: color-mix(in srgb, var(--officer-graphite) 55%, white);
-}
-
 .officer-ui .officer-link {
   display: inline-flex;
   align-items: center;
@@ -218,95 +84,19 @@
 }
 .officer-ui .officer-row {
   display: block;
-  border: 0;
-  border-bottom: 1px solid
-    color-mix(in srgb, var(--officer-graphite) 12%, white);
-  border-radius: 6px;
   padding: 12px;
-  margin: 0 -12px;
-  box-shadow: none;
+  margin: 0 0 8px;
   text-decoration: none;
-  transition:
-    background 100ms,
-    box-shadow 100ms;
-}
-.officer-ui .officer-row:hover {
-  background: color-mix(in srgb, var(--officer-graphite) 6%, white);
-  box-shadow: inset 4px 0 0 0 var(--officer-yellow);
-}
-.officer-ui .officer-row:active {
-  background: color-mix(in srgb, var(--officer-graphite) 10%, white);
-  box-shadow: inset 4px 0 0 0 var(--officer-yellow);
-}
-.officer-ui .officer-row:focus-visible {
-  outline: 2px solid var(--officer-yellow);
-  outline-offset: 2px;
-  background: color-mix(in srgb, var(--officer-yellow) 8%, white);
-  box-shadow: inset 4px 0 0 0 var(--officer-yellow);
 }
 .officer-ui .officer-row:last-child {
-  border-bottom: 0;
+  margin-bottom: 0;
 }
 
 /* Report card (mobile list view) */
 .officer-ui .report-card {
   display: block;
-  border: 1px solid color-mix(in srgb, var(--officer-graphite) 25%, white);
-  border-radius: 10px;
-  background: white;
   padding: 12px;
   text-decoration: none;
-  transition:
-    border-color 150ms,
-    box-shadow 150ms,
-    background 100ms;
-  box-shadow: 0 2px 5px #00000010;
-}
-.officer-ui .report-card:hover {
-  border-color: color-mix(in srgb, var(--officer-graphite) 32%, white);
-  box-shadow:
-    0 4px 12px #00000010,
-    0 2px 4px #00000008;
-}
-.officer-ui .report-card:active {
-  background: color-mix(in srgb, var(--officer-graphite) 6%, white);
-}
-.officer-ui .report-card:focus-visible {
-  outline: 2px solid var(--officer-yellow);
-  outline-offset: 2px;
-  border-color: var(--officer-graphite);
-  box-shadow: 0 2px 5px #00000010;
-}
-
-/* Report metadata inline (used in table cells and cards) */
-.officer-ui .report-meta-inline {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  font-size: 11px;
-}
-.officer-ui .report-meta-inline .type-text {
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: color-mix(in srgb, var(--officer-graphite) 55%, white);
-  font-weight: 500;
-}
-.officer-ui .report-meta-inline .severity-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-weight: 600;
-}
-.officer-ui .report-meta-inline .severity-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.officer-ui .report-meta-inline .status-badge {
-  font-weight: 500;
-  text-transform: capitalize;
 }
 
 /* Report card — increase contrast for secondary text */
@@ -325,11 +115,7 @@
 
 .officer-ui .officer-detail-panel {
   min-width: 0;
-  border: 1px solid color-mix(in srgb, var(--officer-graphite) 18%, white);
-  border-radius: 10px;
-  background: white;
   padding: 16px;
-  box-shadow: 0 2px 6px #0000000a;
 }
 
 /* Toolbar button states */
@@ -405,30 +191,7 @@
 
 /* Shared card elevation — KPI cards + report section cards */
 .officer-ui .overview-card {
-  background: white;
-  border: 1px solid color-mix(in srgb, var(--officer-graphite) 18%, white);
-  border-radius: 10px;
-  box-shadow:
-    0 1px 3px #0000000a,
-    0 2px 6px #00000008;
-  transition:
-    box-shadow 150ms,
-    border-color 150ms;
-}
-.officer-ui .overview-card:where(a):hover {
-  border-color: color-mix(in srgb, var(--officer-graphite) 32%, white);
-  box-shadow:
-    0 4px 12px #00000010,
-    0 2px 4px #00000008;
-}
-.officer-ui .overview-card:where(a):focus-visible {
-  outline: 2px solid var(--officer-yellow);
-  outline-offset: 2px;
-  border-color: var(--officer-yellow);
-  box-shadow:
-    0 4px 12px #00000010,
-    0 2px 4px #00000008,
-    0 0 0 2px var(--officer-yellow);
+  min-width: 0;
 }
 .officer-ui .officer-table table {
   table-layout: fixed;
@@ -448,9 +211,6 @@
   background: var(--officer-surface);
 }
 .officer-ui .officer-section {
-  background: white;
-  border: 1px solid color-mix(in srgb, var(--officer-graphite) 12%, white);
-  border-radius: 8px;
   padding: 16px;
 }
 .officer-ui .officer-toolbar {
@@ -531,11 +291,11 @@
 .officer-ui table :is(td, th) {
   overflow-wrap: anywhere;
 }
-.officer-ui button:not(.officer-button) {
+.officer-ui main button:not(.officer-button) {
   min-height: 40px;
   border-radius: 6px;
 }
-.officer-ui button:not(.officer-button):hover {
+.officer-ui main button:not(.officer-button):hover {
   background-color: var(--officer-surface);
 }
 .officer-ui button:focus-visible,

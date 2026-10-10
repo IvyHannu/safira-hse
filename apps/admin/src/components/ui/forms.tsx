@@ -18,13 +18,17 @@ interface FieldProps {
 function Field({
   id,
   label,
+  labelClassName = '',
   helperText,
   error,
   children,
-}: FieldProps & { id: string; children: ReactNode }) {
+}: FieldProps & { id: string; children: ReactNode; labelClassName?: string }) {
   return (
     <div className="grid gap-1">
-      <label htmlFor={id} className="text-sm font-semibold text-deepCharcoal">
+      <label
+        htmlFor={id}
+        className={`text-sm font-semibold text-deepCharcoal ${labelClassName}`}
+      >
         {label}
       </label>
       {children}
@@ -72,18 +76,35 @@ export function Input({
   );
 }
 
-export function SearchInput(props: Omit<InputProps, 'type'>) {
+export function SearchInput(
+  props: Omit<InputProps, 'type'> & { labelHidden?: boolean },
+) {
   const generatedId = useId();
-  const { label, helperText, error, className = '', id, ...inputProps } = props;
+  const {
+    label,
+    labelHidden = false,
+    helperText,
+    error,
+    className = '',
+    id,
+    ...inputProps
+  } = props;
   const fieldId = id || generatedId;
   return (
-    <Field id={fieldId} label={label} helperText={helperText} error={error}>
+    <Field
+      id={fieldId}
+      label={label}
+      labelClassName={labelHidden ? 'sr-only' : ''}
+      helperText={helperText}
+      error={error}
+    >
       <div className="relative">
-        <MagnifyingGlass
-          size={18}
+        <span
+          className="pointer-events-none absolute inset-y-0 left-0 flex w-10 items-center justify-center text-graphite/70"
           aria-hidden="true"
-          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-graphite/70"
-        />
+        >
+          <MagnifyingGlass size={18} />
+        </span>
         <input
           {...inputProps}
           id={fieldId}
@@ -92,7 +113,7 @@ export function SearchInput(props: Omit<InputProps, 'type'>) {
           aria-describedby={
             error || helperText ? `${fieldId}-message` : undefined
           }
-          className={`${controlClass} min-h-11 border-graphite/25 pl-10 shadow-sm focus:border-signalYellow focus:outline-none focus:ring-0 ${className}`}
+          className={`${controlClass} safira-search-input ${className}`}
         />
       </div>
     </Field>
@@ -154,7 +175,7 @@ function Choice({
           aria-describedby={
             error || helperText ? `${fieldId}-message` : undefined
           }
-          className={`size-5 shrink-0 accent-signalYellow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signalYellow ${className}`}
+          className={`${type === 'checkbox' ? 'size-[18px]' : 'size-5'} shrink-0 accent-signalYellow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signalYellow ${className}`}
         />
         {label}
       </label>

@@ -7,7 +7,7 @@ export function ReportListCard({ report }: { report: ReportListItem }) {
   return (
     <Link
       href={`/hse-officer/reports/${report.id}`}
-      className="report-card group"
+      className="report-card safira-card-surface safira-card-action group"
       aria-label={`Open report ${report.id}: ${report.title}`}
     >
       <div className="grid min-w-0 gap-2 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_minmax(0,1.4fr)_auto] lg:items-center lg:gap-4">

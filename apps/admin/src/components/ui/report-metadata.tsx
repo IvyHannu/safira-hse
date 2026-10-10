@@ -1,7 +1,7 @@
 import { Circle } from '@phosphor-icons/react/dist/ssr';
 import { metadata } from '@safira/design-tokens';
 
-export type MetadataKind = 'type' | 'severity' | 'status';
+export type MetadataKind = 'type' | 'role' | 'severity' | 'status';
 export type MetadataTone =
   'neutral' | 'success' | 'warning' | 'critical' | 'information';
 export type ReportType =
@@ -52,7 +52,7 @@ export function MetadataLabel({
 }) {
   return (
     <span
-      className={`safira-metadata inline-flex min-h-5 max-w-full items-center gap-1.5 whitespace-nowrap align-middle leading-5 ${kind === 'type' ? 'text-[11px] font-medium uppercase tracking-wide text-graphite/75' : kind === 'severity' ? `text-xs font-semibold ${toneClass[tone]}` : `text-xs font-medium ${toneClass[tone]}`} ${className}`}
+      className={`safira-metadata inline-flex min-h-5 max-w-full items-center gap-1.5 whitespace-nowrap align-middle leading-5 ${kind === 'type' ? 'text-[11px] font-medium uppercase tracking-wide text-graphite/75' : kind === 'role' ? 'text-xs font-medium text-graphite' : kind === 'severity' ? `text-xs font-semibold ${toneClass[tone]}` : `text-xs font-medium ${toneClass[tone]}`} ${className}`}
       style={{
         minHeight: metadata.height,
         gap: metadata.gap,
@@ -61,7 +61,7 @@ export function MetadataLabel({
         lineHeight: `${metadata.lineHeight}px`,
       }}
     >
-      {kind !== 'type' && (
+      {(kind === 'severity' || kind === 'status') && (
         <Circle
           size={kind === 'severity' ? metadata.dotSize + 1 : metadata.dotSize}
           weight="fill"

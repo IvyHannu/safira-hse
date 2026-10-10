@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import { colors, spacing, typography } from '@safira/design-tokens';
 import Check from 'phosphor-react-native/src/icons/Check';
 import { StyleSheet, Text, View } from 'react-native';
-import { AppCard, Button, EmptyState, StatusBadge } from '@/components/ui';
+import { AppCard, Button, EmptyState, MetadataLabel } from '@/components/ui';
 import { useReporting } from '@/reporting/provider';
 
 export default function ReportConfirmationScreen() {
@@ -36,7 +36,7 @@ export default function ReportConfirmationScreen() {
       <AppCard>
         <Text style={styles.referenceLabel}>Report reference</Text>
         <Text style={styles.reference}>{report.reference}</Text>
-        <StatusBadge label="Submitted" tone="information" />
+        <MetadataLabel label="Submitted" tone="information" />
         <Text style={styles.timestamp}>
           Submitted {new Date(report.submittedAt).toLocaleString()}
         </Text>

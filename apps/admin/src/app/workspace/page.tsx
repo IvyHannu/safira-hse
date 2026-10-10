@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { AuthRole } from '@safira/auth';
 import { useAuth } from '@/lib/demo-auth';
-import { Button } from '@/components/ui';
 
 const adminRoles: Record<Exclude<AuthRole, 'worker'>, string> = {
   hse_officer: 'HSE Officer',
@@ -15,7 +14,7 @@ const adminRoles: Record<Exclude<AuthRole, 'worker'>, string> = {
 
 export default function WorkspacePage() {
   const router = useRouter();
-  const { session, loading, error, signIn, signOut } = useAuth();
+  const { session, loading, error, signIn } = useAuth();
   const [acceptingLink, setAcceptingLink] = useState(true);
   const linkHandled = useRef(false);
 
@@ -59,35 +58,20 @@ export default function WorkspacePage() {
     );
   }
 
+  if (role === 'hse_admin') {
+    router.replace('/hse-admin/overview');
+    return null;
+  }
+
   if (role === 'hse_officer') {
     router.replace('/hse-officer/overview');
     return null;
   }
 
-  return (
-    <main className="min-h-screen bg-coolSurface p-6 text-graphite">
-      <section className="mx-auto max-w-[720px] border border-coolConcrete bg-white p-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em]">
-          Safira Admin
-        </p>
-        <h1 className="mt-3 border-l-4 border-signalYellow pl-4 text-[22px] font-semibold text-deepCharcoal">
-          {adminRoles[role]} space
-        </h1>
-        <Button
-          className="mt-6"
-          variant="secondary"
-          onClick={() => router.push('/')}
-        >
-          Switch workspace
-        </Button>
-        <Button
-          className="mt-6"
-          variant="tertiary"
-          onClick={() => void signOut().then(() => router.replace('/'))}
-        >
-          Sign out
-        </Button>
-      </section>
-    </main>
-  );
+  if (role === 'organisation_admin') {
+    router.replace('/organisation-admin/overview');
+    return null;
+  }
+
+  return null;
 }

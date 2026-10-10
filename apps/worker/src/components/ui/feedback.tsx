@@ -1,8 +1,13 @@
 import { useState, type ReactNode } from 'react';
-import { colors, radius, spacing, typography } from '@safira/design-tokens';
-import type { IllustrationKey } from '@safira/design-tokens';
+import {
+  colors,
+  metadata,
+  radius,
+  spacing,
+  typography,
+  type IllustrationKey,
+} from '@safira/design-tokens';
 import Info from 'phosphor-react-native/src/icons/Info';
-import Check from 'phosphor-react-native/src/icons/Check';
 import CheckCircle from 'phosphor-react-native/src/icons/CheckCircle';
 import WarningCircle from 'phosphor-react-native/src/icons/WarningCircle';
 import {
@@ -17,38 +22,42 @@ import { IllustrationSlot } from './illustration-slot';
 
 export type Tone = 'success' | 'warning' | 'critical' | 'information';
 
-interface StatusBadgeProps {
+interface StatusLabelProps {
   label: string;
   tone: Tone;
 }
 
-export function StatusBadge({ label, tone }: StatusBadgeProps) {
+export function MetadataLabel({
+  label,
+  tone = 'information',
+  kind = 'status',
+}: {
+  label: string;
+  tone?: Tone;
+  kind?: 'type' | 'severity' | 'status';
+}) {
+  const color = kind === 'type' ? colors.graphite : colors[tone];
   return (
-    <View
-      accessibilityLabel={`Status: ${label}`}
-      style={[
-        styles.badge,
-        { borderColor: colors[tone], backgroundColor: `${colors[tone]}12` },
-      ]}
-    >
-      <Text style={[styles.badgeText, { color: colors[tone] }]}>{label}</Text>
-    </View>
-  );
-}
-
-export function StatusLabel({ label, tone }: StatusBadgeProps) {
-  return (
-    <View accessibilityLabel={`Status: ${label}`} style={styles.statusLabel}>
-      {tone === 'success' ? (
-        <Check size={14} weight="bold" color={colors.success} />
-      ) : (
-        <View style={[styles.statusDot, { backgroundColor: colors[tone] }]} />
+    <View accessibilityLabel={`${kind}: ${label}`} style={styles.metadataLabel}>
+      {kind !== 'type' && (
+        <View style={[styles.statusDot, { backgroundColor: color }]} />
       )}
-      <Text style={[styles.statusLabelText, { color: colors[tone] }]}>
+      <Text
+        style={[
+          styles.metadataText,
+          kind === 'type' && styles.metadataType,
+          kind === 'severity' && styles.metadataStrong,
+          { color },
+        ]}
+      >
         {label}
       </Text>
     </View>
   );
+}
+
+export function StatusLabel({ label, tone }: StatusLabelProps) {
+  return <MetadataLabel label={label} tone={tone} />;
 }
 
 export function ChecklistProgress({
@@ -106,7 +115,7 @@ export function StatusCard({
 }) {
   const Icon = tone === 'success' ? CheckCircle : Info;
   return (
-    <View style={[styles.statusCard, { borderLeftColor: colors[tone] }]}>
+    <View style={[styles.statusCard, { borderColor: colors[tone] }]}>
       <View accessibilityElementsHidden>
         <Icon size={20} color={colors[tone]} weight="bold" />
       </View>
@@ -268,7 +277,7 @@ export function InlineAlert({ tone, title, message }: InlineAlertProps) {
   return (
     <View
       accessibilityRole="alert"
-      style={[styles.alert, { borderLeftColor: colors[tone] }]}
+      style={[styles.alert, { borderColor: colors[tone] }]}
     >
       <Text style={[styles.alertTitle, { color: colors[tone] }]}>{title}</Text>
       <Text style={styles.alertMessage}>{message}</Text>
@@ -276,13 +285,47 @@ export function InlineAlert({ tone, title, message }: InlineAlertProps) {
   );
 }
 
+export const workerCardSurface: ViewStyle = {
+  borderWidth: 1,
+  borderColor: colors.coolConcrete,
+  borderRadius: radius.md,
+  backgroundColor: colors.white,
+  padding: spacing[2],
+  gap: spacing[1],
+  shadowColor: colors.deepCharcoal,
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.07,
+  shadowRadius: 6,
+  elevation: 1,
+};
+
 const styles = StyleSheet.create({
-  statusLabel: { flexDirection: 'row', alignItems: 'center', gap: 5 },
-  statusDot: { width: 7, height: 7, borderRadius: 4 },
-  statusLabelText: {
+  metadataLabel: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: metadata.gap,
+    minHeight: metadata.height,
+    alignSelf: 'flex-start',
+    paddingHorizontal: metadata.paddingX,
+    borderRadius: metadata.radius,
+  },
+  statusDot: {
+    width: metadata.dotSize,
+    height: metadata.dotSize,
+    borderRadius: metadata.dotSize / 2,
+  },
+  metadataText: {
     fontFamily: typography.fontFamily,
-    fontSize: 12,
-    fontWeight: '700',
+    fontSize: metadata.fontSize,
+    lineHeight: metadata.lineHeight,
+    fontWeight: '500',
+  },
+  metadataStrong: { fontWeight: '700' },
+  metadataType: {
+    fontSize: metadata.typeFontSize,
+    fontWeight: '500',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   checklistProgress: { gap: spacing[1] },
   progressCompact: { gap: 0 },
@@ -310,7 +353,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: spacing[1],
-    borderLeftWidth: 3,
+    borderWidth: 1,
     borderRadius: radius.sm,
     backgroundColor: colors.coolSurface,
     padding: spacing[2],
@@ -330,8 +373,8 @@ const styles = StyleSheet.create({
   },
   issuePanel: {
     gap: spacing[1],
-    borderLeftWidth: 3,
-    borderLeftColor: colors.warning,
+    borderWidth: 1,
+    borderColor: colors.warning,
     borderRadius: radius.sm,
     backgroundColor: `${colors.warning}08`,
     padding: spacing[2],
@@ -349,31 +392,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 19,
   },
-  badge: {
-    alignSelf: 'flex-start',
-    borderWidth: 1,
-    borderRadius: radius.sm,
-    paddingHorizontal: spacing[1],
-    paddingVertical: 4,
-  },
-  badgeText: {
-    fontFamily: typography.fontFamily,
-    fontSize: 12,
-    fontWeight: '700',
-  },
-  card: {
-    borderWidth: 1,
-    borderColor: colors.coolConcrete,
-    borderRadius: radius.md,
-    backgroundColor: colors.white,
-    padding: spacing[2],
-    gap: spacing[1],
-    shadowColor: colors.deepCharcoal,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 6,
-    elevation: 1,
-  },
+  card: workerCardSurface,
   cardTitle: {
     color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
@@ -389,7 +408,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.coolConcrete,
     transform: [{ scale: 0.99 }],
   },
-  cardFocused: { borderWidth: 2, borderColor: colors.deepCharcoal },
+  cardFocused: { borderWidth: 1, borderColor: colors.signalYellow },
   infoRow: {
     minHeight: 28,
     flexDirection: 'row',
@@ -415,8 +434,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: spacing[1],
-    borderLeftWidth: 3,
-    borderLeftColor: colors.signalYellow,
+    borderWidth: 1,
+    borderColor: colors.coolConcrete,
     borderRadius: radius.sm,
     backgroundColor: colors.coolSurface,
     paddingHorizontal: 10,
@@ -458,7 +477,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   alert: {
-    borderLeftWidth: 4,
+    borderWidth: 1,
     borderRadius: radius.sm,
     backgroundColor: colors.white,
     padding: spacing[2],
