@@ -587,7 +587,14 @@ export function OrganisationAccess() {
               </div>
             ))
           ) : (
-            <p className="organisation-access-empty">No pending invitations.</p>
+            <div className="organisation-access-empty grid justify-items-center gap-2 text-center">
+              <IllustrationSlot
+                illustrationKey="empty"
+                decorative
+                className="max-w-20"
+              />
+              <p>No pending invitations.</p>
+            </div>
           )}
           <Link
             href="/organisation-admin/users"
@@ -654,9 +661,14 @@ export function OrganisationAccess() {
               );
             })
           ) : (
-            <p className="organisation-access-empty">
-              No pending access requests.
-            </p>
+            <div className="organisation-access-empty grid justify-items-center gap-2 text-center">
+              <IllustrationSlot
+                illustrationKey="empty"
+                decorative
+                className="max-w-20"
+              />
+              <p>No pending access requests.</p>
+            </div>
           )}
         </section>
       </div>

@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { PageHeader } from '@/components/ui/shell';
 import { Select } from '@/components/ui/forms';
+import { IllustrationSlot } from '@/components/ui/illustration-slot';
 import { checklistSubmissions, flaggedCount } from '@/data/checklists';
 import {
   reportList,
@@ -339,9 +340,14 @@ export function AdminInsights() {
             </table>
           </div>
         ) : (
-          <p className="admin-insights-empty">
-            No reports match these filters.
-          </p>
+          <div className="admin-insights-empty grid justify-items-center gap-2 py-3 text-center">
+            <IllustrationSlot
+              illustrationKey="empty"
+              decorative
+              className="max-w-24"
+            />
+            <p>No reports match these filters.</p>
+          </div>
         )}
         <p className="admin-insights-note">
           Actual action and resolution dates are not in the local records; this
