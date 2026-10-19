@@ -1,5 +1,4 @@
-import { useEffect, useRef } from 'react';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { colors, spacing, typography } from '@safira/design-tokens';
 import type { ReportStatus } from '@safira/types';
 import { StyleSheet, Text, View } from 'react-native';
@@ -14,7 +13,6 @@ import {
   type Tone,
   WorkerHomeHeader,
 } from '@/components/ui';
-import { WorkspaceSelector } from '@/components/workspace-selector';
 import { workerHomeDemo } from '@/demo/worker-data';
 import { useAuth } from '@/lib/demo-auth';
 import { isDraftStarted } from '@/reporting/model';
@@ -32,23 +30,11 @@ const workerStatus: Record<ReportStatus, { label: string; tone: Tone }> = {
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { workspaceRole } = useLocalSearchParams<{ workspaceRole?: string }>();
-  const { session, loading, signIn } = useAuth();
-  const linkHandled = useRef(false);
+  const { account } = useAuth();
   const { state } = useReporting();
   const { photoUri } = useProfilePhoto();
 
-  useEffect(() => {
-    if (loading || workspaceRole !== 'worker' || linkHandled.current) return;
-    linkHandled.current = true;
-    void signIn('worker').then((saved) => {
-      if (saved) router.replace('/');
-    });
-  }, [workspaceRole, loading, router, signIn]);
   const { checklists } = useSafety();
-
-  if (loading) return <Text style={styles.body}>Opening Safira…</Text>;
-  if (session?.role !== 'worker') return <WorkspaceSelector />;
 
   const { worker, site, assignedChecklist, activeSafetyAlert } = workerHomeDemo;
   const latestReport = [...state.demoReports].sort(
@@ -68,9 +54,9 @@ export default function HomeScreen() {
   return (
     <View style={styles.content}>
       <WorkerHomeHeader
-        siteName={site.name}
+        siteName={account?.site ?? site.name}
         area={site.area}
-        firstName={worker.firstName}
+        firstName={account?.fullName.split(' ')[0] || worker.firstName}
         photoUri={photoUri}
       />
       <View style={styles.main}>
@@ -131,12 +117,6 @@ const styles = StyleSheet.create({
     marginHorizontal: -spacing[2],
     marginTop: -spacing[2],
     backgroundColor: colors.coolSurface,
-  },
-  body: {
-    color: colors.graphite,
-    fontFamily: typography.fontFamily,
-    fontSize: 15,
-    lineHeight: 22,
   },
   main: { gap: spacing[2], padding: spacing[2] },
   section: { gap: spacing[1] },

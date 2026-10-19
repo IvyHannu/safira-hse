@@ -249,6 +249,7 @@ interface EmptyStateProps {
   description: string;
   action?: ReactNode;
   illustrationKey?: IllustrationKey;
+  prominent?: boolean;
 }
 
 export function EmptyState({
@@ -256,12 +257,24 @@ export function EmptyState({
   description,
   action,
   illustrationKey = 'empty',
+  prominent = false,
 }: EmptyStateProps) {
   return (
-    <View style={styles.emptyState}>
-      <IllustrationSlot illustrationKey={illustrationKey} decorative compact />
-      <Text style={styles.emptyTitle}>{title}</Text>
-      <Text style={styles.description}>{description}</Text>
+    <View style={[styles.emptyState, prominent && styles.emptyStateProminent]}>
+      <IllustrationSlot
+        illustrationKey={illustrationKey}
+        decorative
+        compact={!prominent}
+        style={prominent && styles.emptyArtworkProminent}
+      />
+      <Text
+        style={[styles.emptyTitle, prominent && styles.emptyTitleProminent]}
+      >
+        {title}
+      </Text>
+      <Text style={[styles.description, prominent && styles.emptyDescription]}>
+        {description}
+      </Text>
       {action}
     </View>
   );
@@ -424,6 +437,8 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   infoValue: {
+    minWidth: 64,
+    textAlign: 'right',
     color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 14,
@@ -470,12 +485,24 @@ const styles = StyleSheet.create({
     padding: spacing[3],
     gap: spacing[1],
   },
+  emptyStateProminent: {
+    alignItems: 'center',
+    padding: spacing[1],
+    gap: spacing[1],
+  },
+  emptyArtworkProminent: { maxWidth: '100%' },
   emptyTitle: {
     color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 18,
     fontWeight: '600',
   },
+  emptyTitleProminent: {
+    fontSize: 20,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  emptyDescription: { fontSize: 14, lineHeight: 20, textAlign: 'center' },
   alert: {
     borderWidth: 1,
     borderRadius: radius.sm,

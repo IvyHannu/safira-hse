@@ -93,6 +93,7 @@ export default function ChecklistsPage() {
         <EmptyState
           title="No matching submissions"
           description="Try another search or change your filters."
+          illustrationKey="noResults"
         />
       ) : (
         <div className="grid min-w-0 gap-2.5">

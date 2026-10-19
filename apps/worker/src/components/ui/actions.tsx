@@ -3,6 +3,7 @@ import { colors, radius, spacing, typography } from '@safira/design-tokens';
 import ArrowLeft from 'phosphor-react-native/src/icons/ArrowLeft';
 import {
   Pressable,
+  Platform,
   StyleSheet,
   Text,
   View,
@@ -13,6 +14,15 @@ export { ChoiceCard as SelectableCard } from './form-controls';
 
 export type ButtonVariant =
   'primary' | 'secondary' | 'tertiary' | 'destructive';
+
+export function isVisibleKeyboardFocus(target: unknown) {
+  if (Platform.OS !== 'web') return true;
+  return Boolean(
+    (target as { matches?: (selector: string) => boolean } | null)?.matches?.(
+      ':focus-visible',
+    ),
+  );
+}
 
 interface ButtonProps extends Omit<PressableProps, 'children' | 'style'> {
   label: string;
@@ -57,7 +67,7 @@ export function Button({
         onHoverOut?.(event);
       }}
       onFocus={(event) => {
-        setFocused(true);
+        setFocused(isVisibleKeyboardFocus(event.target));
         onFocus?.(event);
       }}
       onBlur={(event) => {
@@ -70,6 +80,7 @@ export function Button({
         hovered && !inactive && styles[`${variant}Hover`],
         pressed && !inactive && styles[`${variant}Pressed`],
         focused && !inactive && styles.focused,
+        focused && !inactive && variant === 'primary' && styles.primaryFocused,
         inactive && styles.disabled,
       ]}
     >
@@ -110,7 +121,7 @@ export function WorkerHeader({
         onPress={onBack}
         onHoverIn={() => setHovered(true)}
         onHoverOut={() => setHovered(false)}
-        onFocus={() => setFocused(true)}
+        onFocus={(event) => setFocused(isVisibleKeyboardFocus(event.target))}
         onBlur={() => setFocused(false)}
         style={({ pressed }) => [
           styles.headerBack,
@@ -136,6 +147,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     paddingHorizontal: spacing[2],
     paddingVertical: 0,
+    outlineWidth: 0,
   },
   buttonContent: {
     flexDirection: 'row',
@@ -201,13 +213,9 @@ const styles = StyleSheet.create({
     borderColor: colors.graphite,
   },
   focused: {
-    borderWidth: 1,
     borderColor: colors.signalYellow,
-    outlineWidth: 1,
-    outlineStyle: 'solid',
-    outlineColor: colors.signalYellow,
-    outlineOffset: 2,
   },
+  primaryFocused: { borderColor: colors.deepCharcoal },
   disabled: {
     opacity: 1,
     backgroundColor: colors.coolConcrete,

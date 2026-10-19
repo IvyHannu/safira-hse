@@ -1,10 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { colors } from '@safira/design-tokens';
 import { HSEOfficerSidebar } from '@/components/hse-officer/Sidebar';
 import { MobileHeader } from '@/components/ui/shell';
+import { useAuth } from '@/lib/demo-auth';
+import {
+  hasCompletedHseOfficerOnboarding,
+  subscribeHseOfficerOnboarding,
+} from '@/lib/hse-officer-onboarding';
 import './officer.css';
 
 export default function HSEOfficerLayout({
@@ -13,6 +19,58 @@ export default function HSEOfficerLayout({
   children: ReactNode;
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { session, account, loading } = useAuth();
+  const pathname = usePathname();
+  const router = useRouter();
+  const isOfficer = session?.role === 'hse_officer';
+  const isOnboarding = pathname.startsWith('/hse-officer/onboarding');
+  const isPreview =
+    process.env.NODE_ENV === 'development' &&
+    pathname === '/hse-officer/onboarding/preview';
+  const onboardingComplete = useSyncExternalStore(
+    subscribeHseOfficerOnboarding,
+    () => (session ? hasCompletedHseOfficerOnboarding(session) : false),
+    () => false,
+  );
+
+  useEffect(() => {
+    if (loading) return;
+    if (!isOfficer) {
+      router.replace('/sign-in');
+      return;
+    }
+    if (account && !account.profileComplete) {
+      router.replace('/complete-profile');
+      return;
+    }
+    if (!onboardingComplete && !isOnboarding)
+      router.replace('/hse-officer/onboarding');
+    if (onboardingComplete && isOnboarding && !isPreview)
+      router.replace('/hse-officer/overview');
+  }, [
+    account,
+    isOfficer,
+    isOnboarding,
+    isPreview,
+    loading,
+    onboardingComplete,
+    router,
+  ]);
+
+  const redirecting = isOfficer
+    ? (account && !account.profileComplete) ||
+      (onboardingComplete === isOnboarding && !isPreview)
+    : true;
+  if (loading || redirecting)
+    return (
+      <main
+        className="min-h-dvh bg-coolSurface p-6 text-graphite"
+        role="status"
+      >
+        Opening Safira…
+      </main>
+    );
+  if (isOnboarding) return <>{children}</>;
 
   return (
     <div

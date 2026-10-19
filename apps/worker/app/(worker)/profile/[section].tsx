@@ -1,8 +1,7 @@
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Redirect, useLocalSearchParams, useRouter } from 'expo-router';
 import { colors, radius, spacing, typography } from '@safira/design-tokens';
 import { StyleSheet, Text, View } from 'react-native';
 import { ProfilePhotoEditor, WorkerHeader } from '@/components/ui';
-import { WorkspaceSelector } from '@/components/workspace-selector';
 import { workerHomeDemo } from '@/demo/worker-data';
 import { useAuth } from '@/lib/demo-auth';
 
@@ -16,10 +15,10 @@ const sections = {
 export default function ProfileSectionScreen() {
   const { section } = useLocalSearchParams<{ section: string }>();
   const router = useRouter();
-  const { session, loading } = useAuth();
+  const { account, session, loading } = useAuth();
   const title = sections[section as keyof typeof sections];
 
-  if (!loading && session?.role !== 'worker') return <WorkspaceSelector />;
+  if (!loading && session?.role !== 'worker') return <Redirect href="/sign-in" />;
 
   return (
     <View style={styles.content}>
@@ -35,13 +34,13 @@ export default function ProfileSectionScreen() {
           {section === 'personal-details' && (
             <>
               <View style={styles.photoSection}>
-                <ProfilePhotoEditor name={workerHomeDemo.worker.firstName} />
+                <ProfilePhotoEditor name={account?.fullName || workerHomeDemo.worker.firstName} />
                 <View style={styles.photoCopy}>
                   <Text style={styles.detailValue}>Profile photo</Text>
                   <Text style={styles.detailLabel}>Saved on this device.</Text>
                 </View>
               </View>
-              <Detail label="Name" value={workerHomeDemo.worker.firstName} />
+              <Detail label="Name" value={account?.fullName || workerHomeDemo.worker.firstName} />
               <Detail label="Role" value="Worker" />
               <Detail label="Current site" value={workerHomeDemo.site.name} />
             </>

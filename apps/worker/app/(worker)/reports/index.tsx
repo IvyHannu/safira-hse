@@ -108,45 +108,50 @@ export default function MyReportsScreen() {
         description="Reports you have submitted at this site."
       />
 
-      <FilterTabs
-        items={FILTERS}
-        selectedKey={filter}
-        onSelect={(key: FilterKey) => setFilter(key)}
-        accessibilityLabel="Filter reports"
-      />
+      <View style={styles.filterResults}>
+        <FilterTabs
+          items={FILTERS}
+          selectedKey={filter}
+          onSelect={(key: FilterKey) => setFilter(key)}
+          accessibilityLabel="Filter reports"
+        />
 
-      {sorted.length === 0 ? (
-        <EmptyState
-          title="No reports here"
-          description={
-            filter === 'active'
-              ? 'You have no active reports.'
-              : filter === 'resolved'
-                ? 'No resolved reports yet.'
-                : 'You have not submitted any reports yet.'
-          }
-        />
-      ) : (
-        <FlatList
-          data={sorted}
-          keyExtractor={(item) => item.reference}
-          renderItem={({ item }) => (
-            <ReportCard
-              report={item}
-              onPress={() => router.push(`/reports/${item.reference}`)}
-            />
-          )}
-          contentContainerStyle={styles.list}
-          scrollEnabled={false}
-        />
-      )}
+        {sorted.length === 0 ? (
+          <EmptyState
+            title={filter === 'all' ? 'No reports yet' : 'No reports here'}
+            illustrationKey={filter === 'all' ? 'reportCategory' : 'noResults'}
+            prominent
+            description={
+              filter === 'active'
+                ? 'You have no active reports.'
+                : filter === 'resolved'
+                  ? 'No resolved reports yet.'
+                  : 'Reports you submit will appear here.'
+            }
+          />
+        ) : (
+          <FlatList
+            data={sorted}
+            keyExtractor={(item) => item.reference}
+            renderItem={({ item }) => (
+              <ReportCard
+                report={item}
+                onPress={() => router.push(`/reports/${item.reference}`)}
+              />
+            )}
+            contentContainerStyle={styles.list}
+            scrollEnabled={false}
+          />
+        )}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  content: { gap: spacing[3] },
-  list: { gap: spacing[2], paddingTop: spacing[1] },
+  content: { gap: 12 },
+  filterResults: { gap: spacing[1] },
+  list: { gap: spacing[2] },
   cardRow: {
     flexDirection: 'row',
     gap: spacing[2],

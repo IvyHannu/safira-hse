@@ -6,6 +6,7 @@ import {
   AppCard,
   Button,
   EmptyState,
+  IllustrationSlot,
   SectionHeader,
   MetadataLabel,
   WorkerHeader,
@@ -170,6 +171,11 @@ function ReportDetailContent({ report }: { report: DemoReport }) {
             description="How this report was closed."
           />
           <AppCard>
+            <IllustrationSlot
+              illustrationKey="resolutionSuccess"
+              compact
+              decorative
+            />
             <Text style={styles.body}>{report.resolution.summary}</Text>
             <Text style={styles.updateMeta}>
               Resolved {formatDate(report.resolution.resolvedAt)}

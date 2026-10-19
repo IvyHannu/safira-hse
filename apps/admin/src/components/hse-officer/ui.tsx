@@ -26,19 +26,88 @@ export function OfficerPanel({
   );
 }
 
+export function OfficerFormPanel({
+  title,
+  icon,
+  context,
+  field,
+  action,
+  children,
+}: {
+  title: string;
+  icon: ReactNode;
+  context: ReactNode;
+  field: ReactNode;
+  action: ReactNode;
+  children?: ReactNode;
+}) {
+  return (
+    <OfficerPanel className="grid content-start gap-[12px]">
+      <SectionHeader title={title} icon={icon} compact />
+      <div className="text-xs leading-5 text-graphite/70">{context}</div>
+      {field}
+      <div className="flex justify-end">{action}</div>
+      {children}
+    </OfficerPanel>
+  );
+}
+
+export function OfficerHistory({
+  title,
+  entries,
+}: {
+  title: string;
+  entries: readonly { actor: string; date: string; body: string }[];
+}) {
+  if (!entries.length) return null;
+  return (
+    <div className="border-t border-graphite/10 pt-3">
+      <h3 className="mb-1 text-xs font-semibold text-graphite/75">{title}</h3>
+      <div className="divide-y divide-graphite/10">
+        {entries.map((entry, index) => (
+          <div
+            key={`${entry.date}-${index}`}
+            className="py-2 first:pt-1 last:pb-0"
+          >
+            <div className="flex flex-wrap items-center gap-x-2 text-xs leading-5">
+              <span className="font-semibold text-deepCharcoal">
+                {entry.actor}
+              </span>
+              <time dateTime={entry.date} className="text-graphite/70">
+                {new Date(entry.date).toLocaleString('en-GB', {
+                  day: '2-digit',
+                  month: 'short',
+                  year: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </time>
+            </div>
+            <p className="mt-1 text-sm leading-5 text-graphite">{entry.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function SectionHeader({
   title,
   icon,
   action,
   urgent = false,
+  compact = false,
 }: {
   title: string;
   icon?: ReactNode;
   action?: ReactNode;
   urgent?: boolean;
+  compact?: boolean;
 }) {
   return (
-    <div className="mb-3 flex items-center justify-between gap-3">
+    <div
+      className={`${compact ? '' : 'mb-3'} flex items-center justify-between gap-3`}
+    >
       <div className="flex items-center gap-2">
         {icon && (
           <span className="text-graphite/70" aria-hidden="true">

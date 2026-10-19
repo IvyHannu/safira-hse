@@ -1,4 +1,4 @@
-/** Asset slots only. No artwork is bundled until an approved asset is supplied. */
+/** Shared illustration purposes. Each surface resolves approved local artwork. */
 export const illustrationSlots = {
   welcome: {
     assetKey: 'worker/welcome',
@@ -50,10 +50,15 @@ export const illustrationSlots = {
     aspectRatio: 4 / 3,
     alt: 'Report resolved',
   },
+  noResults: {
+    assetKey: 'shared/no-results',
+    aspectRatio: 4 / 3,
+    alt: 'No matching results',
+  },
   empty: {
     assetKey: 'shared/empty',
     aspectRatio: 3 / 2,
-    alt: 'No results yet',
+    alt: '',
   },
   offlineError: {
     assetKey: 'shared/offline-error',

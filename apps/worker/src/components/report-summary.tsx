@@ -169,15 +169,17 @@ const styles = StyleSheet.create({
   section: {
     borderBottomWidth: 1,
     borderBottomColor: colors.coolConcrete,
-    paddingVertical: 10,
-    gap: 6,
+    paddingVertical: spacing[2],
+    gap: spacing[1],
   },
   heading: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    gap: spacing[1],
   },
   headingText: {
+    flex: 1,
     color: colors.deepCharcoal,
     fontFamily: typography.fontFamily,
     fontSize: 14,
@@ -228,5 +230,5 @@ const styles = StyleSheet.create({
     borderRadius: radius.sm,
     backgroundColor: colors.coolSurface,
   },
-  answers: { gap: 4 },
+  answers: { gap: spacing[1] },
 });

@@ -46,7 +46,25 @@ const baseReports: ReportListItem[] = [
   { id: 'SF-2036', title: 'Missing fall protection on roof edge', type: 'hazard', site: 'Harbor Yard — Warehouse Roof', severity: 'critical', status: 'action_required', date: '2026-09-17' },
 ];
 
-function buildDetail(base: ReportListItem): ReportDetail {
+const submittedAtById: Record<string, string> = {
+  'SF-2050': '2026-09-24T18:00:00.000Z',
+  'SF-2049': '2026-09-24T15:00:00.000Z',
+  'SF-2048': '2026-09-23T18:00:00.000Z',
+  'SF-2047': '2026-09-23T15:00:00.000Z',
+  'SF-2046': '2026-09-22T18:00:00.000Z',
+  'SF-2045': '2026-09-22T15:00:00.000Z',
+  'SF-2044': '2026-09-21T18:00:00.000Z',
+  'SF-2043': '2026-09-20T18:00:00.000Z',
+  'SF-2042': '2026-09-20T15:00:00.000Z',
+  'SF-2041': '2026-09-19T18:00:00.000Z',
+  'SF-2040': '2026-09-19T15:00:00.000Z',
+  'SF-2039': '2026-09-18T18:00:00.000Z',
+  'SF-2038': '2026-09-18T15:00:00.000Z',
+  'SF-2037': '2026-09-17T18:00:00.000Z',
+  'SF-2036': '2026-09-17T15:00:00.000Z',
+};
+
+function buildDetail(base: ReportListItem, index: number): ReportDetail {
   const sites: Record<string, { site: string; area: string; coordinates?: string }> = {
     'Riverside Logistics — Dock B': { site: 'Riverside Logistics', area: 'Dock B', coordinates: '-33.8688, 151.2093' },
     'Riverside Warehouse — Aisle 12': { site: 'Riverside Warehouse', area: 'Aisle 12', coordinates: '-33.8788, 151.2193' },
@@ -121,14 +139,13 @@ function buildDetail(base: ReportListItem): ReportDetail {
     ],
   };
 
-  const dateObj = new Date(base.date);
-  const submittedAt = new Date(dateObj.getTime() - Math.random() * 4 * 60 * 60 * 1000).toISOString();
+  const submittedAt = submittedAtById[base.id];
 
   const workers = ['Marcus Webb', 'James Park', 'Lisa Wong', 'Sarah Chen', 'Robert Kim', 'Emma Davis', 'David Liu', 'Anna Patel'];
-  const submittedBy = workers[Math.floor(Math.random() * workers.length)];
+  const submittedBy = workers[index % workers.length];
 
   const hseOfficers = ['Sarah Chen (HSE Officer)', 'James Park (HSE Officer)', 'Lisa Wong (HSE Admin)'];
-  const assignedTo = hseOfficers[Math.floor(Math.random() * hseOfficers.length)];
+  const assignedTo = hseOfficers[index % hseOfficers.length];
 
   return {
     ...base,
@@ -151,7 +168,7 @@ function buildDetail(base: ReportListItem): ReportDetail {
 }
 
 export const reportData: Record<string, ReportDetail> = Object.fromEntries(
-  baseReports.map((r) => [r.id, buildDetail(r)])
+  baseReports.map((r, index) => [r.id, buildDetail(r, index)])
 );
 
 export const reportList: ReportListItem[] = baseReports;

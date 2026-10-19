@@ -29,7 +29,7 @@ export function WorkerNavigation() {
       icon: (
         <House
           size={21}
-          color={selectedKey === 'home' ? colors.white : colors.graphite}
+          color={selectedKey === 'home' ? colors.signalYellow : colors.graphite}
           weight={selectedKey === 'home' ? 'fill' : 'regular'}
         />
       ),
@@ -40,7 +40,9 @@ export function WorkerNavigation() {
       icon: (
         <Files
           size={21}
-          color={selectedKey === 'reports' ? colors.white : colors.graphite}
+          color={
+            selectedKey === 'reports' ? colors.signalYellow : colors.graphite
+          }
           weight={selectedKey === 'reports' ? 'fill' : 'regular'}
         />
       ),
@@ -49,8 +51,21 @@ export function WorkerNavigation() {
       key: 'report',
       label: 'New report',
       icon: (
-        <View style={styles.reportIcon}>
-          <Plus size={24} weight="bold" color={colors.deepCharcoal} />
+        <View
+          style={[
+            styles.reportIcon,
+            selectedKey === 'report' && styles.reportIconSelected,
+          ]}
+        >
+          <Plus
+            size={24}
+            weight="bold"
+            color={
+              selectedKey === 'report'
+                ? colors.signalYellow
+                : colors.deepCharcoal
+            }
+          />
         </View>
       ),
       disabled: loading || session?.role !== 'worker',
@@ -61,7 +76,9 @@ export function WorkerNavigation() {
       icon: (
         <ShieldCheck
           size={21}
-          color={selectedKey === 'safety' ? colors.white : colors.graphite}
+          color={
+            selectedKey === 'safety' ? colors.signalYellow : colors.graphite
+          }
           weight={selectedKey === 'safety' ? 'fill' : 'regular'}
         />
       ),
@@ -73,7 +90,9 @@ export function WorkerNavigation() {
       icon: (
         <UserCircle
           size={21}
-          color={selectedKey === 'profile' ? colors.white : colors.graphite}
+          color={
+            selectedKey === 'profile' ? colors.signalYellow : colors.graphite
+          }
           weight={selectedKey === 'profile' ? 'fill' : 'regular'}
         />
       ),
@@ -106,6 +125,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: colors.signalYellow,
     borderWidth: 1,
+    borderColor: colors.deepCharcoal,
+  },
+  reportIconSelected: {
+    backgroundColor: colors.deepCharcoal,
     borderColor: colors.deepCharcoal,
   },
 });

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { OrganisationShell } from '@/components/organisation-admin/OrganisationShell';
+import { OrganisationOnboardingGate } from '@/components/organisation-admin/OrganisationOnboardingGate';
 import './organisation.css';
 
 export default function OrganisationAdminLayout({
@@ -7,5 +7,5 @@ export default function OrganisationAdminLayout({
 }: {
   children: ReactNode;
 }) {
-  return <OrganisationShell>{children}</OrganisationShell>;
+  return <OrganisationOnboardingGate>{children}</OrganisationOnboardingGate>;
 }

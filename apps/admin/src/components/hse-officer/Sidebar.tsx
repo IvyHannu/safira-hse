@@ -42,12 +42,12 @@ export function HSEOfficerSidebar({
   onCloseMobile,
 }: HSEOfficerSidebarProps) {
   const router = useRouter();
-  const { session, signOut, error } = useAuth();
+  const { session, account, signOut, error } = useAuth();
   const [signingOut, setSigningOut] = useState(false);
   useOfficerLayer(mobileOpen, onCloseMobile);
 
   useEffect(() => {
-    if (signingOut && !session && !error) router.replace('/');
+    if (signingOut && !session && !error) router.replace('/sign-in');
   }, [signingOut, session, error, router]);
 
   return (
@@ -84,7 +84,7 @@ export function HSEOfficerSidebar({
             onNavigate={onCloseMobile}
           />
           <SidebarAccount
-            name={officerProfile.name}
+            name={account?.fullName || officerProfile.name}
             role="HSE Officer"
             workspace="HSE review"
             profileHref="/hse-officer/profile"

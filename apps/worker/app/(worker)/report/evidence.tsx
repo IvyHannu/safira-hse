@@ -16,6 +16,7 @@ import {
 import {
   ActionUploadField,
   Button,
+  IllustrationSlot,
   InlineAlert,
   SelectionSheet,
   WorkerHeader,
@@ -118,6 +119,9 @@ export default function AddEvidenceScreen() {
           </Text>
         </View>
 
+        {!hasPhoto && (
+          <IllustrationSlot illustrationKey="evidence" compact decorative />
+        )}
         <View style={styles.photoRow}>
           {hasPhoto && evidence ? (
             <View style={styles.photoTile}>

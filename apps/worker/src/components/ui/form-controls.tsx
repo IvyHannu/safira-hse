@@ -21,6 +21,7 @@ interface FormFieldProps extends NativeTextInputProps {
   error?: string;
   disabled?: boolean;
   minimumHeight?: number;
+  trailingAction?: ReactNode;
 }
 
 export function FormField({
@@ -31,6 +32,7 @@ export function FormField({
   editable,
   multiline,
   minimumHeight,
+  trailingAction,
   onFocus,
   onBlur,
   value,
@@ -50,6 +52,7 @@ export function FormField({
         onHoverOut={() => setHovered(false)}
         style={({ pressed }) => [
           styles.surface,
+          Boolean(trailingAction) && styles.surfaceWithAction,
           multiline && styles.multilineSurface,
           minimumHeight !== undefined && { minHeight: minimumHeight },
           Boolean(value) && styles.filled,
@@ -78,8 +81,13 @@ export function FormField({
             setFocused(false);
             onBlur?.(event);
           }}
-          style={[styles.input, multiline && styles.multilineInput]}
+          style={[
+            styles.input,
+            multiline && styles.multilineInput,
+            Boolean(trailingAction) && styles.inputWithAction,
+          ]}
         />
+        {trailingAction}
       </Pressable>
       {error ? (
         <ValidationMessage message={error} />
@@ -369,7 +377,7 @@ const styles = StyleSheet.create({
   surface: {
     minHeight: 48,
     borderWidth: 1,
-    borderColor: colors.coolConcrete,
+    borderColor: `${colors.graphite}40`,
     borderRadius: radius.md,
     backgroundColor: colors.white,
     shadowColor: colors.deepCharcoal,
@@ -378,7 +386,11 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
-  filled: { borderColor: colors.graphite, backgroundColor: colors.white },
+  surfaceWithAction: { flexDirection: 'row', alignItems: 'center' },
+  filled: {
+    borderColor: `${colors.graphite}55`,
+    backgroundColor: colors.white,
+  },
   hovered: {
     borderColor: colors.graphite,
     backgroundColor: colors.coolSurface,
@@ -403,6 +415,8 @@ const styles = StyleSheet.create({
   input: {
     minHeight: 46,
     paddingHorizontal: spacing[2],
+    paddingVertical: 0,
+    textAlignVertical: 'center',
     outlineWidth: 0,
     outlineStyle: 'solid',
     outlineColor: 'transparent',
@@ -410,6 +424,7 @@ const styles = StyleSheet.create({
     fontFamily: typography.fontFamily,
     fontSize: 16,
   },
+  inputWithAction: { flex: 1, minWidth: 0, paddingRight: 0 },
   multilineSurface: { minHeight: 88 },
   multilineInput: {
     flex: 1,

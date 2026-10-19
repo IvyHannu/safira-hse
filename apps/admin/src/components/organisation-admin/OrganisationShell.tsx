@@ -47,14 +47,14 @@ const navigation = [
 export function OrganisationShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
-  const { session, loading, signOut, error } = useAuth();
+  const { session, account, loading, signOut, error } = useAuth();
   const router = useRouter();
   const sidebar = useRef<HTMLElement>(null);
   const close = useCallback(() => setOpen(false), []);
 
   useEffect(() => {
     if (!loading && session?.role !== 'organisation_admin')
-      router.replace(signingOut ? '/' : '/workspace');
+      router.replace(signingOut ? '/sign-in' : '/workspace');
   }, [loading, session, router, signingOut]);
 
   useEffect(() => {
@@ -141,7 +141,7 @@ export function OrganisationShell({ children }: { children: ReactNode }) {
           onNavigate={close}
         />
         <SidebarAccount
-          name={adminProfile.name}
+          name={account?.fullName || adminProfile.name}
           role="Organisation Admin"
           workspace="Organisation governance"
           profileHref="/organisation-admin/profile"

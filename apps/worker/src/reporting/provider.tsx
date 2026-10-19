@@ -22,7 +22,7 @@ import {
 
 const legacyStorageKey = 'safira.worker.reporting.v1';
 const storageKey = 'safira.worker.reporting.v2';
-const resetMarkerKey = 'safira.worker.reporting.reset.2026-10-01';
+const resetMarkerKey = 'safira.worker.reporting.reset.2026-10-18-reports';
 
 interface ReportingContextValue {
   state: LocalReportingState;

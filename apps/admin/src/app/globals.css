@@ -44,6 +44,71 @@ select option:hover {
   min-width: 0;
 }
 
+/* One compact metric hierarchy across the three Admin workspaces. */
+.safira-card-surface.safira-metric-card {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  min-height: 0;
+  padding: 10px 12px;
+  color: #202220;
+  text-decoration: none;
+}
+
+.safira-metric-card-head {
+  display: flex;
+  min-height: 28px;
+  align-items: start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.safira-metric-card-number {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 28px;
+  font-variant-numeric: tabular-nums;
+}
+
+.safira-metric-card-icon {
+  display: grid;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  place-items: center;
+  color: #2563a6;
+}
+
+.safira-metric-card-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.safira-metric-card[data-tone='warning'] .safira-metric-card-icon {
+  color: #a66a00;
+}
+
+.safira-metric-card[data-tone='critical'] .safira-metric-card-icon {
+  color: #b43732;
+}
+
+.safira-metric-card[data-tone='success'] .safira-metric-card-icon {
+  color: #2c7850;
+}
+
+.safira-metric-card-label {
+  color: #404740;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+.safira-metric-card-helper {
+  color: #606761;
+  font-size: 11px;
+  line-height: 15px;
+}
+
 .safira-card-action {
   color: #202220;
   text-decoration: none;
@@ -93,7 +158,9 @@ select option:hover {
   text-align: left;
 }
 
-.safira-clickable-card[aria-pressed='true'] {
+.safira-clickable-card[aria-pressed='true']:not(
+    [data-selection-style='neutral']
+  ) {
   border-color: #d8a617;
   background: #fff;
   box-shadow: 0 1px 3px #1214120b;
@@ -146,17 +213,76 @@ select option:hover {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
 }
 
 /* Shared Admin search field: reserve a fixed icon slot for every role. */
+.safira-search-field {
+  position: relative;
+}
+
+.safira-search-icon {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  display: flex;
+  width: 34px;
+  align-items: center;
+  justify-content: center;
+  color: #5b625b;
+  pointer-events: none;
+}
+
 .safira-search-input {
-  height: 44px !important;
-  min-height: 44px !important;
-  padding: 0 12px 0 44px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  padding: 0 12px 0 38px !important;
+  box-sizing: border-box;
+  line-height: 20px;
   border: 1px solid #bbc2b9 !important;
   border-radius: 6px !important;
   background: #fff;
+}
+
+/* Keep metric values aligned while labels wrap independently underneath. */
+.safira-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+
+.safira-metric-stack {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.safira-metric-value {
+  order: -1;
+  min-height: 28px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  font-variant-numeric: tabular-nums;
+}
+
+.safira-metric-label {
+  font-size: 12px;
+  line-height: 16px;
+  color: #5b625b;
+}
+
+/* Compact grid retains the shared Checkbox's full-row touch target. */
+.safira-checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 8px;
+  min-width: 0;
+}
+
+.safira-checkbox-grid > :first-child {
+  grid-column: 1 / -1;
 }
 
 .safira-search-input:hover:not(:disabled) {
@@ -171,8 +297,8 @@ select option:hover {
 }
 
 .safira-select-trigger {
-  height: 44px !important;
-  min-height: 44px !important;
+  height: 40px !important;
+  min-height: 40px !important;
   padding-inline: 12px !important;
   border: 1px solid #bbc2b9 !important;
   border-radius: 6px !important;
@@ -203,8 +329,8 @@ select option:hover {
 
 /* One compact form size for Admin builder controls. */
 .safira-builder-control {
-  height: 44px !important;
-  min-height: 44px !important;
+  height: 40px !important;
+  min-height: 40px !important;
   padding-inline: 12px !important;
   border: 1px solid #bbc2b9 !important;
   border-radius: 6px !important;
@@ -241,8 +367,8 @@ select option:hover {
 
 @media (min-width: 768px) {
   .safira-control-compact {
-    height: 44px !important;
-    min-height: 44px !important;
+    height: 40px !important;
+    min-height: 40px !important;
   }
 }
 

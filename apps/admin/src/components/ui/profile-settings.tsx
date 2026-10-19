@@ -26,7 +26,7 @@ export function ProfileAvatar({
     <span
       role="img"
       aria-label={`${name} avatar`}
-      className={`relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-coolSurface text-xl font-bold text-deepCharcoal ${className}`}
+      className={`relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full border border-graphite/10 bg-coolConcrete text-xl font-bold text-deepCharcoal ${className}`}
       style={{ width: 64, height: 64, borderRadius: '50%' }}
     >
       {photoUrl && photoUrl !== failedUrl ? (
@@ -46,19 +46,96 @@ export function ProfileAvatar({
   );
 }
 
+export function ProfileIdentity({
+  name,
+  role,
+  context,
+  photoUrl,
+}: {
+  name: string;
+  role: string;
+  context?: string;
+  photoUrl?: string | null;
+}) {
+  return (
+    <div className="flex min-w-0 items-center gap-3 py-1">
+      <ProfileAvatar name={name} photoUrl={photoUrl} />
+      <div className="min-w-0">
+        <strong className="block text-lg font-bold leading-6 text-deepCharcoal">
+          {name}
+        </strong>
+        <p className="text-sm leading-5 text-graphite">{role}</p>
+        {context && (
+          <p className="text-xs leading-5 text-graphite">{context}</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function ProfileSectionNav<Section extends string>({
+  items,
+  selected,
+  selectionStyle = 'accent',
+  onSelect,
+  idPrefix,
+  panelId,
+}: {
+  items: readonly { id: Section; label: string; icon: ReactNode }[];
+  selected: Section;
+  selectionStyle?: 'accent' | 'neutral';
+  onSelect: (section: Section) => void;
+  idPrefix: string;
+  panelId: string;
+}) {
+  return (
+    <nav
+      className="safira-card-surface overflow-hidden"
+      aria-label="Profile sections"
+    >
+      <div>
+        {items.map((item) => (
+          <button
+            key={item.id}
+            id={`${idPrefix}-${item.id}`}
+            type="button"
+            aria-current={selected === item.id ? 'true' : undefined}
+            aria-controls={panelId}
+            onClick={() => onSelect(item.id)}
+            className={`flex min-h-12 w-full items-center gap-2 border-b border-graphite/10 px-3 text-left text-sm font-semibold text-deepCharcoal transition-colors last:border-b-0 hover:bg-coolSurface active:bg-coolConcrete focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-signalYellow motion-reduce:transition-none ${selected === item.id ? (selectionStyle === 'neutral' ? 'bg-coolSurface' : 'ring-1 ring-inset ring-signalYellow') : ''}`}
+          >
+            <span
+              className="flex size-5 shrink-0 items-center justify-center"
+              aria-hidden="true"
+            >
+              {item.icon}
+            </span>
+            <span className="min-w-0 flex-1">{item.label}</span>
+            <CaretRight size={18} weight="bold" aria-hidden="true" />
+          </button>
+        ))}
+      </div>
+    </nav>
+  );
+}
+
 export function PreferenceToggle({
   label,
   description,
   checked,
   onChange,
+  compact = false,
 }: {
   label: string;
   description: string;
   checked: boolean;
   onChange: (checked: boolean) => void;
+  compact?: boolean;
 }) {
   return (
-    <label className="flex min-h-14 cursor-pointer items-center justify-between gap-4 border-b border-graphite/10 py-2.5 last:border-0">
+    <label
+      className={`flex cursor-pointer items-center justify-between gap-4 border-b border-graphite/10 last:border-0 ${compact ? 'min-h-11 py-1.5' : 'min-h-14 py-2.5'}`}
+    >
       <span className="min-w-0">
         <strong className="block text-sm font-semibold text-deepCharcoal">
           {label}
@@ -135,7 +212,7 @@ export function ProfileCard({
   return (
     <Element
       {...props}
-      className={`min-w-0 rounded-lg border border-graphite/15 bg-white p-4 shadow-sm ${className}`}
+      className={`safira-card-surface min-w-0 p-4 ${className}`}
     >
       {children}
     </Element>

@@ -19,6 +19,8 @@ import {
 } from '@phosphor-icons/react';
 import {
   OfficerPanel,
+  OfficerFormPanel,
+  OfficerHistory,
   ReportMetadata,
   SectionHeader,
   Select,
@@ -327,8 +329,12 @@ function AssessmentForm({ report }: { report: ReportDetail }) {
   const [hseStatus, setHseStatus] = useState(report.hseStatus);
 
   return (
-    <OfficerPanel className="space-y-4 border-t-4 border-t-signalYellow">
-      <SectionHeader title="HSE Assessment" icon={<Shield size={16} />} />
+    <OfficerPanel className="space-y-3">
+      <SectionHeader
+        title="HSE Assessment"
+        icon={<Shield size={16} />}
+        compact
+      />
 
       <div className="grid gap-3">
         <Select
@@ -403,65 +409,42 @@ function WorkerUpdateForm({
   const [message, setMessage] = useState('');
 
   return (
-    <OfficerPanel className="space-y-4 border-l-4 border-l-information">
-      <SectionHeader
-        title="Worker-Facing Update"
-        icon={<ChatCircle size={16} />}
-        action={
-          <Button
-            variant="primary"
-            icon={<PaperPlane size={16} aria-hidden="true" />}
-            onClick={() => {
-              onSend(message);
-              setMessage('');
-            }}
-            disabled={!message.trim()}
-          >
-            Send Update
-          </Button>
-        }
+    <OfficerFormPanel
+      title="Worker-Facing Update"
+      icon={<ChatCircle size={18} />}
+      context="Visible to the reporter."
+      field={
+        <Textarea
+          label="Message to worker"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Write an update visible to the reporter..."
+          rows={3}
+        />
+      }
+      action={
+        <Button
+          variant="primary"
+          icon={<PaperPlane size={16} aria-hidden="true" />}
+          onClick={() => {
+            onSend(message);
+            setMessage('');
+          }}
+          disabled={!message.trim()}
+        >
+          Send Update
+        </Button>
+      }
+    >
+      <OfficerHistory
+        title="Previous Updates"
+        entries={updates.map((update) => ({
+          actor: update.sentBy,
+          date: update.date,
+          body: update.message,
+        }))}
       />
-
-      <Textarea
-        label="Message to worker"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        placeholder="Write an update visible to the reporter..."
-        rows={3}
-      />
-
-      {updates.length > 0 && (
-        <div className="border-t border-graphite/10 pt-3">
-          <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-2">
-            Previous Updates
-          </h3>
-          <div className="space-y-2">
-            {updates.map((update, idx) => (
-              <div
-                key={idx}
-                className="rounded-lg border border-graphite/10 bg-coolSurface p-3"
-              >
-                <div className="flex items-center gap-2 flex-wrap text-xs mb-1">
-                  <span className="font-medium text-deepCharcoal">
-                    {update.sentBy}
-                  </span>
-                  <span className="text-graphite/60">
-                    {new Date(update.date).toLocaleString('en-GB', {
-                      day: '2-digit',
-                      month: 'short',
-                      year: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </span>
-                </div>
-                <p className="text-sm text-graphite">{update.message}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </OfficerPanel>
+    </OfficerFormPanel>
   );
 }
 
@@ -475,69 +458,42 @@ function InternalNotesForm({
   const [note, setNote] = useState('');
 
   return (
-    <OfficerPanel className="space-y-4 border-l-4 border-l-graphite/50">
-      <SectionHeader
-        title="Internal HSE Notes"
-        icon={<Lock size={16} />}
-        action={
-          <Button
-            variant="secondary"
-            icon={<Plus size={16} aria-hidden="true" />}
-            onClick={() => {
-              onAdd(note);
-              setNote('');
-            }}
-            disabled={!note.trim()}
-          >
-            Add Note
-          </Button>
-        }
+    <OfficerFormPanel
+      title="Internal HSE Notes"
+      icon={<Lock size={18} />}
+      context="HSE Only — Not visible to workers"
+      field={
+        <Textarea
+          label="Internal note"
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          placeholder="Add internal assessment note..."
+          rows={2}
+        />
+      }
+      action={
+        <Button
+          variant="secondary"
+          icon={<Plus size={16} aria-hidden="true" />}
+          onClick={() => {
+            onAdd(note);
+            setNote('');
+          }}
+          disabled={!note.trim()}
+        >
+          Add Note
+        </Button>
+      }
+    >
+      <OfficerHistory
+        title="Previous Notes"
+        entries={notes.map((entry) => ({
+          actor: entry.author,
+          date: entry.date,
+          body: entry.note,
+        }))}
       />
-
-      <div className="mb-3 p-2.5 rounded-md bg-white border border-graphite/20">
-        <p className="text-xs font-medium text-graphite/70 flex items-center gap-1">
-          <Lock size={12} aria-hidden="true" />
-          HSE Only — Not visible to workers
-        </p>
-      </div>
-
-      <Textarea
-        label="Internal note"
-        value={note}
-        onChange={(e) => setNote(e.target.value)}
-        placeholder="Add internal assessment note..."
-        rows={2}
-      />
-
-      {notes.length > 0 && (
-        <div className="border-t border-graphite/10 pt-3">
-          <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-2">
-            Previous Notes
-          </h3>
-          <div className="space-y-2">
-            {notes.map((n, idx) => (
-              <div key={idx} className="border-b border-graphite/10 py-2">
-                <div className="flex items-center gap-2 flex-wrap text-xs mb-1">
-                  <span className="font-medium text-deepCharcoal">
-                    {n.author}
-                  </span>
-                  <span className="text-graphite/60">
-                    {new Date(n.date).toLocaleString('en-GB', {
-                      day: '2-digit',
-                      month: 'short',
-                      year: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </span>
-                </div>
-                <p className="text-sm text-graphite">{n.note}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </OfficerPanel>
+    </OfficerFormPanel>
   );
 }
 
@@ -657,7 +613,7 @@ export default function ReportDetailPage() {
   return (
     <div className="w-full min-w-0">
       {/* Header */}
-      <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+      <header className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Link
           href="/hse-officer/reports"
           className="inline-flex items-center gap-1.5 text-sm font-medium officer-link"
@@ -668,7 +624,7 @@ export default function ReportDetailPage() {
       </header>
 
       {/* Report Title & Meta */}
-      <section className="mb-6">
+      <section className="mb-4">
         <h1 className="text-[26px] font-semibold leading-tight text-deepCharcoal">
           {report.title}
         </h1>
@@ -697,9 +653,9 @@ export default function ReportDetailPage() {
       </section>
 
       {/* Two-column layout */}
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(310px,360px)]">
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(310px,360px)]">
         {/* Main Column */}
-        <div className="min-w-0 space-y-5">
+        <div className="min-w-0 space-y-4">
           {/* Worker Report */}
           <OfficerPanel>
             <SectionHeader
@@ -707,7 +663,7 @@ export default function ReportDetailPage() {
               icon={<FileText size={16} />}
             />
             <div className="divide-y divide-graphite/10">
-              <div className="pb-5">
+              <div className="pb-4">
                 <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-3">
                   Description
                 </h3>
@@ -716,14 +672,14 @@ export default function ReportDetailPage() {
                 </p>
               </div>
 
-              <div className="py-5">
+              <div className="py-4">
                 <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-3">
                   Evidence
                 </h3>
                 <EvidenceGrid evidence={report.evidence} />
               </div>
 
-              <div className="py-5">
+              <div className="py-4">
                 <h3 className="text-xs font-semibold text-graphite/70 uppercase tracking-wide mb-3">
                   Worker Answers
                 </h3>
@@ -739,7 +695,7 @@ export default function ReportDetailPage() {
                 </div>
               </div>
 
-              <div className="pt-5">
+              <div className="pt-4">
                 <ReportDetailsGrid
                   items={[
                     { label: 'Location', value: report.location.area },
@@ -783,7 +739,7 @@ export default function ReportDetailPage() {
         </div>
 
         {/* Secondary Column - HSE Assessment + Context */}
-        <aside className="min-w-0 space-y-5">
+        <aside className="min-w-0 space-y-4">
           <AssessmentForm report={report} />
 
           <OfficerPanel>
@@ -810,7 +766,7 @@ export default function ReportDetailPage() {
 
           <InfoCard
             title="Emergency — Not an emergency response tool"
-            icon={<Warning size={16} />}
+            icon={<Warning size={20} />}
           >
             For immediate danger, follow site emergency procedures first.
           </InfoCard>

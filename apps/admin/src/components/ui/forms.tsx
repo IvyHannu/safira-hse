@@ -46,10 +46,12 @@ function Field({
 }
 
 const controlClass =
-  'h-11 min-h-11 w-full rounded-md border border-graphite bg-white px-3 text-sm text-deepCharcoal placeholder:text-graphite/70 hover:border-deepCharcoal focus:border-signalYellow focus:outline-none disabled:cursor-not-allowed disabled:border-coolConcrete disabled:bg-coolSurface disabled:text-graphite/70 disabled:opacity-100 aria-invalid:border-critical';
+  'h-10 min-h-10 max-md:h-12 max-md:min-h-12 w-full rounded-[6px] border border-graphite bg-white px-3 text-sm text-deepCharcoal placeholder:text-graphite/70 hover:border-deepCharcoal focus:border-signalYellow focus:outline-none disabled:cursor-not-allowed disabled:border-coolConcrete disabled:bg-coolSurface disabled:text-graphite/70 disabled:opacity-100 aria-invalid:border-critical';
 
 type InputProps = FieldProps &
-  Omit<InputHTMLAttributes<HTMLInputElement>, 'children'>;
+  Omit<InputHTMLAttributes<HTMLInputElement>, 'children'> & {
+    endAdornment?: ReactNode;
+  };
 
 export function Input({
   label,
@@ -57,21 +59,29 @@ export function Input({
   error,
   id,
   className = '',
+  endAdornment,
   ...props
 }: InputProps) {
   const generatedId = useId();
   const fieldId = id || generatedId;
   return (
     <Field id={fieldId} label={label} helperText={helperText} error={error}>
-      <input
-        {...props}
-        id={fieldId}
-        aria-invalid={!!error}
-        aria-describedby={
-          error || helperText ? `${fieldId}-message` : undefined
-        }
-        className={`${controlClass} ${className}`}
-      />
+      <div className={endAdornment ? 'relative' : undefined}>
+        <input
+          {...props}
+          id={fieldId}
+          aria-invalid={!!error}
+          aria-describedby={
+            error || helperText ? `${fieldId}-message` : undefined
+          }
+          className={`${controlClass} ${endAdornment ? 'pr-12' : ''} ${className}`}
+        />
+        {endAdornment && (
+          <span className="absolute inset-y-0 right-0 flex items-center pr-1">
+            {endAdornment}
+          </span>
+        )}
+      </div>
     </Field>
   );
 }
@@ -98,12 +108,9 @@ export function SearchInput(
       helperText={helperText}
       error={error}
     >
-      <div className="relative">
-        <span
-          className="pointer-events-none absolute inset-y-0 left-0 flex w-10 items-center justify-center text-graphite/70"
-          aria-hidden="true"
-        >
-          <MagnifyingGlass size={18} />
+      <div className="safira-search-field">
+        <span className="safira-search-icon" aria-hidden="true">
+          <MagnifyingGlass size={16} weight="bold" />
         </span>
         <input
           {...inputProps}

@@ -13,8 +13,17 @@ import {
   type ViewStyle,
 } from 'react-native';
 
-const approvedAssets: Partial<Record<IllustrationKey, ImageSourcePropType>> =
-  {};
+const approvedAssets: Partial<Record<IllustrationKey, ImageSourcePropType>> = {
+  reportCategory: require('../../../../../docs/references/safira-report-observation.png'),
+  hazard: require('../../../../../docs/references/safira-hazard.png'),
+  nearMiss: require('../../../../../docs/references/safira-near-miss.png'),
+  incident: require('../../../../../docs/references/safira-incident.png'),
+  environmental: require('../../../../../docs/references/safira-environmental-concern.png'),
+  evidence: require('../../../../../docs/references/safira-evidence.png'),
+  checklist: require('../../../../../docs/references/safira-safety-checklist.png'),
+  resolutionSuccess: require('../../../../../docs/references/safira-resolved.png'),
+  noResults: require('../../../../../docs/references/safira-no-results.png'),
+};
 
 /** Reserves a stable space for approved art without implying an image exists. */
 export function IllustrationSlot({
@@ -30,6 +39,7 @@ export function IllustrationSlot({
 }) {
   const slot = illustrationSlots[illustrationKey];
   const source = approvedAssets[illustrationKey];
+  if (!source) return null;
   return (
     <View
       accessible={!!source && !decorative}
@@ -46,9 +56,7 @@ export function IllustrationSlot({
         style,
       ]}
     >
-      {source && (
-        <Image source={source} style={styles.image} resizeMode="contain" />
-      )}
+      <Image source={source} style={styles.image} resizeMode="cover" />
     </View>
   );
 }
@@ -62,6 +70,7 @@ const styles = StyleSheet.create({
     borderColor: colors.coolConcrete,
     borderRadius: radius.md,
     backgroundColor: colors.coolSurface,
+    overflow: 'hidden',
   },
   compact: { maxWidth: 128 },
   image: { width: '100%', height: '100%' },

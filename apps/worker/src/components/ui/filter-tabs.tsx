@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { colors, radius, spacing, typography } from '@safira/design-tokens';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { isVisibleKeyboardFocus } from './actions';
 
 interface FilterTab<Key extends string> {
   key: Key;
@@ -38,7 +39,11 @@ export function FilterTabs<Key extends string>({
           onPress={() => onSelect(item.key)}
           onHoverIn={() => setHoveredKey(item.key)}
           onHoverOut={() => setHoveredKey(null)}
-          onFocus={() => setFocusedKey(item.key)}
+          onFocus={(event) =>
+            setFocusedKey(
+              isVisibleKeyboardFocus(event.target) ? item.key : null,
+            )
+          }
           onBlur={() => setFocusedKey(null)}
           style={({ pressed }) => [
             styles.tab,
@@ -65,12 +70,12 @@ export function FilterTabs<Key extends string>({
 }
 
 const styles = StyleSheet.create({
-  tabs: { flexDirection: 'row', gap: spacing[2] },
+  tabs: { flexDirection: 'row', gap: spacing[1] },
   tab: {
     flex: 1,
     minHeight: 48,
     paddingHorizontal: spacing[2],
-    paddingVertical: spacing[1],
+    paddingVertical: 0,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.white,
@@ -78,7 +83,10 @@ const styles = StyleSheet.create({
     borderColor: colors.coolConcrete,
     borderRadius: radius.sm,
   },
-  tabSelected: { borderColor: colors.signalYellow },
+  tabSelected: {
+    backgroundColor: colors.coolConcrete,
+    borderColor: colors.coolConcrete,
+  },
   tabHover: { backgroundColor: colors.coolSurface },
   tabPressed: { backgroundColor: colors.coolConcrete },
   tabFocused: { borderColor: colors.signalYellow },

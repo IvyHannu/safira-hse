@@ -9,7 +9,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import { PressableCard } from './feedback';
+import { PressableCard, workerCardSurface } from './feedback';
 import { PrimaryButton } from './actions';
 import { ProfileAvatar } from './profile-avatar';
 
@@ -73,7 +73,6 @@ export function DraftStatusCard({ onContinue }: { onContinue(): void }) {
       onPress={onContinue}
       style={styles.draft}
     >
-      <View style={styles.draftAccent} accessibilityElementsHidden />
       <View style={styles.draftCopy}>
         <Text style={styles.draftTitle}>Report in progress</Text>
         <Text style={styles.draftMessage}>
@@ -173,12 +172,7 @@ export function NoticeCard({
 
 const styles = StyleSheet.create({
   homeCardElevation: {
-    borderRadius: radius.lg,
-    shadowColor: colors.deepCharcoal,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 6,
-    elevation: 1,
+    ...workerCardSurface,
   },
   header: {
     minHeight: 80,
@@ -236,13 +230,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing[1],
     padding: spacing[1],
-    borderColor: colors.signalYellow,
-  },
-  draftAccent: {
-    width: 4,
-    alignSelf: 'stretch',
-    borderRadius: 2,
-    backgroundColor: colors.signalYellow,
   },
   draftCopy: { flex: 1, minWidth: 0, gap: 3 },
   draftTitle: {
@@ -287,10 +274,6 @@ const styles = StyleSheet.create({
   guidance: {
     minHeight: 176,
     flexDirection: 'row',
-    borderRadius: radius.lg,
-    backgroundColor: colors.white,
-    borderWidth: 1,
-    borderColor: colors.coolConcrete,
     overflow: 'hidden',
   },
   guidanceNarrow: { flexDirection: 'column' },
@@ -316,11 +299,6 @@ const styles = StyleSheet.create({
   notice: {
     minHeight: 64,
     padding: 12,
-    borderWidth: 1,
-    borderColor: colors.coolConcrete,
-    borderLeftWidth: 4,
-    borderLeftColor: colors.signalYellow,
-    backgroundColor: colors.white,
   },
   noticeCopy: { gap: 3 },
   noticeHeading: { flexDirection: 'row', alignItems: 'center', gap: 5 },

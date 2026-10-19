@@ -12,7 +12,10 @@ export function ChecklistResponseRow({
   const Icon = response.flagged ? WarningCircle : CheckCircle;
 
   return (
-    <div id={`response-${response.id}`} className="grid min-w-0 gap-2 py-3 text-xs">
+    <div
+      id={`response-${response.id}`}
+      className="grid min-w-0 gap-1.5 py-2.5 text-xs leading-5"
+    >
       <div className="flex min-w-0 items-start gap-2">
         <Icon
           size={18}
@@ -23,7 +26,7 @@ export function ChecklistResponseRow({
           <h3 className="font-semibold text-deepCharcoal">
             {response.question}
           </h3>
-          <p className="mt-1 break-words text-graphite">
+          <p className="break-words text-graphite">
             {response.type === 'checkbox' && <span aria-hidden="true">☑ </span>}
             {response.answer}
           </p>
@@ -38,7 +41,10 @@ export function ChecklistResponseRow({
       {evidence.length ? (
         <div className="flex flex-wrap gap-2 pl-[26px]">
           {evidence.map((file) => (
-            <div key={`${file.name}-${file.url}`} className="w-full max-w-[360px]">
+            <div
+              key={`${file.name}-${file.url}`}
+              className="w-full max-w-[440px]"
+            >
               <EvidenceCard
                 item={{ type: 'photo', url: file.url, caption: file.name }}
                 compactUnavailable

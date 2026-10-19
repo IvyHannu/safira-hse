@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { Funnel, X, Calendar, CaretDown } from '@phosphor-icons/react';
+import { Funnel, X, Calendar } from '@phosphor-icons/react';
 import { SearchInput } from '@/components/ui/forms';
+import { Button, IconButton } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/feedback';
 import { ReportListCard } from '@/components/hse-officer/report-list-card';
 import { Select, Input, useOfficerLayer } from '@/components/hse-officer/ui';
@@ -132,15 +133,15 @@ function FilterToolbar({
 
       {/* Date filter - compact popover */}
       <div className="relative">
-        <button
-          type="button"
+        <Button
+          variant="secondary"
+          size="compact"
           onClick={() => setDateFilterOpen(!dateFilterOpen)}
-          className={`date-filter-btn inline-flex h-9 items-center justify-center gap-1.5 rounded-md border border-graphite/20 bg-white px-3 text-sm font-medium text-graphite ${dateFilterOpen ? 'bg-coolSurface' : ''}`}
+          icon={<Calendar aria-hidden="true" />}
+          aria-expanded={dateFilterOpen}
         >
-          <Calendar size={14} aria-hidden="true" />
-          <span>{dateFrom || dateTo ? 'Date' : 'Date'}</span>
-          <CaretDown size={12} aria-hidden="true" />
-        </button>
+          Date
+        </Button>
         {dateFilterOpen && (
           <div
             className="fixed inset-0 z-40"
@@ -166,17 +167,17 @@ function FilterToolbar({
                 className="w-full"
               />
               <div className="flex gap-2 pt-1">
-                <button
-                  type="button"
+                <Button
+                  variant="tertiary"
+                  size="compact"
+                  icon={<X aria-hidden="true" />}
                   onClick={() => {
                     setDateFrom('');
                     setDateTo('');
                   }}
-                  className="inline-flex h-8 items-center justify-center gap-1.5 rounded-md border border-graphite/20 bg-white px-2 text-xs font-medium text-graphite hover:bg-coolSurface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
                 >
-                  <X size={11} aria-hidden="true" />
-                  <span>Clear</span>
-                </button>
+                  Clear
+                </Button>
               </div>
             </div>
           </div>
@@ -185,14 +186,14 @@ function FilterToolbar({
 
       {/* Clear Filters - secondary action */}
       {hasActiveFilters && (
-        <button
-          type="button"
+        <Button
+          variant="tertiary"
+          size="compact"
+          icon={<X aria-hidden="true" />}
           onClick={clearFilters}
-          className="clear-filters-btn inline-flex items-center gap-1 rounded-md px-2 text-sm font-medium text-graphite/70 hover:text-graphite"
         >
-          <X size={12} aria-hidden="true" />
-          <span>Clear</span>
-        </button>
+          Clear
+        </Button>
       )}
     </div>
   );
@@ -256,14 +257,11 @@ function MobileFilterSheet({
       >
         <div className="flex h-14 items-center justify-between border-b border-graphite/20 px-4">
           <h2 className="text-sm font-semibold text-deepCharcoal">Filters</h2>
-          <button
-            type="button"
+          <IconButton
+            label="Close filters"
+            icon={<X aria-hidden="true" />}
             onClick={onClose}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-graphite/70 hover:text-graphite hover:bg-coolSurface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-information"
-            aria-label="Close filters"
-          >
-            <CaretDown size={20} aria-hidden="true" />
-          </button>
+          />
         </div>
         <div className="flex-1 overflow-y-auto p-4 grid content-start gap-4">
           <div>
@@ -352,17 +350,18 @@ function MobileFilterSheet({
             />
           </div>
           {hasActiveFilters && (
-            <button
-              type="button"
+            <Button
+              variant="secondary"
+              size="compact"
+              icon={<X aria-hidden="true" />}
               onClick={() => {
                 clearFilters();
                 onClose();
               }}
-              className="clear-filters-btn inline-flex items-center justify-center gap-1.5 rounded-md border border-graphite/20 bg-white px-3 py-2 text-sm font-medium text-graphite mt-2"
+              className="mt-2"
             >
-              <X size={14} aria-hidden="true" />
               Clear All Filters
-            </button>
+            </Button>
           )}
         </div>
       </aside>
@@ -504,19 +503,19 @@ export default function ReportsPage() {
                 placeholder="Search reports…"
               />
             </div>
-            <button
-              type="button"
+            <Button
+              variant="secondary"
+              size="compact"
+              icon={<Funnel aria-hidden="true" />}
               onClick={() => setMobileFiltersOpen(true)}
-              className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-graphite/20 bg-white px-3 text-sm font-medium text-graphite hover:bg-coolSurface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow"
             >
-              <Funnel size={16} aria-hidden="true" />
               <span>Filters</span>
               {hasActiveFilters && (
                 <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-signalYellow text-deepCharcoal text-[10px] font-bold">
                   {filteredReports.length}
                 </span>
               )}
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -526,16 +525,18 @@ export default function ReportsPage() {
             <EmptyState
               title="No reports found"
               description="Try adjusting your search or filters."
+              illustrationKey="noResults"
               action={
                 hasActiveFilters ? (
-                  <button
-                    type="button"
+                  <Button
+                    variant="secondary"
+                    size="compact"
+                    icon={<X aria-hidden="true" />}
                     onClick={clearFilters}
-                    className="mt-3 inline-flex items-center gap-1 text-sm font-medium officer-link"
+                    className="mt-2"
                   >
-                    <X size={14} aria-hidden="true" />
                     Clear Filters
-                  </button>
+                  </Button>
                 ) : undefined
               }
             />

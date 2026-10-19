@@ -89,29 +89,20 @@ function BottomNavigationButton({
         styles.navigationItem,
         item.key === 'report' && styles.navigationReport,
         hovered && !selected && !item.disabled && styles.navigationHover,
-        selected && item.key !== 'report' && styles.navigationSelected,
+        selected && styles.navigationSelected,
         pressed && !item.disabled && styles.navigationPressed,
-        pressed &&
-          selected &&
-          item.key !== 'report' &&
-          styles.navigationSelectedPressed,
+        pressed && selected && styles.navigationSelectedPressed,
         focused && styles.navigationFocused,
-        focused &&
-          selected &&
-          item.key !== 'report' &&
-          styles.navigationSelectedFocused,
+        focused && selected && styles.navigationSelectedFocused,
         item.disabled && styles.navigationDisabled,
       ]}
     >
-      {selected && item.key !== 'report' && (
-        <View accessibilityElementsHidden style={styles.activeIndicator} />
-      )}
       {item.icon}
       <Text
         style={[
           styles.navigationLabel,
           selected && styles.navigationLabelSelected,
-          item.key === 'report' && styles.navigationReportLabel,
+          item.key === 'report' && !selected && styles.navigationReportLabel,
         ]}
       >
         {item.label}
@@ -169,14 +160,6 @@ const styles = StyleSheet.create({
   navigationReport: { minHeight: 70 },
   navigationSelected: { backgroundColor: colors.deepCharcoal },
   navigationSelectedPressed: { backgroundColor: colors.graphite },
-  activeIndicator: {
-    position: 'absolute',
-    top: 3,
-    width: 18,
-    height: 3,
-    borderRadius: 2,
-    backgroundColor: colors.signalYellow,
-  },
   navigationHover: { backgroundColor: colors.coolSurface },
   navigationPressed: {
     backgroundColor: colors.coolConcrete,
@@ -191,6 +174,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 11,
   },
-  navigationLabelSelected: { color: colors.white, fontWeight: '700' },
+  navigationLabelSelected: { color: colors.signalYellow, fontWeight: '700' },
   navigationReportLabel: { color: colors.deepCharcoal, fontWeight: '700' },
 });

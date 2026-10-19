@@ -20,42 +20,6 @@
     padding: 16px;
   }
 }
-.officer-ui :is(a, button):focus-visible {
-  outline: 2px solid var(--officer-yellow);
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-.officer-ui :is(input:not([type='checkbox']), select, textarea) {
-  min-height: 40px;
-  border: 1px solid color-mix(in srgb, var(--officer-graphite) 28%, white);
-  border-radius: 6px;
-  background-color: white;
-  color: var(--officer-charcoal);
-  font-size: 14px;
-  line-height: 20px;
-  box-shadow: 0 1px 2px #00000008;
-}
-.officer-ui :is(input, select, textarea):hover:not(:disabled) {
-  border-color: var(--officer-graphite);
-}
-.officer-ui :is(input, select, textarea)[aria-invalid='true'] {
-  border-color: var(--officer-critical);
-}
-.officer-ui :is(input, select, textarea):disabled {
-  background-color: var(--officer-surface);
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-.officer-ui .officer-control {
-  padding: 9px 12px;
-}
-.officer-ui textarea.officer-control {
-  min-height: 100px;
-}
-.officer-ui label {
-  line-height: 20px;
-  font-size: 13px;
-}
 .officer-ui .officer-link {
   display: inline-flex;
   align-items: center;
@@ -83,13 +47,10 @@
   background: color-mix(in srgb, var(--officer-yellow) 12%, white);
 }
 .officer-ui .officer-row {
-  display: block;
+  display: grid;
+  gap: 8px;
   padding: 12px;
-  margin: 0 0 8px;
   text-decoration: none;
-}
-.officer-ui .officer-row:last-child {
-  margin-bottom: 0;
 }
 
 /* Report card (mobile list view) */
@@ -115,104 +76,9 @@
 
 .officer-ui .officer-detail-panel {
   min-width: 0;
-  padding: 16px;
+  padding: 12px;
 }
 
-/* Toolbar button states */
-.officer-ui .officer-toolbar button:not(.officer-button) {
-  transition:
-    background 120ms,
-    color 120ms,
-    border-color 120ms;
-}
-.officer-ui .officer-toolbar button:not(.officer-button):hover {
-  background: var(--officer-surface);
-}
-.officer-ui .officer-toolbar button:not(.officer-button):active {
-  background: color-mix(in srgb, var(--officer-graphite) 10%, white);
-}
-.officer-ui .officer-toolbar button:not(.officer-button):focus-visible {
-  outline: 2px solid var(--officer-yellow);
-  outline-offset: 2px;
-  background: color-mix(in srgb, var(--officer-yellow) 12%, white);
-}
-
-/* Date filter button */
-.officer-ui .date-filter-btn {
-  transition:
-    background 120ms,
-    color 120ms,
-    border-color 120ms;
-}
-.officer-ui .date-filter-btn:hover {
-  background: var(--officer-surface);
-}
-.officer-ui .date-filter-btn:active {
-  background: color-mix(in srgb, var(--officer-graphite) 10%, white);
-}
-.officer-ui .date-filter-btn:focus-visible {
-  outline: 2px solid var(--officer-yellow);
-  outline-offset: 2px;
-  background: color-mix(in srgb, var(--officer-yellow) 12%, white);
-}
-
-/* Clear filters button */
-.officer-ui .clear-filters-btn {
-  transition:
-    background 120ms,
-    color 120ms,
-    border-color 120ms;
-}
-.officer-ui .clear-filters-btn:hover {
-  background: var(--officer-surface);
-  color: var(--officer-graphite);
-}
-.officer-ui .clear-filters-btn:active {
-  background: color-mix(in srgb, var(--officer-graphite) 10%, white);
-}
-.officer-ui .clear-filters-btn:focus-visible {
-  outline: 2px solid var(--officer-yellow);
-  outline-offset: 2px;
-  background: color-mix(in srgb, var(--officer-yellow) 12%, white);
-}
-
-/* Mobile filter sheet */
-.officer-ui .mobile-filter-sheet {
-  animation: slideIn 200ms ease-out;
-}
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-/* Shared card elevation — KPI cards + report section cards */
-.officer-ui .overview-card {
-  min-width: 0;
-}
-.officer-ui .officer-table table {
-  table-layout: fixed;
-}
-.officer-ui .officer-table th:first-child,
-.officer-ui .officer-table td:first-child {
-  width: 42%;
-}
-.officer-ui .officer-table td,
-.officer-ui .officer-table th {
-  padding: 10px 12px;
-  overflow-wrap: anywhere;
-  font-size: 13px;
-  line-height: 20px;
-}
-.officer-ui .officer-table tbody tr:hover {
-  background: var(--officer-surface);
-}
-.officer-ui .officer-section {
-  padding: 16px;
-}
 .officer-ui .officer-toolbar {
   display: grid;
   grid-template-columns: minmax(240px, 2fr) repeat(4, minmax(100px, 1fr)) auto;
@@ -224,19 +90,6 @@
 }
 .officer-ui .officer-toolbar .officer-control {
   min-width: 0;
-}
-.officer-ui h1 {
-  font-size: 24px;
-  line-height: 30px;
-}
-.officer-ui h2 {
-  font-size: 15px;
-  line-height: 22px;
-  letter-spacing: 0;
-  text-transform: none;
-}
-.officer-ui .text-\[10px\] {
-  font-size: 12px;
 }
 @media (max-width: 1100px) and (min-width: 768px) {
   .officer-ui .officer-toolbar {
@@ -250,6 +103,9 @@
   .officer-page {
     padding: 32px;
   }
+  .officer-ui .officer-detail-panel {
+    padding: 16px;
+  }
 }
 @media (min-width: 1024px) and (max-width: 1279px) {
   .officer-page {
@@ -261,53 +117,10 @@
     padding: 24px;
   }
 }
-@media (max-width: 767px) {
-  .officer-page {
-    padding: 16px;
-  }
-  .officer-ui :is(input:not([type='checkbox']), select) {
-    min-height: 44px;
-  }
-  .officer-select > svg {
-    bottom: 14px;
-  }
-  .officer-ui h1 {
-    font-size: 22px;
-    line-height: 28px;
-  }
-}
 @media (prefers-reduced-motion: reduce) {
   .officer-ui * {
     transition: none !important;
   }
-}
-
-.officer-ui table {
-  table-layout: fixed;
-}
-.officer-ui table th:first-child {
-  width: 34%;
-}
-.officer-ui table :is(td, th) {
-  overflow-wrap: anywhere;
-}
-.officer-ui main button:not(.officer-button) {
-  min-height: 40px;
-  border-radius: 6px;
-}
-.officer-ui main button:not(.officer-button):hover {
-  background-color: var(--officer-surface);
-}
-.officer-ui button:focus-visible,
-.officer-ui a:focus-visible {
-  outline: 2px solid var(--officer-yellow);
-  outline-offset: 2px;
-}
-.officer-ui :is(input, select, textarea):not(:placeholder-shown) {
-  color: var(--officer-charcoal);
-}
-.officer-ui .text-xs {
-  line-height: 1.6;
 }
 
 .officer-checklist-filters > :first-child {
@@ -317,16 +130,4 @@
   .officer-checklist-filters > :first-child {
     grid-column: auto;
   }
-}
-.officer-ui .officer-section .officer-section {
-  padding: 0;
-  border: 0;
-}
-
-/* Overview-specific overrides */
-.officer-ui .overview-section-label {
-  font-size: 11px;
-  line-height: 20px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
 }

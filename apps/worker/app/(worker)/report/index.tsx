@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { Redirect, useRouter } from 'expo-router';
 import { colors, spacing, typography } from '@safira/design-tokens';
 import FirstAid from 'phosphor-react-native/src/icons/FirstAid';
 import Leaf from 'phosphor-react-native/src/icons/Leaf';
@@ -6,7 +6,12 @@ import ListDashes from 'phosphor-react-native/src/icons/ListDashes';
 import Warning from 'phosphor-react-native/src/icons/Warning';
 import WarningCircle from 'phosphor-react-native/src/icons/WarningCircle';
 import { StyleSheet, Text, View } from 'react-native';
-import { Button, ChoiceCard, EmptyState, WorkerHeader } from '@/components/ui';
+import {
+  Button,
+  ChoiceCard,
+  IllustrationSlot,
+  WorkerHeader,
+} from '@/components/ui';
 import {
   workerHomeDemo,
   workerReportCategories,
@@ -31,20 +36,20 @@ export default function ReportChoiceScreen() {
   const { session, loading } = useAuth();
   const { state, updateDraft } = useReporting();
   const selected = state.draft.category;
+  const selectedIllustration = selected
+    ? (
+        {
+          unsafe_observation: 'hazard',
+          almost_happened: 'nearMiss',
+          event_happened: 'incident',
+          environmental_observation: 'environmental',
+        } as const
+      )[selected]
+    : null;
   const icons = [Warning, ListDashes, FirstAid, Leaf];
 
   if (loading) return <Text style={styles.body}>Opening Safira…</Text>;
-  if (session?.role !== 'worker') {
-    return (
-      <EmptyState
-        title="Choose your workspace"
-        description="Select Worker to continue."
-        action={
-          <Button label="Choose workspace" onPress={() => router.push('/')} />
-        }
-      />
-    );
-  }
+  if (session?.role !== 'worker') return <Redirect href="/sign-in" />;
 
   return (
     <View style={styles.content}>
@@ -111,6 +116,13 @@ export default function ReportChoiceScreen() {
           );
         })}
       </View>
+      {selectedIllustration && (
+        <IllustrationSlot
+          illustrationKey={selectedIllustration}
+          compact
+          decorative
+        />
+      )}
       <View style={styles.footer}>
         <Button
           label="Continue"

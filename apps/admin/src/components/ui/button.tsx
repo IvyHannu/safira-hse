@@ -4,9 +4,11 @@ import {
   cloneElement,
   isValidElement,
   type ButtonHTMLAttributes,
+  type ComponentProps,
   type ReactElement,
   type ReactNode,
 } from 'react';
+import Link from 'next/link';
 
 export type ButtonVariant =
   | 'primary'
@@ -42,12 +44,12 @@ const variants: Record<ButtonVariant, string> = {
 };
 
 const buttonBase =
-  'inline-flex h-11 min-h-11 max-md:h-12 max-md:min-h-12 items-center justify-center gap-1 whitespace-nowrap rounded-md border px-4 text-sm font-semibold leading-5 transition-[background-color,border-color,color,box-shadow] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signalYellow disabled:pointer-events-none disabled:cursor-not-allowed disabled:border-graphite/30 disabled:bg-coolSurface disabled:text-graphite/70 disabled:opacity-100';
+  'relative inline-flex h-10 min-h-10 max-md:h-12 max-md:min-h-12 items-center justify-center gap-1 whitespace-nowrap rounded-[6px] border px-3 text-sm font-semibold leading-5 before:absolute before:-inset-y-[4px] before:inset-x-0 before:content-[""] max-md:before:inset-0 transition-[background-color,border-color,box-shadow] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signalYellow disabled:pointer-events-none disabled:cursor-not-allowed disabled:border-graphite/30 disabled:bg-coolSurface disabled:text-graphite/70 disabled:opacity-100';
 
 function ButtonIcon({ icon }: { icon: ReactNode }) {
   const strongIcon = isValidElement(icon)
     ? cloneElement(icon as ReactElement<{ size?: number; weight?: string }>, {
-        size: 18,
+        size: 16,
         weight: 'bold',
       })
     : icon;
@@ -79,11 +81,11 @@ export function Button({
       type={type}
       disabled={disabled || loading}
       aria-busy={loading}
-      className={`${buttonBase} ${variants[variant]} ${size === 'compact' ? 'h-9 min-h-9 !px-[12px] text-xs max-md:h-11 max-md:min-h-11' : ''} ${className}`}
+      className={`${buttonBase} ${variants[variant]} ${size === 'compact' ? 'px-2.5 text-xs' : ''} ${className}`}
     >
       {loading ? (
         <span
-          className="inline-flex size-[18px] items-center justify-center"
+          className="inline-flex size-4 items-center justify-center"
           aria-hidden="true"
         >
           <span className="size-3 animate-spin rounded-full border-2 border-current border-r-transparent motion-reduce:animate-none" />
@@ -94,6 +96,29 @@ export function Button({
       <span>{children}</span>
       {loading && <span className="sr-only">Loading</span>}
     </button>
+  );
+}
+
+export function ButtonLink({
+  variant = 'secondary',
+  size = 'default',
+  icon,
+  className = '',
+  children,
+  ...props
+}: ComponentProps<typeof Link> & {
+  variant?: ButtonVariant;
+  size?: 'default' | 'compact';
+  icon?: ReactNode;
+}) {
+  return (
+    <Link
+      {...props}
+      className={`${buttonBase} ${variants[variant]} ${size === 'compact' ? 'px-2.5 text-xs' : ''} ${className}`}
+    >
+      {icon && <ButtonIcon icon={icon} />}
+      <span>{children}</span>
+    </Link>
   );
 }
 
@@ -116,7 +141,7 @@ export function IconButton({
       {...props}
       type={type}
       aria-label={label}
-      className={`${buttonBase} size-11 max-md:size-12 shrink-0 px-0 ${variants[variant]} ${className}`}
+      className={`${buttonBase} size-10 max-md:size-12 shrink-0 px-0 ${variants[variant]} ${className}`}
     >
       <ButtonIcon icon={icon} />
     </button>
