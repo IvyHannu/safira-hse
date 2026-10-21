@@ -10,7 +10,7 @@ export function AccountContext({
   site?: string;
 }) {
   return (
-    <section className="border-t border-coolConcrete pt-1.5">
+    <section className="border-t border-coolConcrete pt-2">
       <h2 className="text-sm font-semibold text-deepCharcoal">
         Your workspace
       </h2>

@@ -2,11 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from 'react';
 import Link from 'next/link';
-import {
-  CaretDown,
-  SignOut,
-  UserCircle,
-} from '@phosphor-icons/react';
+import { CaretDown, Gear, SignOut, UserCircle } from '@phosphor-icons/react';
 import './sidebar-account.css';
 
 interface SidebarAccountProps {
@@ -14,6 +10,7 @@ interface SidebarAccountProps {
   role: string;
   workspace: string;
   profileHref: string;
+  settingsHref?: string;
   onSignOut: () => void;
   onNavigate?: () => void;
   busy?: boolean;
@@ -25,6 +22,7 @@ export function SidebarAccount({
   role,
   workspace,
   profileHref,
+  settingsHref,
   onSignOut,
   onNavigate,
   busy = false,
@@ -98,6 +96,12 @@ export function SidebarAccount({
             <UserCircle size={18} aria-hidden="true" />
             Profile
           </Link>
+          {settingsHref && (
+            <Link href={settingsHref} onClick={navigate}>
+              <Gear size={18} aria-hidden="true" />
+              Settings
+            </Link>
+          )}
           <button type="button" disabled={busy} onClick={onSignOut}>
             <SignOut size={18} aria-hidden="true" />
             Sign out

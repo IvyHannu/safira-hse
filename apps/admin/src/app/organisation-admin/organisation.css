@@ -92,14 +92,14 @@
 }
 .organisation-overview {
   display: grid;
-  gap: 16px;
+  gap: 12px;
   min-width: 0;
 }
 .organisation-overview > * {
   min-width: 0;
 }
 .organisation-overview > header {
-  padding-bottom: 12px;
+  padding-bottom: 8px;
 }
 .organisation-overview section {
   min-width: 0;
@@ -133,55 +133,20 @@
 .organisation-metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  min-width: 0;
-}
-.organisation-metrics section {
-  display: grid;
-  align-content: start;
-  gap: 4px;
-  padding: 13px 14px;
-}
-.organisation-metrics section > div {
-  display: flex;
-  justify-content: space-between;
   gap: 8px;
-  align-items: start;
-}
-.organisation-metrics span {
-  color: #555c57;
-  font-size: 12px;
-  font-weight: 600;
-}
-.organisation-metrics svg {
-  color: #2563a6;
-  flex-shrink: 0;
-}
-.organisation-metrics section:nth-child(3) svg {
-  color: #a66a00;
-}
-.organisation-metrics section:nth-child(4) svg {
-  color: #b43732;
-}
-.organisation-metrics strong {
-  font-size: 25px;
-  line-height: 1.2;
-}
-.organisation-metrics small {
-  color: #606761;
-  font-size: 11px;
+  min-width: 0;
 }
 .organisation-overview-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
-  gap: 16px;
+  gap: 12px;
   align-items: start;
 }
 .organisation-panel {
   padding: 16px;
 }
 .organisation-panel-heading {
-  padding-bottom: 12px;
+  padding-bottom: 8px;
   border-bottom: 1px solid #20222018;
 }
 .organisation-panel-heading h2 {
@@ -214,7 +179,7 @@
   align-items: start;
   gap: 10px;
   min-width: 0;
-  padding: 12px 0;
+  padding: 9px 0;
   border-bottom: 1px solid #20222015;
 }
 .organisation-attention li:last-child,
@@ -241,8 +206,8 @@
 .organisation-attention-icon,
 .organisation-activity-icon {
   display: grid;
-  width: 25px;
-  height: 25px;
+  width: 24px;
+  height: 24px;
   place-items: center;
   flex-shrink: 0;
   border-radius: 5px;
@@ -264,6 +229,8 @@
   flex-shrink: 0;
   color: #606761;
   font-size: 11px;
+  margin-left: auto;
+  text-align: right;
 }
 @media (max-width: 1000px) {
   .organisation-overview-grid {
@@ -276,7 +243,54 @@
     margin-left: 0;
   }
   .organisation-page {
-    padding: 16px;
+    padding: 12px;
+  }
+  .organisation-page
+    :is(
+      .organisation-overview,
+      .organisation-users,
+      .organisation-sites,
+      .organisation-governance,
+      .organisation-access,
+      .organisation-profile
+    ) {
+    gap: 12px;
+  }
+  .organisation-page
+    :is(
+      .organisation-overview,
+      .organisation-users,
+      .organisation-sites,
+      .organisation-access,
+      .organisation-profile
+    )
+    > header {
+    padding-bottom: 8px;
+  }
+  .organisation-overview-grid,
+  .organisation-access-bottom {
+    gap: 12px;
+  }
+  .organisation-panel {
+    padding: 12px;
+  }
+  .organisation-sites-filters,
+  .organisation-users-filters {
+    gap: 8px;
+  }
+  .organisation-sites-filters,
+  .organisation-sites-count {
+    margin-bottom: 0;
+  }
+  .organisation-users-filters > :last-child {
+    grid-column: 1 / -1;
+  }
+  .organisation-access-role-list > div {
+    padding: 10px 12px;
+  }
+  .organisation-access-filters {
+    gap: 8px;
+    padding: 12px;
   }
   .organisation-topbar > header {
     height: 56px;
@@ -312,9 +326,6 @@
   .organisation-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
-  }
-  .organisation-metrics section {
-    padding: 12px;
   }
   .organisation-activity time {
     white-space: nowrap;

@@ -1,13 +1,14 @@
 import {
   Buildings,
   Clock,
+  Info,
   MapPin,
   ShieldCheck,
   Users,
   Warning,
 } from '@phosphor-icons/react/dist/ssr';
 import { PageHeader } from '@/components/ui/shell';
-import { Card, InfoCard } from '@/components/ui/feedback';
+import { Card, InfoCard, MetricCard } from '@/components/ui/feedback';
 import { StatusLabel } from '@/components/ui/status-label';
 import { organisationOverview } from '@/data/organisation-overview';
 
@@ -17,26 +18,30 @@ const metrics = [
     value: organisationOverview.activeUsers,
     detail: 'Across the organisation',
     icon: Users,
+    tone: 'information',
   },
   {
     label: 'Active sites',
     value: organisationOverview.activeSites,
     detail: 'Available work locations',
     icon: MapPin,
+    tone: 'information',
   },
   {
     label: 'Pending invites',
     value: organisationOverview.pendingInvitations,
     detail: 'Awaiting acceptance',
     icon: Clock,
+    tone: 'warning',
   },
   {
     label: 'Access issues',
     value: organisationOverview.accessIssues,
     detail: 'Need a decision',
     icon: ShieldCheck,
+    tone: 'critical',
   },
-];
+] as const;
 
 export function OrganisationOverview() {
   return (
@@ -56,15 +61,15 @@ export function OrganisationOverview() {
         <StatusLabel label={organisationOverview.status} tone="success" />
       </Card>
       <div className="organisation-metrics" aria-label="Organisation summary">
-        {metrics.map(({ label, value, detail, icon: Icon }) => (
-          <Card key={label}>
-            <div>
-              <span>{label}</span>
-              <Icon size={21} aria-hidden="true" />
-            </div>
-            <strong>{value}</strong>
-            <small>{detail}</small>
-          </Card>
+        {metrics.map(({ label, value, detail, icon: Icon, tone }) => (
+          <MetricCard
+            key={label}
+            value={value}
+            label={label}
+            helper={detail}
+            icon={<Icon weight="bold" />}
+            tone={tone}
+          />
         ))}
       </div>
       <div className="organisation-overview-grid">
@@ -113,7 +118,12 @@ export function OrganisationOverview() {
           </ul>
         </Card>
       </div>
-      <InfoCard title="Administration scope" variant="neutral">
+      <InfoCard
+        title="Administration scope"
+        icon={<Info size={18} aria-hidden="true" />}
+        variant="neutral"
+        compact
+      >
         <p>
           {organisationOverview.hseAdmins} HSE admins are recorded in this
           organisation. Organisation Admin manages people, roles, site access

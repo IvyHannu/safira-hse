@@ -9,20 +9,14 @@
 .organisation-users > header {
   padding-bottom: 12px;
 }
-.organisation-users > header button {
-  min-height: 40px;
-}
 .organisation-users-filters {
   display: grid;
   grid-template-columns: minmax(220px, 1.5fr) repeat(3, minmax(125px, 1fr));
   align-items: end;
   gap: 12px;
 }
-.organisation-users-filters :is(input, select) {
-  box-shadow: none;
-}
 .organisation-users-context {
-  margin-top: -8px;
+  margin-top: 0;
   color: #606761;
   font-size: 12px;
   line-height: 1.4;
@@ -208,10 +202,6 @@
   display: grid;
   gap: 12px;
 }
-.organisation-user-fields input {
-  min-height: 42px;
-  border-color: #20222030;
-}
 .organisation-user-edit-identity {
   font-size: 13px;
   color: #606761;
@@ -273,9 +263,6 @@
   padding-top: 16px;
   border-top: 1px solid #20222018;
 }
-.organisation-user-sheet-actions button {
-  min-height: 42px;
-}
 @media (max-width: 1100px) {
   .organisation-users-filters {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -286,11 +273,11 @@
   .organisation-users-cards {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    gap: 8px;
   }
   .organisation-users-cards article {
     min-width: 0;
-    padding: 14px;
+    padding: 12px;
   }
   .organisation-user-card-head {
     display: flex;
@@ -300,9 +287,9 @@
   }
   .organisation-users-cards dl {
     display: grid;
-    gap: 8px;
-    margin: 12px 0;
-    padding-top: 12px;
+    gap: 6px;
+    margin: 8px 0;
+    padding-top: 8px;
     border-top: 1px solid #20222018;
   }
   .organisation-users-cards dt {

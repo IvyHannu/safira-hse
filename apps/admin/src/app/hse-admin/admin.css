@@ -23,62 +23,12 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 64px;
+  height: 144px;
   flex-shrink: 0;
   padding: 0 20px;
   border-bottom: 1px solid #ffffff15;
   font-size: 20px;
   font-weight: 600;
-}
-.admin-sidebar nav {
-  padding: 16px 12px;
-  flex: 1;
-  min-height: 0;
-  overflow: visible;
-}
-.admin-sidebar nav :is(a, button) {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  min-height: 44px;
-  margin-bottom: 4px;
-  padding: 10px 12px;
-  border-radius: 6px;
-  font-size: 14px;
-  text-align: left;
-}
-.admin-sidebar nav a[aria-current='page'] {
-  background: #ffd21a;
-  color: #121412;
-  font-weight: 600;
-}
-.admin-sidebar nav a:hover {
-  background: #202220;
-  color: white;
-}
-.admin-sidebar nav a[aria-current='page']:hover {
-  background: #ffd21a;
-  color: #121412;
-}
-.admin-sidebar nav button:disabled {
-  color: #ffffff70;
-  cursor: not-allowed;
-}
-.admin-sidebar-footer {
-  padding: 16px 20px;
-  border-top: 1px solid #ffffff15;
-  display: grid;
-  gap: 3px;
-}
-.hse-admin-shell .admin-signout {
-  margin-top: 12px;
-  min-height: 48px;
-  color: white;
-  padding-left: 0;
-}
-.hse-admin-shell .admin-signout:hover {
-  background: #202220;
 }
 .admin-workspace {
   margin-left: 240px;
@@ -144,7 +94,7 @@
   line-height: 20px;
 }
 .hse-admin-shell section {
-  padding: 16px;
+  padding: 12px;
   border-color: #20222018;
   border-radius: 8px;
   box-shadow: 0 1px 2px #12141205;
@@ -162,14 +112,6 @@
 .admin-section-heading button {
   color: #2563a6;
   font-size: 12px;
-}
-.admin-metric-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
 }
 .tone-information {
   background: #2563a615;
@@ -259,11 +201,6 @@
   flex: 1;
   min-width: 0;
 }
-.admin-search input {
-  min-height: 40px;
-  border-color: #20222025;
-  box-shadow: 0 1px 2px #12141208;
-}
 @media (max-width: 1279px) {
   .admin-recent-table th:first-child {
     width: 34%;
@@ -328,9 +265,6 @@
   .hse-admin-shell button {
     min-height: 44px;
   }
-  .admin-search input {
-    min-height: 44px;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   .hse-admin-shell * {
@@ -345,25 +279,25 @@
 .admin-overview {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 16px;
+  gap: 12px;
   min-width: 0;
 }
 .admin-overview > * {
   min-width: 0;
 }
 .admin-overview > header {
-  padding-bottom: 12px;
+  padding-bottom: 8px;
 }
 .admin-metrics {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 8px;
 }
 .admin-overview-panels {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: start;
-  gap: 16px;
+  gap: 12px;
   min-width: 0;
 }
 .admin-overview section {
@@ -389,15 +323,9 @@
 .admin-overview-panels > section {
   overflow: visible;
 }
-.admin-sidebar-footer {
-  flex-shrink: 0;
-}
 .admin-attention-list,
 .admin-recent-mobile {
   gap: 8px;
-}
-.admin-kpi-card {
-  min-height: 104px;
 }
 @media (min-width: 1024px) {
   .admin-metrics {
@@ -425,9 +353,6 @@
   }
 }
 @media (max-width: 767px) {
-  .admin-sidebar nav {
-    overflow-y: auto;
-  }
   .admin-overview {
     gap: 16px;
   }
@@ -435,23 +360,66 @@
     padding: 12px;
   }
 }
-@media (min-width: 768px) and (max-height: 600px) {
-  .admin-brand {
-    height: 48px;
+
+/* Shared compact rhythm for HSE Admin working screens on handheld viewports. */
+@media (max-width: 767px) {
+  .hse-admin-shell .admin-mobile-density {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
   }
-  .admin-sidebar nav {
+  .hse-admin-shell .admin-mobile-density > header {
+    padding-bottom: 8px;
+  }
+  .hse-admin-shell .admin-mobile-density > header p {
+    line-height: 20px;
+  }
+  .hse-admin-shell .admin-mobile-density .safira-card-surface {
+    padding: 12px;
+  }
+  .hse-admin-shell .admin-mobile-density .safira-clickable-card {
+    min-height: 56px;
+    padding: 10px 12px;
+  }
+  .hse-admin-shell .admin-mobile-density .safira-card-list {
+    gap: 8px;
+  }
+  .hse-admin-shell .admin-mobile-density .safira-select-trigger {
+    height: 48px !important;
+    min-height: 48px !important;
+  }
+  .hse-admin-shell .admin-mobile-filter-sheet {
+    grid-template-columns: minmax(0, 1fr);
+    min-width: 0;
+  }
+  .hse-admin-shell .admin-mobile-filter-sheet footer {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    min-width: 0;
+  }
+  .hse-admin-shell .admin-mobile-filter-sheet footer button {
+    width: 100%;
+    min-width: 0;
+  }
+}
+@media (min-width: 768px) and (max-height: 600px) {
+  .safira-admin-sidebar-nav {
     padding: 8px 12px;
   }
-  .admin-sidebar nav :is(a, button) {
+  .safira-admin-sidebar-nav a {
     min-height: 36px;
-    margin-bottom: 2px;
     padding: 6px 12px;
   }
-  .admin-sidebar-footer {
-    padding: 8px 20px;
+}
+
+@media (max-width: 359px) {
+  .hse-admin-shell :is(.admin-reports-tools, .admin-checklist-toolbar) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
   }
-  .hse-admin-shell .admin-signout {
-    margin-top: 4px;
-    min-height: 36px;
+
+  .hse-admin-shell
+    :is(.admin-report-filter-trigger, .admin-checklist-mobile-filters) {
+    justify-self: start;
   }
 }

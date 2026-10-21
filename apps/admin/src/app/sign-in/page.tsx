@@ -50,7 +50,12 @@ export default function AdminSignInPage() {
     (invitation) => invitation.role === storedRole,
   );
   const setupCode =
-    invitationCode ?? assignedInvitation?.code ?? rememberedInvitation?.code;
+    invitationCode ??
+    assignedInvitation?.code ??
+    rememberedInvitation?.code ??
+    (process.env.NODE_ENV === 'development'
+      ? adminInvitations[0].code
+      : undefined);
 
   useEffect(() => {
     if (!loading && session && isAdminRole(session.role))

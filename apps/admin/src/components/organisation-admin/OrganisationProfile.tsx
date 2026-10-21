@@ -84,7 +84,7 @@ function readPreferences(value: string | null): ProfilePreferences {
 }
 
 export function OrganisationProfile() {
-  const { session } = useAuth();
+  const { session, account } = useAuth();
   const organisation = useOrganisationSettings();
   const [section, setSection] = useState<Section>('personal');
   const [message, setMessage] = useState('');
@@ -129,9 +129,10 @@ export function OrganisationProfile() {
         description="Your account details and workspace preferences."
       />
       <ProfileIdentity
-        name={adminProfile.name}
+        name={account?.fullName || adminProfile.name}
         role="Organisation Admin"
         context={organisation.name}
+        photoUrl={account?.photoUrl}
       />
       <div className="grid min-w-0 items-start gap-4 md:grid-cols-[280px_minmax(0,1fr)]">
         <ProfileSectionNav
@@ -141,6 +142,7 @@ export function OrganisationProfile() {
             icon: <Icon size={20} aria-hidden="true" />,
           }))}
           selected={section}
+          selectionStyle="neutral"
           onSelect={(value) => {
             setSection(value);
             setMessage('');
@@ -163,11 +165,11 @@ export function OrganisationProfile() {
               <dl className="organisation-profile-details">
                 <div>
                   <dt>Full name</dt>
-                  <dd>{adminProfile.name}</dd>
+                  <dd>{account?.fullName || adminProfile.name}</dd>
                 </div>
                 <div>
                   <dt>Email address</dt>
-                  <dd>{adminProfile.email}</dd>
+                  <dd>{account?.email || adminProfile.email}</dd>
                 </div>
                 <div>
                   <dt>Role</dt>

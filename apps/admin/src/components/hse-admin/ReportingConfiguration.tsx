@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Eye, Plus, X } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
+import { ClickableCard } from '@/components/ui/feedback';
 import { MetadataLabel } from '@/components/ui/report-metadata';
-import { Input, Select, Textarea } from '@/components/ui/forms';
+import { Checkbox, Input, Select, Textarea } from '@/components/ui/forms';
 import { siteOptions, type ReportType } from '@/data/reports';
 import './reporting-configuration.css';
 
@@ -195,6 +196,7 @@ function CategoryEditor({
           <div className="admin-config-form-grid">
             <Input
               label="Worker-facing label"
+              className="safira-builder-control"
               {...labelField}
               onChange={(event) => {
                 void labelField.onChange(event);
@@ -220,16 +222,13 @@ function CategoryEditor({
             </div>
           </div>
           <div className="admin-config-actions">
-            <label className="admin-config-toggle">
-              <input
-                type="checkbox"
-                checked={category.enabled}
-                onChange={(event) =>
-                  onChange({ ...category, enabled: event.target.checked })
-                }
-              />
-              Enabled for reporting
-            </label>
+            <Checkbox
+              label="Enabled for reporting"
+              checked={category.enabled}
+              onChange={(event) =>
+                onChange({ ...category, enabled: event.target.checked })
+              }
+            />
           </div>
         </div>
       </section>
@@ -246,6 +245,7 @@ function CategoryEditor({
             <span className="admin-config-number">{index + 1}</span>
             <Input
               label="Question"
+              className="safira-builder-control"
               value={question.label}
               onChange={(event) =>
                 updateQuestion(question.id, { label: event.target.value })
@@ -253,6 +253,7 @@ function CategoryEditor({
             />
             <Select
               label="Answer type"
+              className="safira-builder-control"
               value={question.kind}
               onChange={(event) =>
                 updateQuestion(question.id, {
@@ -270,9 +271,9 @@ function CategoryEditor({
                 </option>
               ))}
             </Select>
-            <label className="admin-config-required">
-              <input
-                type="checkbox"
+            <div className="admin-config-required">
+              <Checkbox
+                label="Required"
                 checked={question.required}
                 onChange={(event) =>
                   updateQuestion(question.id, {
@@ -280,8 +281,7 @@ function CategoryEditor({
                   })
                 }
               />
-              Required
-            </label>
+            </div>
             <Button
               variant="tertiary"
               icon={<X size={16} />}
@@ -317,6 +317,7 @@ function CategoryEditor({
         <Button
           variant="secondary"
           icon={<Plus size={16} />}
+          className="justify-self-start"
           onClick={addQuestion}
         >
           Add question
@@ -327,36 +328,31 @@ function CategoryEditor({
           <h3>Site availability</h3>
           <p>Choose where workers can select this report type.</p>
         </div>
-        <label className="admin-config-site">
-          <input
-            type="checkbox"
+        <div className="safira-checkbox-grid">
+          <Checkbox
+            label="All sites"
             checked={allSites}
             onChange={() => onChange({ ...category, sites: [] })}
           />
-          All sites
-        </label>
-        <div className="admin-config-sites">
           {siteOptions.map((site) => (
-            <label key={site.value} className="admin-config-site">
-              <input
-                type="checkbox"
-                checked={allSites || category.sites.includes(site.value)}
-                onChange={() => {
-                  const next = allSites
-                    ? siteOptions
-                        .map((option) => option.value)
-                        .filter((value) => value !== site.value)
-                    : category.sites.includes(site.value)
-                      ? category.sites.filter((value) => value !== site.value)
-                      : [...category.sites, site.value];
-                  onChange({
-                    ...category,
-                    sites: next.length === siteOptions.length ? [] : next,
-                  });
-                }}
-              />
-              {site.label}
-            </label>
+            <Checkbox
+              key={site.value}
+              label={site.label}
+              checked={allSites || category.sites.includes(site.value)}
+              onChange={() => {
+                const next = allSites
+                  ? siteOptions
+                      .map((option) => option.value)
+                      .filter((value) => value !== site.value)
+                  : category.sites.includes(site.value)
+                    ? category.sites.filter((value) => value !== site.value)
+                    : [...category.sites, site.value];
+                onChange({
+                  ...category,
+                  sites: next.length === siteOptions.length ? [] : next,
+                });
+              }}
+            />
           ))}
         </div>
       </section>
@@ -368,7 +364,7 @@ function CategoryEditor({
           </h3>
           <p>Preview of this report choice and additional questions.</p>
         </div>
-        <div className="admin-config-preview">
+        <div className="admin-config-preview safira-preview-surface">
           <p className="admin-config-preview-kicker">
             What would you like to report?
           </p>
@@ -490,7 +486,7 @@ export function ReportingConfiguration() {
     }
   };
   return (
-    <div className="admin-config">
+    <div className="admin-config admin-mobile-density">
       <header className="admin-config-header">
         <div>
           <h1>Reporting Configuration</h1>
@@ -542,10 +538,10 @@ export function ReportingConfiguration() {
             <p>Four fixed core categories</p>
           </div>
           {order.map((key) => (
-            <button
+            <ClickableCard
               key={key}
-              className={`safira-card-surface safira-card-action ${selected === key ? 'is-selected' : ''}`}
-              aria-current={selected === key}
+              selected={selected === key}
+              selectionStyle="neutral"
               onClick={() => setSelected(key)}
             >
               <span>
@@ -557,7 +553,7 @@ export function ReportingConfiguration() {
                 tone={config[key].enabled ? 'success' : 'neutral'}
                 label={config[key].enabled ? 'On' : 'Off'}
               />
-            </button>
+            </ClickableCard>
           ))}
         </aside>
         {loaded && (

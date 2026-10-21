@@ -216,6 +216,12 @@ select option:hover {
   gap: 8px;
 }
 
+/* Hide Edge's native reveal icon when the shared field provides its own toggle. */
+.safira-password-with-toggle::-ms-reveal,
+.safira-password-with-toggle::-ms-clear {
+  display: none;
+}
+
 /* Shared Admin search field: reserve a fixed icon slot for every role. */
 .safira-search-field {
   position: relative;

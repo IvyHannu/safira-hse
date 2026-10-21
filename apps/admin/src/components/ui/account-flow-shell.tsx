@@ -76,8 +76,8 @@ export function AccountFlowShell({
     <div className="flex min-h-dvh flex-col bg-coolSurface px-2 py-2 text-deepCharcoal sm:px-3 sm:py-3">
       <div className="mx-auto my-auto w-full max-w-[680px]">
         <AccountBrandHeader context={context} compact />
-        <main className="pt-2 sm:pt-2.5">
-          <div className="mb-1.5 grid gap-1.5">
+        <main className="pt-3 sm:pt-3.5">
+          <div className="mb-2.5 grid gap-1.5">
             <div className="flex items-baseline justify-between gap-3 text-xs font-semibold text-graphite">
               <span>{phase}</span>
               <span className="font-mono tabular-nums">
@@ -98,15 +98,15 @@ export function AccountFlowShell({
             {description}
           </p>
           {illustrationLed ? (
-            <div className="mt-1.5 grid gap-2">{children}</div>
+            <div className="mt-3 grid gap-2">{children}</div>
           ) : (
-            <Card className="mt-1.5 gap-2 p-2.5">{children}</Card>
+            <Card className="mt-3 gap-2 p-2.5">{children}</Card>
           )}
           <div
             className={
               onboarding
-                ? 'mt-2 flex gap-2 [&>button]:min-w-0 [&>button:first-child:not(:last-child)]:basis-[32%] [&>button:last-child]:flex-1 sm:justify-end sm:[&>button]:flex-none'
-                : 'mt-2 flex flex-col gap-2 sm:flex-row sm:justify-end'
+                ? 'mt-3 flex gap-2 [&>button]:min-w-0 [&>button:first-child:not(:last-child)]:basis-[32%] [&>button:last-child]:flex-1 sm:justify-end sm:[&>button]:flex-none'
+                : 'mt-3 flex flex-col gap-2 sm:flex-row sm:justify-end'
             }
           >
             {actions}

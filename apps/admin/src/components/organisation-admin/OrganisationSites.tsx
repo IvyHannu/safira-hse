@@ -427,6 +427,7 @@ export function OrganisationSites() {
               <ClickableCard
                 key={site.id}
                 selected={site.id === selectedId}
+                selectionStyle="neutral"
                 className="organisation-site-card"
                 aria-label={`Open ${site.name} site details`}
                 onClick={() => {
@@ -450,7 +451,7 @@ export function OrganisationSites() {
           </div>
           {!filtered.length && (
             <div className="organisation-sites-empty grid gap-3 text-center">
-              <IllustrationSlot illustrationKey="empty" decorative />
+              <IllustrationSlot illustrationKey="noResults" decorative />
               <p>No sites match these filters.</p>
             </div>
           )}

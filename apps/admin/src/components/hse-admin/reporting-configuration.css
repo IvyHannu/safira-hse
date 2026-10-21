@@ -1,6 +1,6 @@
 .admin-config {
   display: grid;
-  gap: 14px;
+  gap: 12px;
   min-width: 0;
   color: #202220;
 }
@@ -38,7 +38,8 @@
   font-weight: 600;
 }
 .admin-config-warning {
-  border-left: 3px solid #a66a00;
+  border: 1px solid #a66a00;
+  border-radius: 8px;
   padding: 10px 12px;
   background: #fff5dc;
   font-size: 13px;
@@ -71,8 +72,8 @@
   align-items: flex-start;
   gap: 8px;
   width: 100%;
-  min-height: 70px;
-  padding: 12px 14px;
+  min-height: 66px;
+  padding: 10px 12px;
   text-align: left;
 }
 .admin-config-list button span:first-child {
@@ -89,13 +90,13 @@
   line-height: 1.4;
 }
 .admin-config-tabs a:focus-visible {
-  outline: 2px solid #2563a6;
-  outline-offset: -2px;
+  outline: 2px solid #ffd21a;
+  outline-offset: 2px;
 }
 .admin-config-editor {
-  padding: 18px;
+  padding: 16px;
   display: grid;
-  gap: 16px;
+  gap: 14px;
 }
 .admin-config-editor-head {
   display: flex;
@@ -130,7 +131,7 @@
 }
 .hse-admin-shell .admin-config-section {
   display: grid;
-  gap: 12px;
+  gap: 10px;
   min-width: 0;
   padding: 12px 0 0;
   border: 0;
@@ -149,7 +150,7 @@
 }
 .admin-config-type-fields {
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 .admin-config-form-grid {
   display: grid;
@@ -188,20 +189,8 @@
   min-height: 70px;
   border-color: #bbc2b9;
 }
-.admin-config-toggle,
-.admin-config-required,
-.admin-config-site {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 40px;
-  font-size: 13px;
-}
-.admin-config input[type='checkbox'] {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  accent-color: #202220;
+.admin-config-required {
+  align-self: end;
 }
 .admin-config-question {
   display: grid;
@@ -222,19 +211,10 @@
 .admin-config-option {
   grid-column: 2/-1;
 }
-.admin-config-sites {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 4px 14px;
-}
 .admin-config-preview {
   max-width: 440px;
-  padding: 16px;
-  background: #f6f7f5;
-  border: 1px solid #dfe3dc;
-  border-radius: 8px;
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 .admin-config-preview-kicker {
   font-size: 16px;
@@ -243,7 +223,7 @@
 .admin-config-preview-choice {
   display: flex;
   gap: 12px;
-  padding: 14px;
+  padding: 12px;
   background: white;
   border: 1px solid #cfd5cd;
   border-radius: 8px;
@@ -328,10 +308,20 @@
     font-size: 11px;
   }
   .admin-config-editor {
-    padding: 14px;
+    gap: 10px;
   }
-  .admin-config-form-grid,
-  .admin-config-sites {
+  .hse-admin-shell .admin-config-section {
+    gap: 8px;
+    padding-top: 10px;
+  }
+  .admin-config-type-fields,
+  .admin-config-preview {
+    gap: 8px;
+  }
+  .admin-config-preview-choice {
+    padding: 10px;
+  }
+  .admin-config-form-grid {
     grid-template-columns: 1fr;
   }
   .admin-config-question {
@@ -350,5 +340,15 @@
   .admin-config select,
   .admin-config button {
     min-height: 48px;
+  }
+}
+@media (max-width: 359px) {
+  .admin-config-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+  .admin-config-actions > :first-child {
+    grid-column: 1 / -1;
   }
 }

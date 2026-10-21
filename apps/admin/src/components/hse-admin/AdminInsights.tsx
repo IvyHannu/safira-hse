@@ -145,7 +145,7 @@ export function AdminInsights() {
   const flagged = submissions.filter((item) => flaggedCount(item) > 0).length;
 
   return (
-    <div className="admin-insights">
+    <div className="admin-insights admin-mobile-density">
       <PageHeader
         title="Reports & Insights"
         description="Operational patterns across reports and checklist submissions."
@@ -153,6 +153,7 @@ export function AdminInsights() {
       <div className="admin-insights-filters" aria-label="Insight filters">
         <Select
           label="Site"
+          className="safira-control-compact"
           value={site}
           onChange={(event) => setSite(event.target.value)}
         >
@@ -165,6 +166,7 @@ export function AdminInsights() {
         </Select>
         <Select
           label="Date"
+          className="safira-control-compact"
           value={range}
           onChange={(event) => setRange(event.target.value as DateRange)}
         >
@@ -174,6 +176,7 @@ export function AdminInsights() {
         </Select>
         <Select
           label="Report type"
+          className="safira-control-compact"
           value={type}
           onChange={(event) => setType(event.target.value)}
         >
@@ -192,30 +195,30 @@ export function AdminInsights() {
       </p>
 
       <div className="admin-insights-metrics" aria-label="Filtered summary">
-        <div>
-          <span>Reports</span>
+        <div className="safira-card-surface">
           <strong>{reports.length}</strong>
+          <span>Reports</span>
           <small>Submitted in selection</small>
         </div>
-        <div>
-          <span>Require action</span>
+        <div className="safira-card-surface">
           <strong>{action}</strong>
+          <span>Require action</span>
           <small>Current status</small>
         </div>
-        <div>
-          <span>Resolved / closed</span>
+        <div className="safira-card-surface">
           <strong>{resolved}</strong>
+          <span>Resolved / closed</span>
           <small>Current status</small>
         </div>
-        <div>
-          <span>Checklist submissions</span>
+        <div className="safira-card-surface">
           <strong>{submissions.length}</strong>
+          <span>Checklist submissions</span>
           <small>{flagged} flagged</small>
         </div>
       </div>
 
       <div className="admin-insights-grid">
-        <section className="admin-insights-panel">
+        <section className="admin-insights-panel safira-card-surface">
           <div className="admin-insights-heading">
             <h2>Report status</h2>
             <p>Current state of selected reports</p>
@@ -229,7 +232,7 @@ export function AdminInsights() {
             tone="status"
           />
         </section>
-        <section className="admin-insights-panel">
+        <section className="admin-insights-panel safira-card-surface">
           <div className="admin-insights-heading">
             <h2>Severity distribution</h2>
             <p>HSE-assessed severity</p>
@@ -246,7 +249,7 @@ export function AdminInsights() {
       </div>
 
       <div className="admin-insights-grid admin-insights-grid-wide">
-        <section className="admin-insights-panel">
+        <section className="admin-insights-panel safira-card-surface">
           <div className="admin-insights-heading">
             <h2>Site comparison</h2>
             <p>Report pressure and flagged checklist submissions</p>
@@ -278,7 +281,7 @@ export function AdminInsights() {
             </table>
           </div>
         </section>
-        <section className="admin-insights-panel">
+        <section className="admin-insights-panel safira-card-surface">
           <div className="admin-insights-heading">
             <h2>Checklist review</h2>
             <p>Submitted checklists in selection</p>
@@ -311,7 +314,7 @@ export function AdminInsights() {
         </section>
       </div>
 
-      <section className="admin-insights-panel admin-insights-trends">
+      <section className="admin-insights-panel admin-insights-trends safira-card-surface">
         <div className="admin-insights-heading">
           <h2>Action & resolution by report date</h2>
           <p>Current outcomes grouped by when reports were submitted</p>
@@ -350,8 +353,8 @@ export function AdminInsights() {
           </div>
         )}
         <p className="admin-insights-note">
-          Actual action and resolution dates are not in the local records; this
-          view does not measure time to resolution.
+          Actual action and resolution dates are unavailable for these records;
+          this view does not measure time to resolution.
         </p>
       </section>
     </div>

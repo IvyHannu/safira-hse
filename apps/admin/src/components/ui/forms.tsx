@@ -97,7 +97,7 @@ export function Input({
           aria-describedby={
             error || helperText ? `${fieldId}-message` : undefined
           }
-          className={`${controlClass} ${endAdornment ? 'pr-12' : ''} ${className}`}
+          className={`${controlClass} ${endAdornment ? 'pr-12' : ''} ${endAdornment && props.type === 'password' ? 'safira-password-with-toggle' : ''} ${className}`}
         />
         {endAdornment && (
           <span className="absolute inset-y-0 right-0 flex items-center pr-1">

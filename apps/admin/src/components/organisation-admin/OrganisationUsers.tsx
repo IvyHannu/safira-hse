@@ -318,7 +318,11 @@ export function OrganisationUsers() {
           Edit access
         </Button>
         <Button
-          variant="tertiary"
+          variant={
+            member.status === 'inactive'
+              ? 'positive-outline'
+              : 'destructive-outline'
+          }
           size="compact"
           onClick={() => changeStatus(member)}
         >
@@ -388,9 +392,6 @@ export function OrganisationUsers() {
           <option value="inactive">Inactive</option>
         </Select>
       </div>
-      <p className="organisation-users-context">
-        Role and site changes here are local to this workspace view.
-      </p>
       <div className="organisation-users-summary">
         <span role="status">
           {filtered.length} of {members.length} members
@@ -498,7 +499,7 @@ export function OrganisationUsers() {
       </div>
       {!filtered.length && (
         <div className="organisation-users-empty grid gap-3 text-center">
-          <IllustrationSlot illustrationKey="empty" decorative />
+          <IllustrationSlot illustrationKey="noResults" decorative />
           <p>No members match these filters.</p>
         </div>
       )}

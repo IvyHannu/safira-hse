@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { MapPin, X } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
+import { ClickableCard } from '@/components/ui/feedback';
 import { IllustrationSlot } from '@/components/ui/illustration-slot';
 import { Input, SearchInput, Select } from '@/components/ui/forms';
 import { MetadataLabel } from '@/components/ui/report-metadata';
@@ -446,7 +447,7 @@ export function SiteHseSetup() {
   );
   const current = sites.find((site) => site.id === selected);
   return (
-    <div className="admin-sites">
+    <div className="admin-sites admin-mobile-density">
       <header>
         <div>
           <h1>Sites</h1>
@@ -465,12 +466,14 @@ export function SiteHseSetup() {
           <div className="admin-sites-filters">
             <SearchInput
               label="Search sites"
+              className="safira-control-compact"
               placeholder="Site or work area"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
             />
             <Select
               label="Status"
+              className="safira-control-compact"
               value={filter}
               onChange={(event) =>
                 setFilter(event.target.value as typeof filter)
@@ -488,10 +491,10 @@ export function SiteHseSetup() {
           <div className="admin-sites-list safira-card-list">
             {filtered.length ? (
               filtered.map((site) => (
-                <button
+                <ClickableCard
                   key={site.id}
-                  className="safira-card-surface safira-card-action"
-                  aria-current={site.id === selected}
+                  selected={site.id === selected}
+                  selectionStyle="neutral"
                   onClick={() => {
                     setSelected(site.id);
                     setMobileOpen(true);
@@ -519,11 +522,11 @@ export function SiteHseSetup() {
                     </small>
                   </span>
                   <SiteStatusLabel status={site.status} />
-                </button>
+                </ClickableCard>
               ))
             ) : (
               <div className="admin-site-empty grid gap-3 text-center">
-                <IllustrationSlot illustrationKey="empty" decorative />
+                <IllustrationSlot illustrationKey="noResults" decorative />
                 <p>No matching sites.</p>
               </div>
             )}

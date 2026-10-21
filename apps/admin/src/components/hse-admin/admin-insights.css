@@ -1,6 +1,6 @@
 .admin-insights {
   display: grid;
-  gap: 16px;
+  gap: 14px;
   min-width: 0;
 }
 
@@ -16,11 +16,6 @@
   gap: 12px;
   max-width: 780px;
 }
-.admin-insights-filters select {
-  min-height: 42px;
-  border-color: #20222030;
-  box-shadow: 0 1px 2px #1214120a;
-}
 .admin-insights-context,
 .admin-insights-note {
   color: #5c625e;
@@ -33,17 +28,13 @@
 .admin-insights-metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  gap: 10px;
 }
 .admin-insights-metrics > div {
   display: grid;
   align-content: start;
   min-width: 0;
-  padding: 14px 16px;
-  background: white;
-  border: 1px solid #20222018;
-  border-radius: 8px;
-  box-shadow: 0 1px 2px #12141208;
+  padding: 12px 14px;
 }
 .admin-insights-metrics span {
   font-size: 12px;
@@ -51,9 +42,10 @@
   color: #555c57;
 }
 .admin-insights-metrics strong {
-  margin-top: 3px;
+  margin-top: 0;
   font-size: 25px;
-  line-height: 1.15;
+  line-height: 28px;
+  min-height: 28px;
 }
 .admin-insights-metrics small {
   margin-top: 4px;
@@ -63,7 +55,7 @@
 .admin-insights-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 12px;
   min-width: 0;
 }
 .admin-insights-grid-wide {
@@ -72,10 +64,8 @@
 .admin-insights-panel {
   display: grid;
   align-content: start;
-  gap: 14px;
+  gap: 12px;
   min-width: 0;
-  background: white;
-  border: 1px solid #20222018;
 }
 .admin-insights-heading h2 {
   font-size: 15px;
@@ -88,7 +78,7 @@
 }
 .admin-insights-breakdown {
   display: grid;
-  gap: 11px;
+  gap: 8px;
 }
 .admin-insights-bar-row {
   display: grid;
@@ -145,7 +135,7 @@
   font-size: 12px;
 }
 .admin-insights-table :is(th, td) {
-  padding: 9px 8px;
+  padding: 7px 8px;
   text-align: left;
   border-bottom: 1px solid #20222016;
 }
@@ -171,7 +161,7 @@
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 0;
+  padding: 8px 0;
   border-bottom: 1px solid #20222016;
   font-size: 13px;
 }
@@ -193,11 +183,11 @@
 }
 @media (max-width: 767px) {
   .admin-insights {
-    gap: 14px;
+    gap: 12px;
   }
   .admin-insights-filters {
     grid-template-columns: minmax(0, 1fr);
-    gap: 10px;
+    gap: 8px;
   }
   .admin-insights-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -208,7 +198,11 @@
   }
   .admin-insights-grid {
     grid-template-columns: minmax(0, 1fr);
-    gap: 14px;
+    gap: 8px;
+  }
+  .admin-insights-panel,
+  .admin-insights-breakdown {
+    gap: 8px;
   }
   .admin-insights-table thead {
     display: none;
@@ -223,7 +217,7 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 4px 8px;
-    padding: 10px 0;
+    padding: 8px 0;
     border-bottom: 1px solid #20222016;
   }
   .admin-insights-table tbody tr:last-child {

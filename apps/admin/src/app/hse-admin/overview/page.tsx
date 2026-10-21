@@ -7,7 +7,7 @@ import {
   CheckCircle,
   ClipboardText,
 } from '@phosphor-icons/react';
-import { Card, EmptyState } from '@/components/ui/feedback';
+import { Card, EmptyState, MetricCard } from '@/components/ui/feedback';
 import { SearchInput } from '@/components/ui/forms';
 import { Button } from '@/components/ui/button';
 import {
@@ -68,7 +68,7 @@ const metrics = [
     icon: CheckCircle,
     tone: 'success',
   },
-];
+] as const;
 function dateLabel(date: string) {
   return new Date(`${date}T12:00:00`).toLocaleDateString('en-GB', {
     day: 'numeric',
@@ -114,17 +114,13 @@ export default function OverviewPage() {
       </div>
       <div className="admin-metrics" aria-label="Operational metrics">
         {metrics.map(({ label, value, icon: Icon, tone }) => (
-          <Card key={label} className="admin-kpi-card">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-2xl font-semibold leading-8">{value}</p>
-                <h2 className="mt-1 text-sm font-medium">{label}</h2>
-              </div>
-              <span className={`admin-metric-icon tone-${tone}`}>
-                <Icon size={20} aria-hidden="true" />
-              </span>
-            </div>
-          </Card>
+          <MetricCard
+            key={label}
+            value={value}
+            label={label}
+            icon={<Icon weight="bold" />}
+            tone={tone}
+          />
         ))}
       </div>
       <div className="admin-overview-panels">
@@ -276,7 +272,7 @@ export default function OverviewPage() {
             Checklist status
           </h2>
         </div>
-        <dl className="grid grid-cols-3 gap-3">
+        <dl className="safira-metric-grid">
           {[
             { label: 'Submissions', value: overviewChecklistSummary.submitted },
             {
@@ -288,12 +284,9 @@ export default function OverviewPage() {
               value: overviewChecklistSummary.flagged,
             },
           ].map((item) => (
-            <div
-              key={item.label}
-              className="border-l-2 border-coolConcrete pl-3"
-            >
-              <dt className="text-xs text-graphite/70">{item.label}</dt>
-              <dd className="mt-1 text-xl font-semibold">{item.value}</dd>
+            <div key={item.label} className="safira-metric-stack">
+              <dt className="safira-metric-label">{item.label}</dt>
+              <dd className="safira-metric-value">{item.value}</dd>
             </div>
           ))}
         </dl>

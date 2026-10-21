@@ -43,7 +43,7 @@ export default function ForgotPasswordScreen() {
     >
       <View style={authStyles.stack}>
         {requested ? (
-          <InfoCard message="Password reset email is not available in this local preview. Contact your organisation administrator for help with account access." />
+          <InfoCard message="A password reset email cannot be sent right now. Contact your organisation administrator for help with account access." />
         ) : (
           <>
             <Controller

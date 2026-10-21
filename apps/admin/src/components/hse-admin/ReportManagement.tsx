@@ -61,7 +61,7 @@ function Evidence({ item }: { item: ReportDetail['evidence'][number] }) {
   const [failed, setFailed] = useState(false);
   return (
     <figure className="admin-detail-evidence">
-      <div className="admin-detail-preview">
+      <div className="admin-detail-preview safira-preview-surface">
         {item.type === 'photo' && !failed ? (
           <NextImage
             src={item.url}

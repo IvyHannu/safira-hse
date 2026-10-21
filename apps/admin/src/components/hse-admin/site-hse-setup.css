@@ -31,22 +31,20 @@
 }
 .admin-sites-list-column {
   display: grid;
-  gap: 10px;
+  gap: 0;
   min-width: 0;
 }
 .admin-sites-filters {
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(110px, 1fr);
-  gap: 8px;
+  gap: 12px;
   align-items: end;
-}
-.admin-sites :is(input:not([type='checkbox']), select) {
-  min-height: 42px;
-  border-color: #bbc2b9;
+  margin-bottom: 8px;
 }
 .admin-site-count {
   font-size: 12px;
   color: #5b625b;
+  margin-bottom: 4px;
 }
 .admin-sites-list,
 .admin-site-panel {
@@ -54,6 +52,7 @@
 }
 .admin-sites-list {
   align-content: start;
+  margin-top: 0;
 }
 .admin-sites-list button {
   display: flex;
@@ -236,7 +235,7 @@
     grid-template-columns: 1fr;
   }
   .admin-sites-filters {
-    grid-template-columns: minmax(0, 1fr) minmax(120px, 1fr);
+    grid-template-columns: minmax(0, 1fr) 120px;
   }
   .admin-site-detail-wrap {
     display: none;
@@ -264,10 +263,11 @@
   .admin-site-form-grid {
     grid-template-columns: 1fr;
   }
-  .admin-sites :is(input:not([type='checkbox']), select, button) {
+  .admin-sites
+    :is(input:not([type='checkbox'], .safira-search-input), select, button) {
     min-height: 48px;
   }
-  .admin-site-tabs {
+  .hse-admin-shell .admin-site-tabs {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -280,5 +280,11 @@
   }
   .admin-site-panel-head h2 {
     font-size: 16px;
+  }
+}
+@media (max-width: 359px) {
+  .admin-sites-filters {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
   }
 }

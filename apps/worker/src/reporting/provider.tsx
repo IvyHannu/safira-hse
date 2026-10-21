@@ -22,7 +22,8 @@ import {
 
 const legacyStorageKey = 'safira.worker.reporting.v1';
 const storageKey = 'safira.worker.reporting.v2';
-const resetMarkerKey = 'safira.worker.reporting.reset.2026-10-18-reports';
+// One-time release cleanup of local preview transactions; later reports persist.
+const resetMarkerKey = 'safira.worker.reporting.reset.2026-10-21-release';
 
 interface ReportingContextValue {
   state: LocalReportingState;

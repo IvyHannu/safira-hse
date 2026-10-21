@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { IllustrationSlot } from '@/components/ui/illustration-slot';
 import { SearchInput, Select } from '@/components/ui/forms';
 import {
+  ReportMetadata,
   ReportSeverityLabel,
   ReportStatusLabel,
   ReportTypeLabel,
@@ -121,6 +122,7 @@ export default function ReportsPage() {
           key={key}
           id={`${prefix}-${key}`}
           label={label}
+          className="safira-control-compact"
           value={filters[key]}
           onChange={(event) =>
             setFilters((current) => ({ ...current, [key]: event.target.value }))
@@ -141,7 +143,10 @@ export default function ReportsPage() {
   );
   return (
     <div className="admin-reports">
-      <div inert={open || undefined} className="admin-reports-body">
+      <div
+        inert={open || undefined}
+        className="admin-reports-body admin-mobile-density"
+      >
         <PageHeader
           title="Reports"
           description="View and manage all HSE reports."
@@ -149,6 +154,7 @@ export default function ReportsPage() {
         <div className="admin-reports-tools">
           <SearchInput
             label="Search reports"
+            className="safira-control-compact"
             placeholder="Search by title, reference or location"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
@@ -183,12 +189,12 @@ export default function ReportsPage() {
               <table className="admin-report-table">
                 <caption className="sr-only">HSE reports</caption>
                 <colgroup>
-                  <col style={{ width: '29%' }} />
+                  <col style={{ width: '27%' }} />
+                  <col style={{ width: '16%' }} />
+                  <col style={{ width: '23%' }} />
+                  <col style={{ width: '9%' }} />
                   <col style={{ width: '14%' }} />
-                  <col style={{ width: '21%' }} />
-                  <col style={{ width: '10%' }} />
-                  <col style={{ width: '14%' }} />
-                  <col style={{ width: '12%' }} />
+                  <col style={{ width: '11%' }} />
                 </colgroup>
                 <thead>
                   <tr>
@@ -246,41 +252,22 @@ export default function ReportsPage() {
                   href={`/hse-admin/reports/${report.id}`}
                   className="admin-report-card safira-card-surface safira-card-action"
                 >
-                  <div className="admin-report-card-heading">
-                    <span className="admin-report-reference">{report.id}</span>
-                    <ReportStatusLabel status={report.status} />
-                  </div>
+                  <span className="admin-report-reference">{report.id}</span>
                   <h2>{report.title}</h2>
                   <p>{report.site}</p>
-                  <dl>
-                    <div>
-                      <dt>Type</dt>
-                      <dd>
-                        <ReportTypeLabel type={report.type} />
-                      </dd>
-                    </div>
-                    <div>
-                      <dt>Severity</dt>
-                      <dd>
-                        <ReportSeverityLabel severity={report.severity} />
-                      </dd>
-                    </div>
-                    <div>
-                      <dt>Date</dt>
-                      <dd>
-                        <time dateTime={report.date}>
-                          {formatDate(report.date)}
-                        </time>
-                      </dd>
-                    </div>
-                  </dl>
+                  <ReportMetadata
+                    type={report.type}
+                    severity={report.severity}
+                    status={report.status}
+                  />
+                  <time dateTime={report.date}>{formatDate(report.date)}</time>
                 </Link>
               ))}
             </div>
           </>
         ) : (
           <div className="admin-report-empty">
-            <IllustrationSlot illustrationKey="empty" decorative />
+            <IllustrationSlot illustrationKey="noResults" decorative />
             <h2>No matching reports</h2>
             <p>Try another search or clear your filters.</p>
             <Button variant="secondary" onClick={clear}>
@@ -298,7 +285,7 @@ export default function ReportsPage() {
           />
           <div
             ref={dialog}
-            className="admin-report-filter-sheet"
+            className="admin-report-filter-sheet admin-mobile-filter-sheet"
             role="dialog"
             aria-modal="true"
             aria-labelledby="report-filter-title"

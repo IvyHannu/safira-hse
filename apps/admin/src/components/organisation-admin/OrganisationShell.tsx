@@ -145,6 +145,7 @@ export function OrganisationShell({ children }: { children: ReactNode }) {
           role="Organisation Admin"
           workspace="Organisation governance"
           profileHref="/organisation-admin/profile"
+          settingsHref="/organisation-admin/settings"
           onNavigate={close}
           busy={signingOut && !error}
           error={error}

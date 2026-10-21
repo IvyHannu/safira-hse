@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { CheckCircle, SlidersHorizontal } from '@phosphor-icons/react';
 import { AccountFlowShell } from '@/components/ui/account-flow-shell';
 import { Button } from '@/components/ui/button';
 import { OnboardingStepContent } from '@/components/ui/onboarding-step-content';
@@ -19,7 +18,6 @@ const steps = [
       'Support HSE operations beyond individual reports.',
     ],
     illustrationKey: 'reportCategory',
-    icon: null,
   },
   {
     title: 'Configure reporting',
@@ -30,7 +28,6 @@ const steps = [
       'Keep worker reporting aligned with organisational needs.',
     ],
     illustrationKey: null,
-    icon: 'configuration',
   },
   {
     title: 'Manage safety checks',
@@ -41,7 +38,6 @@ const steps = [
       'Follow up on flagged issues.',
     ],
     illustrationKey: 'checklist',
-    icon: null,
   },
   {
     title: 'You’re ready to begin',
@@ -51,7 +47,6 @@ const steps = [
       'Keep reporting and safety checks useful for every site.',
     ],
     illustrationKey: null,
-    icon: 'ready',
   },
 ] as const;
 
@@ -116,20 +111,6 @@ export function HseAdminOnboardingFlow({
       <OnboardingStepContent
         points={step.points}
         illustrationKey={step.illustrationKey}
-        leading={
-          step.icon ? (
-            <span
-              className={`flex size-10 items-center justify-center rounded-md ${step.icon === 'ready' ? 'bg-signalYellow' : 'border border-coolConcrete bg-coolSurface'}`}
-              aria-hidden="true"
-            >
-              {step.icon === 'ready' ? (
-                <CheckCircle size={24} weight="bold" />
-              ) : (
-                <SlidersHorizontal size={24} weight="bold" />
-              )}
-            </span>
-          ) : undefined
-        }
       />
       {saveError && (
         <p role="alert" className="text-sm text-critical">

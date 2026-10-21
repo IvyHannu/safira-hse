@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useSyncExternalStore } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import {
   Bell,
   MapPin,
@@ -9,12 +9,12 @@ import {
   UserCircle,
   Wheelchair,
 } from '@phosphor-icons/react';
-import { SignOutButton } from '@/components/ui/sign-out-button';
 import {
   DisclosureRow,
   PreferenceToggle,
-  ProfileAvatar,
   ProfileCard,
+  ProfileIdentity,
+  ProfileSectionNav,
 } from '@/components/ui/profile-settings';
 import { Select } from '@/components/ui/forms';
 import { PageHeader } from '@/components/ui/shell';
@@ -52,10 +52,18 @@ function subscribe(callback: () => void) {
 }
 
 export function AdminProfile() {
-  const { session, signOut, error } = useAuth();
+  const { session, account } = useAuth();
   const [section, setSection] = useState<Section>('personal');
   const [message, setMessage] = useState('');
-  const [signingOut, setSigningOut] = useState(false);
+  useEffect(() => {
+    function selectHashSection() {
+      if (window.location.hash === '#notifications')
+        setSection('notifications');
+    }
+    selectHashSection();
+    window.addEventListener('hashchange', selectHashSection);
+    return () => window.removeEventListener('hashchange', selectHashSection);
+  }, []);
   const storageKey = `safira.admin.preferences.v1.${session?.userId || session?.role || 'signed-out'}`;
   const saved = useSyncExternalStore(
     subscribe,
@@ -91,12 +99,6 @@ export function AdminProfile() {
     }
   }
 
-  async function handleSignOut() {
-    setSigningOut(true);
-    await signOut();
-    window.location.replace('/');
-  }
-
   return (
     <div
       className="admin-profile"
@@ -107,65 +109,31 @@ export function AdminProfile() {
         title="Profile & Settings"
         description="Your account, site scope and preferences."
       />
-      <div
-        className="admin-profile-tabs"
-        role="tablist"
-        aria-label="Profile sections"
-      >
-        {sections.map(({ id, label, icon: Icon }) => (
-          <button
-            key={id}
-            id={`admin-profile-tab-${id}`}
-            role="tab"
-            aria-selected={section === id}
-            aria-controls="admin-profile-panel"
-            onClick={() => {
-              setSection(id);
-              setMessage('');
-            }}
-          >
-            <Icon size={17} aria-hidden="true" />
-            {label}
-          </button>
-        ))}
-      </div>
-      <div className="admin-profile-layout">
+      <ProfileIdentity
+        name={account?.fullName || adminProfile.name}
+        role="HSE Admin"
+        context={account?.organisation || adminProfile.organisation}
+        photoUrl={account?.photoUrl}
+      />
+      <div className="grid min-w-0 items-start gap-4 md:grid-cols-[280px_minmax(0,1fr)]">
+        <ProfileSectionNav
+          items={sections.map(({ id, label, icon: Icon }) => ({
+            id,
+            label,
+            icon: <Icon size={20} aria-hidden="true" />,
+          }))}
+          selected={section}
+          onSelect={(value) => {
+            setSection(value);
+            setMessage('');
+          }}
+          idPrefix="admin-profile-tab"
+          panelId="admin-profile-panel"
+        />
         <ProfileCard
-          as="aside"
-          className="admin-profile-identity"
-          aria-label="HSE Admin identity"
-        >
-          <ProfileAvatar
-            name={adminProfile.name}
-            className="admin-profile-avatar"
-          />
-          <h2>{adminProfile.name}</h2>
-          <p>HSE Admin</p>
-          <dl>
-            <div>
-              <dt>Organisation</dt>
-              <dd>{adminProfile.organisation}</dd>
-            </div>
-            <div>
-              <dt>Scope</dt>
-              <dd>HSE administration across this workspace</dd>
-            </div>
-          </dl>
-          <SignOutButton
-            disabled={signingOut && !error}
-            onClick={() => void handleSignOut()}
-            busy={signingOut && !error}
-          />
-          {error && (
-            <p role="alert" className="admin-profile-error">
-              {error}
-            </p>
-          )}
-        </ProfileCard>
-        <ProfileCard
-          className="admin-profile-panel"
+          className="grid min-w-0 content-start gap-3"
           id="admin-profile-panel"
-          role="tabpanel"
+          role="region"
           aria-labelledby={`admin-profile-tab-${section}`}
         >
           {section === 'personal' && (
@@ -177,11 +145,11 @@ export function AdminProfile() {
               <dl className="admin-profile-details">
                 <div>
                   <dt>Full name</dt>
-                  <dd>{adminProfile.name}</dd>
+                  <dd>{account?.fullName || adminProfile.name}</dd>
                 </div>
                 <div>
                   <dt>Email address</dt>
-                  <dd>{adminProfile.email}</dd>
+                  <dd>{account?.email || adminProfile.email}</dd>
                 </div>
                 <div>
                   <dt>Role</dt>

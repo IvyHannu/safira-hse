@@ -7,9 +7,9 @@ export default function ResetPasswordScreen() {
   return (
     <AuthShell
       title="Reset your password"
-      description="Password reset links will be available when organisation account services are connected."
+      description="Contact your organisation administrator if you need to reset your password."
     >
-      <InfoCard message="This local preview cannot verify a reset link or change an account password. Contact your organisation administrator for access help." />
+      <InfoCard message="Password reset links cannot be used right now. Your organisation administrator can help restore access." />
       <AuthTextLink
         label="Back to sign in"
         onPress={() => router.replace('/sign-in')}

@@ -78,7 +78,7 @@ export default function CreatePasswordPage() {
     >
       <form
         id="admin-password-form"
-        className="grid gap-1.5"
+        className="grid gap-2"
         onSubmit={(event) => void handleSubmit(continueSetup)(event)}
       >
         <Input label="Email" value={invitation.email} readOnly />

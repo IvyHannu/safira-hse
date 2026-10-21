@@ -176,7 +176,11 @@ export function createInitialSafetyState(): LocalSafetyState {
   return {
     checklists: seedChecklists.map((c) => ({
       ...c,
-      responses: { ...c.responses },
+      // Keep the checklist definition and assignment, but start without test responses.
+      status: 'assigned',
+      dueLabel: c.status === 'completed' ? 'Available' : c.dueLabel,
+      submittedAt: undefined,
+      responses: {},
     })),
   };
 }

@@ -15,7 +15,7 @@
   justify-content: space-between;
   align-items: baseline;
   gap: 4px 16px;
-  padding: 12px 16px;
+  padding: 10px 12px;
   border-bottom: 1px solid #20222018;
 }
 .organisation-access-heading h2 {
@@ -43,8 +43,8 @@
 .organisation-access-role-list > div {
   display: grid;
   align-content: start;
-  gap: 5px;
-  padding: 10px 16px;
+  gap: 3px;
+  padding: 8px 12px;
   border-right: 1px solid #20222018;
 }
 .organisation-access-role-list > div:last-child {
@@ -118,8 +118,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
+  gap: 8px;
+  padding: 8px 12px;
   border-bottom: 1px solid #20222015;
 }
 .organisation-access-pending > div:first-child {
@@ -144,12 +144,8 @@
   font-size: 12px;
 }
 .organisation-access-link {
-  display: inline-block;
-  margin: 12px 16px;
-  color: #2563a6;
-  font-size: 12px;
-  font-weight: 700;
-  text-decoration: underline;
+  padding: 8px 12px;
+  border-top: 1px solid #20222015;
 }
 .organisation-access-message {
   padding: 10px 12px;
@@ -242,10 +238,6 @@
   padding: 14px 20px;
   border-top: 1px solid #20222020;
 }
-.organisation-access-sheet footer button,
-.organisation-access-confirm footer button {
-  min-height: 40px;
-}
 .organisation-access-confirm {
   padding-top: 20px;
 }
@@ -298,8 +290,8 @@
   }
   .organisation-access-cards article {
     display: grid;
-    gap: 6px;
-    padding: 12px;
+    gap: 4px;
+    padding: 10px 12px;
   }
   .organisation-access-cards article > div:first-child {
     display: flex;

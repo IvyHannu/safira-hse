@@ -7,9 +7,8 @@ import {
   useState,
   useSyncExternalStore,
 } from 'react';
-import Link from 'next/link';
 import { Check, PencilSimple, ShieldCheck, X } from '@phosphor-icons/react';
-import { ActionGroup, Button } from '@/components/ui/button';
+import { ActionGroup, Button, ButtonLink } from '@/components/ui/button';
 import { SearchInput, Select } from '@/components/ui/forms';
 import { MetadataLabel } from '@/components/ui/report-metadata';
 import { IllustrationSlot } from '@/components/ui/illustration-slot';
@@ -495,7 +494,7 @@ export function OrganisationAccess() {
           </table>
           {visibleMembers.length === 0 && (
             <div className="organisation-access-empty grid gap-3 text-center">
-              <IllustrationSlot illustrationKey="empty" decorative />
+              <IllustrationSlot illustrationKey="noResults" decorative />
               <p>No members match these filters.</p>
             </div>
           )}
@@ -596,12 +595,11 @@ export function OrganisationAccess() {
               <p>No pending invitations.</p>
             </div>
           )}
-          <Link
-            href="/organisation-admin/users"
-            className="organisation-access-link"
-          >
-            Manage invitations in Users & Roles
-          </Link>
+          <div className="organisation-access-link">
+            <ButtonLink href="/organisation-admin/users" size="compact">
+              Manage invitations in Users & Roles
+            </ButtonLink>
+          </div>
         </section>
         <section className="organisation-access-panel safira-card-surface">
           <div className="organisation-access-heading">

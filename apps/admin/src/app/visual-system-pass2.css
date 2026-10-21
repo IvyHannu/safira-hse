@@ -52,6 +52,13 @@
 }
 
 :is(.hse-admin-shell, .organisation-shell)
+  [role='tablist'][data-selection-style='neutral']
+  > [role='tab'][aria-selected='true'] {
+  border-color: #899188;
+  background: #f0f2ee;
+}
+
+:is(.hse-admin-shell, .organisation-shell)
   [role='tablist']
   > [role='tab']:focus-visible {
   border-color: #ffd21a;
@@ -61,8 +68,12 @@
 
 :is(.hse-admin-shell, .organisation-shell)
   :is(
-    .safira-card-action[aria-current='true'],
-    .safira-clickable-card[aria-pressed='true']
+    .safira-card-action[aria-current='true']:not(
+        [data-selection-style='neutral']
+      ),
+    .safira-clickable-card[aria-pressed='true']:not(
+        [data-selection-style='neutral']
+      )
   ) {
   border-color: #ffd21a;
   background: #fff;

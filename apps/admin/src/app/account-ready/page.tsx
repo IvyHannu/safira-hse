@@ -38,7 +38,7 @@ export default function AdminAccountReadyPage() {
         </Button>
       }
     >
-      <div className="grid gap-1.5 text-deepCharcoal">
+      <div className="grid gap-2.5 text-deepCharcoal">
         <span
           className="flex size-10 items-center justify-center rounded-md bg-signalYellow"
           aria-hidden="true"

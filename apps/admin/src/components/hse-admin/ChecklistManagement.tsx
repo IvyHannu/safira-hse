@@ -5,8 +5,9 @@ import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Funnel, Plus, Trash, X } from '@phosphor-icons/react';
 import { Button, IconButton } from '@/components/ui/button';
-import { ClickableCard } from '@/components/ui/feedback';
+import { EvidenceCard } from '@/components/ui/evidence-card';
 import { IllustrationSlot } from '@/components/ui/illustration-slot';
+import { ClickableCard, InfoCard } from '@/components/ui/feedback';
 import { Input, SearchInput, Select, Textarea } from '@/components/ui/forms';
 import { MetadataLabel } from '@/components/ui/report-metadata';
 import {
@@ -420,26 +421,41 @@ function SubmissionReview({
         <h3>Flagged issues</h3>
         {flags.length ? (
           flags.map((response) => (
-            <div className="admin-checklist-flag" key={response.id}>
+            <div
+              className="admin-checklist-flag admin-checklist-flagged"
+              key={response.id}
+            >
               <strong>{response.question}</strong>
               <p>Response: {response.answer}</p>
               {response.note && <p>Note: {response.note}</p>}
-              {response.evidence?.map((file) => (
-                <p key={file.name}>
-                  Evidence: {file.name}
-                  {!file.url && ' · Preview unavailable'}
-                </p>
-              ))}
-              {response.reportId &&
-                (reportList.some(
-                  (report) => report.id === response.reportId,
-                ) ? (
-                  <Link href={`/hse-admin/reports/${response.reportId}`}>
-                    Linked report {response.reportId}
-                  </Link>
-                ) : (
-                  <p>Linked report {response.reportId} unavailable</p>
-                ))}
+              {response.evidence && response.evidence.length > 0 && (
+                <div className="admin-checklist-evidence">
+                  {response.evidence.map((file) => (
+                    <EvidenceCard
+                      key={file.name}
+                      item={{
+                        type: 'photo',
+                        url: file.url,
+                        caption: file.name,
+                      }}
+                      compactUnavailable
+                    />
+                  ))}
+                </div>
+              )}
+              {response.reportId && (
+                <InfoCard title="Linked report" variant="reference">
+                  {reportList.some(
+                    (report) => report.id === response.reportId,
+                  ) ? (
+                    <Link href={`/hse-admin/reports/${response.reportId}`}>
+                      {response.reportId}
+                    </Link>
+                  ) : (
+                    <span>{response.reportId} unavailable</span>
+                  )}
+                </InfoCard>
+              )}
             </div>
           ))
         ) : (
@@ -456,8 +472,8 @@ function SubmissionReview({
           </div>
         ))}
       </section>
-      <div className="admin-checklist-actions">
-        <Button disabled={reviewed} onClick={onReview}>
+      <div className="admin-checklist-review-actions">
+        <Button variant="primary" disabled={reviewed} onClick={onReview}>
           {reviewed ? 'Reviewed' : 'Mark reviewed'}
         </Button>
       </div>
@@ -593,7 +609,7 @@ export function ChecklistManagement() {
       <Select
         id={`${prefix}-status`}
         label="Status"
-        className={tab === 'templates' ? 'safira-control-compact' : ''}
+        className="safira-control-compact"
         value={status}
         onChange={(event) => setStatus(event.target.value)}
       >
@@ -615,7 +631,7 @@ export function ChecklistManagement() {
       <Select
         id={`${prefix}-site`}
         label="Site"
-        className={tab === 'templates' ? 'safira-control-compact' : ''}
+        className="safira-control-compact"
         value={site}
         onChange={(event) => setSite(event.target.value)}
       >
@@ -629,7 +645,7 @@ export function ChecklistManagement() {
   );
   return (
     <div
-      className={`admin-checklists ${tab === 'templates' ? 'admin-checklists-template' : ''}`}
+      className={`admin-checklists admin-mobile-density ${tab === 'templates' ? 'admin-checklists-template' : ''}`}
     >
       <header>
         <div>
@@ -648,6 +664,7 @@ export function ChecklistManagement() {
         className="admin-checklist-tabs"
         role="tablist"
         aria-label="Checklists"
+        data-selection-style="neutral"
       >
         <button
           role="tab"
@@ -666,7 +683,7 @@ export function ChecklistManagement() {
       </div>
       <div className="admin-checklist-toolbar">
         <SearchInput
-          className={tab === 'templates' ? 'safira-control-compact' : ''}
+          className="safira-control-compact"
           label={
             tab === 'templates' ? 'Search templates' : 'Search submissions'
           }
@@ -698,12 +715,13 @@ export function ChecklistManagement() {
       </p>
       {tab === 'templates' ? (
         <div className="admin-checklist-workspace">
-          <div className="admin-checklist-template-list safira-card-list">
+          <div className="safira-card-list">
             {filteredTemplates.length ? (
               filteredTemplates.map((item) => (
                 <ClickableCard
                   key={item.id}
                   selected={selectedTemplate === item.id}
+                  selectionStyle="neutral"
                   onClick={() => {
                     setSelectedTemplate(item.id);
                     setMobilePanel(true);
@@ -718,7 +736,7 @@ export function ChecklistManagement() {
               ))
             ) : (
               <div className="admin-checklist-empty grid gap-3 text-center">
-                <IllustrationSlot illustrationKey="empty" decorative />
+                <IllustrationSlot illustrationKey="noResults" decorative />
                 <p>No matching templates.</p>
               </div>
             )}
@@ -741,113 +759,67 @@ export function ChecklistManagement() {
         <>
           {filteredSubmissions.length ? (
             <>
-              <div className="admin-checklist-table-wrap safira-card-surface">
-                <table className="admin-checklist-table">
-                  <caption className="sr-only">Checklist submissions</caption>
-                  <colgroup>
-                    <col style={{ width: '28%' }} />
-                    <col style={{ width: '18%' }} />
-                    <col style={{ width: '17%' }} />
-                    <col style={{ width: '16%' }} />
-                    <col style={{ width: '12%' }} />
-                    <col style={{ width: '9%' }} />
-                  </colgroup>
-                  <thead>
-                    <tr>
-                      {[
-                        'Checklist',
-                        'Site',
-                        'Submitted by',
-                        'Date / time',
-                        'Status',
-                        'Flagged',
-                      ].map((label) => (
-                        <th scope="col" key={label}>
-                          {label}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredSubmissions.map((item) => (
-                      <tr key={item.id}>
-                        <td>
-                          <button
-                            className="admin-checklist-link"
-                            onClick={() => {
-                              setSelectedSubmission(item.id);
-                              setMobilePanel(true);
-                            }}
-                          >
-                            {item.name}
-                          </button>
-                          <p className="admin-checklist-muted">{item.id}</p>
-                        </td>
-                        <td>{item.site}</td>
-                        <td>{item.submittedBy}</td>
-                        <td>{checklistDate(item.submittedAt)}</td>
-                        <td>
-                          <Status value={statusOf(item)} />
-                        </td>
-                        <td>{flaggedCount(item)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div className="admin-checklist-cards safira-card-list">
+              <div className="admin-checklist-submissions safira-card-list">
                 {filteredSubmissions.map((item) => (
-                  <button
-                    className="admin-checklist-card safira-card-surface safira-card-action"
+                  <ClickableCard
+                    className="admin-checklist-submission-card"
                     key={item.id}
+                    selected={selectedSubmission === item.id}
+                    selectionStyle="neutral"
                     onClick={() => {
                       setSelectedSubmission(item.id);
                       setMobilePanel(true);
                     }}
                   >
-                    <span className="admin-checklist-card-top">
-                      <span className="admin-checklist-muted">{item.id}</span>
+                    <span className="admin-checklist-submission-title">
+                      <strong>{item.name}</strong>
+                      <small>{item.id}</small>
+                    </span>
+                    <span className="admin-checklist-submission-fact">
+                      <small>Site</small>
+                      {item.site}
+                    </span>
+                    <span className="admin-checklist-submission-fact">
+                      <small>Submitted by</small>
+                      {item.submittedBy}
+                    </span>
+                    <span className="admin-checklist-submission-fact">
+                      <small>Date / time</small>
+                      {checklistDate(item.submittedAt)}
+                    </span>
+                    <span className="admin-checklist-submission-state">
                       <Status value={statusOf(item)} />
+                      <small>
+                        {flaggedCount(item)} flagged{' '}
+                        {flaggedCount(item) === 1 ? 'issue' : 'issues'}
+                      </small>
                     </span>
-                    <strong className="admin-checklist-link">
-                      {item.name}
-                    </strong>
-                    <span>
-                      {item.site} · {item.submittedBy}
-                    </span>
-                    <span className="admin-checklist-muted">
-                      {checklistDate(item.submittedAt)} · {flaggedCount(item)}{' '}
-                      flagged
-                    </span>
-                  </button>
+                  </ClickableCard>
                 ))}
               </div>
             </>
           ) : (
             <div className="admin-checklist-empty grid gap-3 text-center">
-              <IllustrationSlot illustrationKey="empty" decorative />
+              <IllustrationSlot illustrationKey="noResults" decorative />
               <p>No matching submissions.</p>
             </div>
           )}
           {activeSubmission && (
-            <div className="admin-checklist-workspace">
-              <div></div>
-              <div className={mobilePanel ? 'admin-checklist-mobile-open' : ''}>
-                <SubmissionReview
-                  item={activeSubmission}
-                  reviewed={statusOf(activeSubmission) === 'reviewed'}
-                  onReview={() =>
-                    setReviews((current) => ({
-                      ...current,
-                      [activeSubmission.id]: true,
-                    }))
-                  }
-                  onClose={() => {
-                    setSelectedSubmission(null);
-                    setMobilePanel(false);
-                  }}
-                />
-              </div>
+            <div className={mobilePanel ? 'admin-checklist-mobile-open' : ''}>
+              <SubmissionReview
+                item={activeSubmission}
+                reviewed={statusOf(activeSubmission) === 'reviewed'}
+                onReview={() =>
+                  setReviews((current) => ({
+                    ...current,
+                    [activeSubmission.id]: true,
+                  }))
+                }
+                onClose={() => {
+                  setSelectedSubmission(null);
+                  setMobilePanel(false);
+                }}
+              />
             </div>
           )}
         </>
@@ -861,7 +833,7 @@ export function ChecklistManagement() {
           />
           <div
             ref={sheet}
-            className="admin-checklist-filter-sheet"
+            className="admin-checklist-filter-sheet admin-mobile-filter-sheet"
             role="dialog"
             aria-modal="true"
             aria-label="Checklist filters"

@@ -17,6 +17,7 @@ import {
 } from './model';
 
 const storageKey = 'safira.worker.safety.v1';
+const resetMarkerKey = 'safira.worker.safety.reset.2026-10-21-release';
 
 interface SafetyContextValue {
   checklists: readonly SafetyChecklist[];
@@ -54,12 +55,20 @@ export function SafetyProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       try {
-        const saved = localStorage.getItem(storageKey);
-        if (saved) {
-          const restored = parseSafetyState(saved);
-          if (!restored) throw new Error('Invalid saved safety data');
-          stateRef.current = restored;
-          setState(restored);
+        if (localStorage.getItem(resetMarkerKey) !== 'complete') {
+          const fresh = createInitialSafetyState();
+          localStorage.setItem(storageKey, JSON.stringify(fresh));
+          localStorage.setItem(resetMarkerKey, 'complete');
+          stateRef.current = fresh;
+          setState(fresh);
+        } else {
+          const saved = localStorage.getItem(storageKey);
+          if (saved) {
+            const restored = parseSafetyState(saved);
+            if (!restored) throw new Error('Invalid saved safety data');
+            stateRef.current = restored;
+            setState(restored);
+          }
         }
       } catch {
         unreadableRef.current = true;

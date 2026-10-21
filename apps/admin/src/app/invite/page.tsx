@@ -23,7 +23,7 @@ export default function AdminInvitePage() {
     <main className="flex min-h-dvh items-center justify-center bg-coolSurface px-2 py-2 text-deepCharcoal sm:px-3 sm:py-3">
       <div className="w-full max-w-[540px]">
         <AccountBrandHeader context="ACCOUNT SETUP" compact />
-        <Card className="mt-2 gap-1.5 p-2.5">
+        <Card className="mt-3 gap-2.5 p-2.5">
           <h1 className="text-[26px] font-bold leading-8">
             {invitation
               ? 'You’re invited to join Safira'

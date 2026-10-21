@@ -1,9 +1,11 @@
 'use client';
-import { useSyncExternalStore } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 import { StatusLabel } from '@/components/ui/status-label';
 import { type ChecklistStatus } from '@/data/checklists';
 const key = 'safira.officer.checklist-reviews.v1';
 const event = 'safira-checklist-review';
+const resetMarkerKey =
+  'safira.officer.checklist-reviews.reset.2026-10-21-release';
 function subscribe(onChange: () => void) {
   window.addEventListener('storage', onChange);
   window.addEventListener(event, onChange);
@@ -20,6 +22,16 @@ function snapshot() {
   }
 }
 export function useChecklistReview() {
+  useEffect(() => {
+    try {
+      if (window.localStorage.getItem(resetMarkerKey) === 'complete') return;
+      window.localStorage.removeItem(key);
+      window.localStorage.setItem(resetMarkerKey, 'complete');
+      window.dispatchEvent(new Event(event));
+    } catch {
+      // Existing review state remains visible if storage is unavailable.
+    }
+  }, []);
   const saved = useSyncExternalStore(subscribe, snapshot, () => '{}');
   let reviews: Record<string, string> = {};
   try {

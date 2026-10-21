@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { Buildings, ImageSquare, X } from '@phosphor-icons/react';
+import { Buildings, X } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
+import { ImageEditControl } from '@/components/ui/image-edit-control';
 import { Input, Select, Textarea } from '@/components/ui/forms';
 import { MetadataLabel } from '@/components/ui/report-metadata';
 import { PreferenceToggle } from '@/components/ui/profile-settings';
@@ -91,21 +92,28 @@ export function OrganisationGovernance({ mode }: { mode: Mode }) {
                 <p>Identity and details shown to your organisation.</p>
               </div>
               <div className="organisation-logo-row">
-                <span
-                  className="organisation-logo-preview"
-                  role="img"
-                  aria-label={
+                <ImageEditControl
+                  imageLabel={
                     logo
                       ? 'Organisation logo preview'
                       : 'Organisation logo placeholder'
                   }
+                  editLabel={
+                    logo
+                      ? 'Change organisation logo'
+                      : 'Upload organisation logo'
+                  }
+                  onEdit={() => fileInput.current?.click()}
                 >
                   {logo ? (
-                    <span style={{ backgroundImage: `url(${logo})` }} />
+                    <span
+                      className="size-full bg-contain bg-center bg-no-repeat"
+                      style={{ backgroundImage: `url(${logo})` }}
+                    />
                   ) : (
                     <Buildings size={27} aria-hidden="true" />
                   )}
-                </span>
+                </ImageEditControl>
                 <div className="organisation-logo-actions">
                   <strong>Organisation logo</strong>
                   <small>
@@ -123,17 +131,9 @@ export function OrganisationGovernance({ mode }: { mode: Mode }) {
                         void selectLogo(event.target.files?.[0])
                       }
                     />
-                    <Button
-                      variant="secondary"
-                      size="compact"
-                      icon={<ImageSquare size={17} />}
-                      onClick={() => fileInput.current?.click()}
-                    >
-                      Choose logo
-                    </Button>
                     {logo && (
                       <Button
-                        variant="tertiary"
+                        variant="destructive-tertiary"
                         size="compact"
                         icon={<X size={16} />}
                         onClick={() => {
