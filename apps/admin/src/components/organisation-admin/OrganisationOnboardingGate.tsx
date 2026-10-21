@@ -18,7 +18,10 @@ export function OrganisationOnboardingGate({
   const pathname = usePathname();
   const router = useRouter();
   const isOrganisationAdmin = session?.role === 'organisation_admin';
-  const isOnboarding = pathname === '/organisation-admin/onboarding';
+  const isOnboarding = pathname.startsWith('/organisation-admin/onboarding');
+  const isPreview =
+    process.env.NODE_ENV === 'development' &&
+    pathname === '/organisation-admin/onboarding/preview';
   const onboardingComplete = useSyncExternalStore(
     subscribeOrganisationAdminOnboarding,
     () => (session ? hasCompletedOrganisationAdminOnboarding(session) : false),
@@ -37,12 +40,13 @@ export function OrganisationOnboardingGate({
     }
     if (!onboardingComplete && !isOnboarding)
       router.replace('/organisation-admin/onboarding');
-    if (onboardingComplete && isOnboarding)
+    if (onboardingComplete && isOnboarding && !isPreview)
       router.replace('/organisation-admin/overview');
   }, [
     account,
     isOrganisationAdmin,
     isOnboarding,
+    isPreview,
     loading,
     onboardingComplete,
     router,
@@ -50,7 +54,7 @@ export function OrganisationOnboardingGate({
 
   const redirecting = isOrganisationAdmin
     ? (account && !account.profileComplete) ||
-      onboardingComplete === isOnboarding
+      (onboardingComplete === isOnboarding && !isPreview)
     : true;
   if (loading || redirecting)
     return (

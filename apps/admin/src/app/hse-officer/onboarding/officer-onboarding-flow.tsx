@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { CheckCircle } from '@phosphor-icons/react';
 import { AccountFlowShell } from '@/components/ui/account-flow-shell';
 import { Button } from '@/components/ui/button';
-import { IllustrationSlot } from '@/components/ui/illustration-slot';
+import { OnboardingStepContent } from '@/components/ui/onboarding-step-content';
 import { useAuth } from '@/lib/demo-auth';
 import { completeHseOfficerOnboarding } from '@/lib/hse-officer-onboarding';
 
@@ -15,9 +14,9 @@ const steps = [
     description:
       'Focus on the reports and safety concerns at the sites you support.',
     points: [
-      'Review reports from workers.',
-      'Confirm classification and set severity.',
-      'See which issues need attention.',
+      'Review worker reports.',
+      'Spot issues needing attention.',
+      'Confirm classification and severity.',
     ],
     illustrationKey: 'reportCategory',
   },
@@ -37,8 +36,8 @@ const steps = [
     description:
       'Use checklist submissions to spot and follow up on site issues.',
     points: [
-      'Review submitted safety checks.',
-      'Identify flagged answers and evidence.',
+      'Review safety check submissions.',
+      'Spot flagged answers and evidence.',
       'Follow up where action is needed.',
     ],
     illustrationKey: 'checklist',
@@ -93,6 +92,7 @@ export function OfficerOnboardingFlow({
       totalSteps={steps.length}
       phase="Getting started"
       presentation="onboarding"
+      contentSurface={step.illustrationKey ? 'plain' : 'card'}
       actions={
         <>
           {stepIndex > 0 && (
@@ -112,29 +112,10 @@ export function OfficerOnboardingFlow({
         </>
       }
     >
-      {step.illustrationKey && (
-        <IllustrationSlot
-          illustrationKey={step.illustrationKey}
-          decorative
-          size="support"
-        />
-      )}
-      <ul className="divide-y divide-graphite/10">
-        {step.points.map((point) => (
-          <li
-            key={point}
-            className="flex items-start gap-3 py-2.5 text-sm leading-5 text-graphite first:pt-0 last:pb-0"
-          >
-            <CheckCircle
-              size={18}
-              weight="bold"
-              className="mt-0.5 shrink-0 text-deepCharcoal"
-              aria-hidden="true"
-            />
-            <span>{point}</span>
-          </li>
-        ))}
-      </ul>
+      <OnboardingStepContent
+        points={step.points}
+        illustrationKey={step.illustrationKey}
+      />
       {saveError && (
         <p role="alert" className="text-sm text-critical">
           {saveError}

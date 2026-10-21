@@ -84,7 +84,7 @@ export default function CompleteAdminProfilePage() {
     >
       <form
         id="admin-profile-form"
-        className="grid gap-3"
+        className="grid gap-1.5"
         onSubmit={(event) => void handleSubmit(continueSetup)(event)}
       >
         <div className="flex items-center gap-4">

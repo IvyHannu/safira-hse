@@ -55,6 +55,11 @@ export const illustrationSlots = {
     aspectRatio: 4 / 3,
     alt: 'No matching results',
   },
+  siteWorkplace: {
+    assetKey: 'shared/site-workplace',
+    aspectRatio: 4 / 3,
+    alt: 'Work areas at a site',
+  },
   empty: {
     assetKey: 'shared/empty',
     aspectRatio: 3 / 2,

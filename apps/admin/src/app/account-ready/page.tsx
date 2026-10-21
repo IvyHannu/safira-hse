@@ -38,19 +38,18 @@ export default function AdminAccountReadyPage() {
         </Button>
       }
     >
-      <div className="flex items-start gap-3 rounded-md border border-coolConcrete bg-coolSurface p-3 text-deepCharcoal">
-        <CheckCircle
-          size={22}
-          weight="bold"
-          className="shrink-0 text-deepCharcoal"
+      <div className="grid gap-1.5 text-deepCharcoal">
+        <span
+          className="flex size-10 items-center justify-center rounded-md bg-signalYellow"
           aria-hidden="true"
-        />
-        <div>
-          <strong className="block text-sm">Ready to go</strong>
-          <p className="text-sm text-graphite">
-            Welcome, {account.fullName}. Your access is set up.
-          </p>
-        </div>
+        >
+          <CheckCircle size={26} weight="bold" />
+        </span>
+        <strong className="text-base">Ready to go, {account.fullName}</strong>
+        <p className="text-sm text-graphite">
+          Your access is set up. Continue for a short introduction to your
+          workspace.
+        </p>
       </div>
       <AccountContext
         role={account.role}

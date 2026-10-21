@@ -20,11 +20,11 @@ export default function AdminInvitePage() {
     invitation && !loading ? readLocalAdminAccount(invitation.email) : null;
 
   return (
-    <main className="flex min-h-dvh items-center justify-center bg-coolSurface px-4 py-6 text-deepCharcoal">
+    <main className="flex min-h-dvh items-center justify-center bg-coolSurface px-2 py-2 text-deepCharcoal sm:px-3 sm:py-3">
       <div className="w-full max-w-[540px]">
-        <AccountBrandHeader context="ACCOUNT SETUP" />
-        <Card className="mt-4 gap-4">
-          <h1 className="text-2xl font-bold">
+        <AccountBrandHeader context="ACCOUNT SETUP" compact />
+        <Card className="mt-2 gap-1.5 p-2.5">
+          <h1 className="text-[26px] font-bold leading-8">
             {invitation
               ? 'You’re invited to join Safira'
               : 'Invitation unavailable'}
@@ -40,8 +40,11 @@ export default function AdminInvitePage() {
                 organisation={invitation.organisation}
                 site={'site' in invitation ? invitation.site : undefined}
               />
-              <p className="text-sm text-graphite">
-                Invitation for {invitation.email}
+              <p className="border-t border-coolConcrete pt-1.5 text-sm text-graphite">
+                Invited email{' '}
+                <strong className="block font-semibold text-deepCharcoal">
+                  {invitation.email}
+                </strong>
               </p>
               <ButtonLink
                 variant="primary"

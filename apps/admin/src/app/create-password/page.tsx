@@ -4,11 +4,10 @@ import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { workerActivationSchema } from '@safira/validation';
 import { useForm } from 'react-hook-form';
-import { Eye, EyeSlash } from '@phosphor-icons/react';
 import { AccountFlowShell } from '@/components/ui/account-flow-shell';
 import { AccountContext } from '@/components/ui/account-context';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/forms';
+import { Input, PasswordVisibilityButton } from '@/components/ui/forms';
 import { getAdminInvitation } from '@/lib/local-admin-account';
 import { useAuth } from '@/lib/demo-auth';
 
@@ -79,28 +78,20 @@ export default function CreatePasswordPage() {
     >
       <form
         id="admin-password-form"
-        className="grid gap-3"
+        className="grid gap-1.5"
         onSubmit={(event) => void handleSubmit(continueSetup)(event)}
       >
-        <Input label="Email" value={invitation.email} disabled />
+        <Input label="Email" value={invitation.email} readOnly />
         <Input
           label="Password"
           type={visible ? 'text' : 'password'}
           autoComplete="new-password"
           error={errors.password?.message}
           endAdornment={
-            <button
-              type="button"
-              onClick={() => setVisible(!visible)}
-              aria-label={visible ? 'Hide password' : 'Show password'}
-              className="flex size-10 items-center justify-center rounded-md text-deepCharcoal focus-visible:outline-2 focus-visible:outline-signalYellow"
-            >
-              {visible ? (
-                <EyeSlash size={18} weight="bold" />
-              ) : (
-                <Eye size={18} weight="bold" />
-              )}
-            </button>
+            <PasswordVisibilityButton
+              visible={visible}
+              onToggle={() => setVisible(!visible)}
+            />
           }
           {...register('password')}
         />
@@ -111,7 +102,7 @@ export default function CreatePasswordPage() {
           error={errors.confirmPassword?.message}
           {...register('confirmPassword')}
         />
-        <p className="text-xs text-graphite">
+        <p className="-mt-0.5 text-xs text-graphite">
           At least 8 characters, including a letter and a number.
         </p>
         <AccountContext

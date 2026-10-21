@@ -6,8 +6,31 @@ import {
   type ReactNode,
   type TextareaHTMLAttributes,
 } from 'react';
-import { MagnifyingGlass } from '@phosphor-icons/react';
+import { Eye, EyeSlash, MagnifyingGlass } from '@phosphor-icons/react';
 export { Select } from './select';
+
+export function PasswordVisibilityButton({
+  visible,
+  onToggle,
+}: {
+  visible: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-label={visible ? 'Hide password' : 'Show password'}
+      className="flex size-10 items-center justify-center rounded-md text-deepCharcoal hover:bg-coolSurface focus-visible:outline-2 focus-visible:outline-signalYellow"
+    >
+      {visible ? (
+        <EyeSlash size={18} weight="bold" />
+      ) : (
+        <Eye size={18} weight="bold" />
+      )}
+    </button>
+  );
+}
 
 interface FieldProps {
   label: string;
